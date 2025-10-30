@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NC IVC Form Writer</title>
+    <!-- 1. Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. The pdf-lib library to work with PDFs -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <!-- 3. The FileSaver.js library for downloading the file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+    <style>
+        /* Simple style for active tabs */
+        .tab-active {
+            border-bottom-color: #3B82F6; /* blue-500 */
+            color: #3B82F6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans p-4 lg:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+        <header class="bg-blue-600 text-white p-6">
+            <h1 class="text-3xl font-bold">NC IVC Form Writer</h1>
+            <p class="mt-1 text-blue-100">Client-Side HIPAA-Compliant Form Generator</p>
+        </header>
+
+        <!-- Privacy Warning -->
+        <div class="p-4 m-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800">
+            <strong class="font-bold">Privacy First:</strong> All data is processed **in your browser**. No information is ever sent to a server.
+        </div>
+
+        <!-- Tab Controls -->
+        <nav class="flex border-b border-gray-200 px-4 lg:px-6">
+            <button id="tab-btn-aoc" class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px tab-active" data-form="aoc">
+                AOC-SP-300 (Petition)
+            </button>
+            <button id="tab-btn-dmh" class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px" data-form="dmh">
+                DMH-5-72-19 (First Exam)
+            </button>
+        </nav>
+
+        <!-- Form Sections -->
+        <main class="p-4 lg:p-6">
+            
+            <!-- FORM 1: AOC-SP-300 -->
+            <section id="form-aoc" class="form-section space-y-4">
+                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">AOC-SP-300: Affidavit and Petition</h2>
+                
+                <!-- Petitioner Info -->
+                <fieldset class="border border-gray-300 rounded-lg p-4">
+                    <legend class="text-lg font-medium text-gray-700 px-2">Petitioner Information</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="aoc-petitioner-name" class="block text-sm font-medium text-gray-700">Your Full Name</label>
+                            <input type="text" id="aoc-petitioner-name" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="aoc-petitioner-phone" class="block text-sm font-medium text-gray-700">Your Phone Number</label>
+                            <input type="text" id="aoc-petitioner-phone" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div class="flex items-start mt-4">
+                        <div class="flex h-5 items-center">
+                            <input id="aoc-remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="aoc-remember-me" class="font-medium text-gray-700">Remember my information</label>
+                            <p class="text-gray-500">Saves your info in this browser's local storage.</p>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Respondent Info -->
+                <fieldset class="border border-gray-300 rounded-lg p-4">
+                    <legend class="text-lg font-medium text-gray-700 px-2">Respondent Information</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="aoc-respondent-name" class="block text-sm font-medium text-gray-700">Respondent's Full Name</label>
+                            <input type="text" id="aoc-respondent-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="aoc-respondent-dob" class="block text-sm font-medium text-gray-700">Respondent's Date of Birth (MM/DD/YYYY)</label>
+                            <input type="text" id="aoc-respondent-dob" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Criteria -->
+                <fieldset class="border border-gray-300 rounded-lg p-4">
+                    <legend class="text-lg font-medium text-gray-700 px-2">Commitment Criteria</legend>
+                    <div class="space-y-2">
+                        <div class="flex items-start">
+                            <div class="flex h-5 items-center">
+                                <input id="aoc-check-mi" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="aoc-check-mi" class="font-medium text-gray-700">Has a mental illness and is dangerous to self or others...</label>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex h-5 items-center">
+                                <input id="aoc-check-sa" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="aoc-check-sa" class="font-medium text-gray-700">Is a substance abuser and is dangerous to self or others.</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Button -->
+                <div class="pt-4">
+                    <button id="generate-aoc" class="generate-btn w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Generate AOC-SP-300 PDF
+                    </button>
+                </div>
+            </section>
+
+            <!-- FORM 2: DMH-5-72-19 -->
+            <section id="form-dmh" class="form-section space-y-4 hidden">
+                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">DMH-5-72-19: First Examination</h2>
+                
+                <!-- Clinician Info -->
+                <fieldset class="border border-gray-300 rounded-lg p-4">
+                    <legend class="text-lg font-medium text-gray-700 px-2">Clinician Information</legend>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="dmh-clinician-name" class="block text-sm font-medium text-gray-700">Your Full Name & Credentials</label>
+                            <input type="text" id="dmh-clinician-name" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="dmh-clinician-facility" class="block text-sm font-medium text-gray-700">Your Facility</label>
+                            <input type="text" id="dmh-clinician-facility" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div class="flex items-start mt-4">
+                        <div class="flex h-5 items-center">
+                            <input id="dmh-remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="dmh-remember-me" class="font-medium text-gray-700">Remember my information</Slabel>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Respondent Info -->
+                <fieldset class="border border-gray-300 rounded-lg p-4">
+                    <legend class="text-lg font-medium text-gray-700 px-2">Respondent Information</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="dmh-respondent-name" class="block text-sm font-medium text-gray-700">Respondent's Full Name</label>
+                            <input type="text" id="dmh-respondent-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="dmh-respondent-dob" class="block text-sm font-medium text-gray-700">DOB (MM/DD/YYYY)</label>
+                            <input type="text" id="dmh-respondent-dob" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="dmh-respondent-age" class="block text-sm font-medium text-gray-700">Age</Flabel>
+                            <input type="text" id="dmh-respondent-age" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+                </fieldset>
+
+                 <!-- Criteria -->
+                <fieldset class="border border-gray-300 rounded-lg p-4">
+                    <legend class="text-lg font-medium text-gray-700 px-2">Section I - Criteria For Commitment</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Inpatient -->
+                        <div class="space-y-2">
+                            <h3 class="font-medium text-gray-800">Inpatient</h3>
+                            <div class="flex items-start">
+                                <input id="dmh-check-inpatient-mi" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <label for="dmh-check-inpatient-mi" class="ml-3 text-sm text-gray-700">An individual with a mental illness</label>
+                            </div>
+                            <div class="flex items-start">
+                                <input id="dmh-check-inpatient-mi-self" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <label for="dmh-check-inpatient-mi-self" class="ml-3 text-sm text-gray-700">Dangerous to: Self</label>
+                            </div>
+                        </div>
+                        <!-- Outpatient -->
+                        <div class="space-y-2">
+                            <h3 class="font-medium text-gray-800">Outpatient</h3>
+                             <div class="flex items-start">
+                                <input id="dmh-check-outpatient-mi" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <label for="dmh-check-outpatient-mi" class="ml-3 text-sm text-gray-700">An individual with a mental illness</label>
+                            </div>
+                        </div>
+                        <!-- Substance Abuse -->
+                        <div class="space-y-2">
+                            <h3 class="font-medium text-gray-800">Substance Abuse</h3>
+                             <div class="flex items-start">
+                                <input id="dmh-check-sa" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <label for="dmh-check-sa" class="ml-3 text-sm text-gray-700">A Substance Abuser</ar ar-ab=""></label>
+                            </div>
+                            <div class="flex items-start">
+                                <input id="dmh-check-sa-self" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <label for="dmh-check-sa-self" class="ml-3 text-sm text-gray-700">Dangerous to: Self</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Button -->
+                <div class="pt-4">
+                    <button id="generate-dmh" class="generate-btn w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Generate DMH-5-72-19 PDF
+                    </button>
+                </div>
+            </section>
+
+        </main>
+        
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 border-4 border-white border-t-blue-500 rounded-full animate-spin"></div>
+                <span class="mt-4 text-white text-lg font-medium">Generating PDF...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Logic -->
+    <script>
+        // Get PDF libraries
+        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+        // --- PDF GENERATION ---
+        
+        // PDF Filenames
+        // We use relative paths. This will NOT work in the local preview,
+        // but it WILL work perfectly once you upload all the files to GitHub Pages.
+        const FORM_URL_AOC = './AOC-SP-300.pdf';
+        const FORM_URL_DMH = './DMH 5-72-19.pdf';
+
+        // --- Coordinate Maps ---
+        // (0, 0) is BOTTOM-LEFT corner
+        // You must find these coordinates via trial and error
+        const COORDS_AOC_SP_300 = {
+            PAGE_1: {
+                RESPONDENT_NAME: { x: 120, y: 720 }, // Example
+                RESPONDENT_DOB: { x: 370, y: 692 }, // Example
+                CHECK_MI: { x: 70, y: 608 },         // Example
+                CHECK_SA: { x: 70, y: 560 },         // Example
+                PETITIONER_NAME: { x: 360, y: 260 }, // Example
+                PETITIONER_PHONE: { x: 360, y: 200 } // Example
+            }
+            // Add other pages if needed
+        };
+
+        const COORDS_DMH_5_72_19 = {
+            PAGE_1: {
+                RESPONDENT_NAME: { x: 100, y: 728 },  // Example
+                RESPONDENT_DOB: { x: 440, y: 728 },  // Example
+                RESPONDENT_AGE: { x: 500, y: 728 }, // Example
+                CHECK_INPATIENT_MI: { x: 72, y: 555 }, // Example
+                CHECK_INPATIENT_MI_SELF: { x: 108, y: 528 }, // Example
+                CHECK_OUTPATIENT_MI: { x: 288, y: 555 }, // Example
+                CHECK_SA: { x: 503, y: 555 }, // Example
+                CHECK_SA_SELF: { x: 538, y: 528 } // Example
+            },
+            PAGE_4: {
+                CLINICIAN_NAME: { x: 230, y: 250 }, // Example
+                CLINICIAN_FACILITY: { x: 70, y: 200 } // Example
+            }
+        };
+
+        // --- Helper Functions ---
+
+        function showSpinner() {
+            document.getElementById('loading-spinner').classList.remove('hidden');
+        }
+        function hideSpinner() {
+            document.getElementById('loading-spinner').classList.add('hidden');
+        }
+
+        /**
+         * Draws an 'X' or checkmark in a PDF checkbox.
+         * @param {PDFPage} page - The PDFLib page object.
+         * @param {object} coords - The { x, y } coordinates.
+         * @param {PDFFont} font - The font to use.
+         */
+        function drawCheck(page, coords, font) {
+            page.drawText('X', {
+                x: coords.x,
+                y: coords.y,
+                size: 14,
+                font: font,
+                color: rgb(0, 0, 0),
+            });
+        }
+        
+        /**
+         * Draws text on the PDF.
+         * @param {PDFPage} page - The PDFLib page object.
+         * @param {string} text - The text to draw.
+         * @param {object} coords - The { x, y } coordinates.
+         * @param {PDFFont} font - The font to use.
+         */
+        function drawText(page, text, coords, font) {
+             page.drawText(text, {
+                x: coords.x,
+                y: coords.y,
+                size: 10,
+                font: font,
+                color: rgb(0, 0, 0),
+            });
+        }
+
+        // --- PDF Generation Logic ---
+
+        /**
+         * Generates the AOC-SP-300 PDF
+         */
+        async function generateAocPdf() {
+            showSpinner();
+            try {
+                // 1. Fetch the blank PDF
+                const existingPdfBytes = await fetch(FORM_URL_AOC).then(res => {
+                    if (!res.ok) throw new Error(`Failed to load PDF. Make sure 'AOC-SP-300.pdf' is in your repository.`);
+                    return res.arrayBuffer();
+                });
+
+                // 2. Load the PDF document
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+                const pages = pdfDoc.getPages();
+                const page1 = pages[0];
+                const coords = COORDS_AOC_SP_300.PAGE_1;
+
+                // 3. Get values from the form
+                const respondentName = document.getElementById('aoc-respondent-name').value;
+                const respondentDob = document.getElementById('aoc-respondent-dob').value;
+                const isMi = document.getElementById('aoc-check-mi').checked;
+                const isSa = document.getElementById('aoc-check-sa').checked;
+                const petitionerName = document.getElementById('aoc-petitioner-name').value;
+                const petitionerPhone = document.getElementById('aoc-petitioner-phone').value;
+
+                // 4. Draw values onto the PDF
+                if (respondentName) drawText(page1, respondentName, coords.RESPONDENT_NAME, font);
+                if (respondentDob) drawText(page1, respondentDob, coords.RESPONDENT_DOB, font);
+                if (isMi) drawCheck(page1, coords.CHECK_MI, font);
+                if (isSa) drawCheck(page1, coords.CHECK_SA, font);
+                if (petitionerName) drawText(page1, petitionerName, coords.PETITIONER_NAME, font);
+                if (petitionerPhone) drawText(page1, petitionerPhone, coords.PETITIONER_PHONE, font);
+                
+                // 5. Save the PDF and trigger download
+                const pdfBytes = await pdfDoc.save();
+                saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'Completed-AOC-SP-300.pdf');
+
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Check the console and make sure the PDF files are in your GitHub repository.');
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        /**
+         * Generates the DMH-5-72-19 PDF
+         */
+        async function generateDmhPdf() {
+            showSpinner();
+            try {
+                // 1. Fetch the blank PDF
+                const existingPdfBytes = await fetch(FORM_URL_DMH).then(res => {
+                    if (!res.ok) throw new Error(`Failed to load PDF. Make sure 'DMH 5-72-19.pdf' is in your repository.`);
+                    return res.arrayBuffer();
+                });
+
+                // 2. Load the PDF document (it has multiple pages)
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+                const page1 = pdfDoc.getPage(0); // Page 1
+                const page4 = pdfDoc.getPage(3); // Page 4
+                
+                const coordsP1 = COORDS_DMH_5_72_19.PAGE_1;
+                const coordsP4 = COORDS_DMH_5_72_19.PAGE_4;
+
+                // 3. Get values from the form
+                const respName = document.getElementById('dmh-respondent-name').value;
+                const respDob = document.getElementById('dmh-respondent-dob').value;
+                const respAge = document.getElementById('dmh-respondent-age').value;
+                const clinicianName = document.getElementById('dmh-clinician-name').value;
+                const clinicianFacility = document.getElementById('dmh-clinician-facility').value;
+
+                // Section I
+                const isInpatientMi = document.getElementById('dmh-check-inpatient-mi').checked;
+                const isInpatientMiSelf = document.getElementById('dmh-check-inpatient-mi-self').checked;
+                const isOutpatientMi = document.getElementById('dmh-check-outpatient-mi').checked;
+                const isSa = document.getElementById('dmh-check-sa').checked;
+                const isSaSelf = document.getElementById('dmh-check-sa-self').checked;
+
+                // 4. Draw values onto the PDF
+                // Page 1
+                if (respName) drawText(page1, respName, coordsP1.RESPONDENT_NAME, font);
+                if (respDob) drawText(page1, respDob, coordsP1.RESPONDENT_DOB, font);
+                if (respAge) drawText(page1, respAge, coordsP1.RESPONDENT_AGE, font);
+                if (isInpatientMi) drawCheck(page1, coordsP1.CHECK_INPATIENT_MI, font);
+                if (isInpatientMiSelf) drawCheck(page1, coordsP1.CHECK_INPATIENT_MI_SELF, font);
+                if (isOutpatientMi) drawCheck(page1, coordsP1.CHECK_OUTPATIENT_MI, font);
+                if (isSa) drawCheck(page1, coordsP1.CHECK_SA, font);
+                if (isSaSelf) drawCheck(page1, coordsP1.CHECK_SA_SELF, font);
+
+                // Page 4
+                if (clinicianName) drawText(page4, clinicianName, coordsP4.CLINICIAN_NAME, font);
+                if (clinicianFacility) drawText(page4, clinicianFacility, coordsP4.CLINICIAN_FACILITY, font);
+
+                // 5. Save the PDF and trigger download
+                const pdfBytes = await pdfDoc.save();
+                saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'Completed-DMH-5-72-19.pdf');
+
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Check the console and make sure the PDF files are in your GitHub repository.');
+            } finally {
+                hideSpinner();
+            }
+        }
+
+
+        // --- EVENT LISTENERS ---
+
+        // Tab switching
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const formSections = document.querySelectorAll('.form-section');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deactivate all
+                tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                formSections.forEach(sec => sec.classList.add('hidden'));
+                
+                // Activate clicked
+                button.classList.add('tab-active');
+                document.getElementById('form-' + button.dataset.form).classList.remove('hidden');
+            });
+        });
+
+        // PDF Generation buttons
+        document.getElementById('generate-aoc').addEventListener('click', generateAocPdf);
+        document.getElementById('generate-dmh').addEventListener('click', generateDmhPdf);
+        
+        // --- Local Storage Logic ---
+        const localSaveInputs = document.querySelectorAll('.local-save');
+        const rememberCheckboxes = document.querySelectorAll('input[id$="-remember-me"]');
+
+        function loadSavedData() {
+            localSaveInputs.forEach(input => {
+                const savedValue = localStorage.getItem(input.id);
+                if (savedValue) {
+                    input.value = savedValue;
+                }
+            });
+            // Also check the "remember me" box if data was loaded
+            if(localStorage.getItem('rememberMe') === 'true') {
+                rememberCheckboxes.forEach(box => box.checked = true);
+            }
+        }
+
+        function handleRememberCheck() {
+            const remember = this.checked;
+            localStorage.setItem('rememberMe', remember);
+            
+            if (remember) {
+                // Save all fields
+                localSaveInputs.forEach(input => {
+                    localStorage.setItem(input.id, input.value);
+                });
+            } else {
+                // Clear all fields
+                localSaveInputs.forEach(input => {
+                    localStorage.removeItem(input.id);
+                });
+            }
+        }
+        
+        // Add listeners
+        rememberCheckboxes.forEach(box => box.addEventListener('change', handleRememberCheck));
+        localSaveInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                // Only save if the box is checked
+                if (localStorage.getItem('rememberMe') === 'true') {
+                    localStorage.setItem(input.id, input.value);
+                }
+            });
+        });
+
+        // Load data on page start
+        loadSavedData();
+
+    </script>
+</body>
+</html>
+
+
