@@ -70,17 +70,227 @@
             Unified Data Entry
           </h2>
 
-          <!-- Combined Petitioner/Clinician Info -->
+          <!-- General / Header -->
           <fieldset class="border border-gray-300 rounded-lg p-4">
             <legend class="text-lg font-medium text-gray-700 px-2">
-              Your Information (Petitioner or Clinician)
+              General Information
             </legend>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="unified-county"
+                  class="block text-sm font-medium text-gray-700"
+                  >County</label
+                >
+                <select
+                  id="unified-county"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                >
+                  <!-- Options will be populated by script -->
+                </select>
+              </div>
+              <div>
+                <label
+                  for="unified-client-record"
+                  class="block text-sm font-medium text-gray-700"
+                  >Client Record #</label
+                >
+                <input
+                  type="text"
+                  id="unified-client-record"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-file-no"
+                  class="block text-sm font-medium text-gray-700"
+                  >File No.</label
+                >
+                <input
+                  type="text"
+                  id="unified-file-no"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Respondent & Contacts -->
+          <fieldset class="border border-gray-300 rounded-lg p-4">
+            <legend class="text-lg font-medium text-gray-700 px-2">
+              Respondent & Contacts
+            </legend>
+
+            <!-- Respondent Info -->
+            <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">
+              Respondent
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div class="md:col-span-2">
+                <label
+                  for="unified-respondent-name"
+                  class="block text-sm font-medium text-gray-700"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-name"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-respondent-dob"
+                  class="block text-sm font-medium text-gray-700"
+                  >DOB</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-dob"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="MM/DD/YYYY"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-respondent-age"
+                  class="block text-sm font-medium text-gray-700"
+                  >Age</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-age"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-respondent-sex"
+                  class="block text-sm font-medium text-gray-700"
+                  >Sex</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-sex"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-respondent-race"
+                  class="block text-sm font-medium text-gray-700"
+                  >Race</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-race"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-respondent-ms"
+                  class="block text-sm font-medium text-gray-700"
+                  >Marital Status</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-ms"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div class="md:col-span-3">
+                <label
+                  for="unified-respondent-address"
+                  class="block text-sm font-medium text-gray-700"
+                  >Address (Street or Box Number, City, State, Zip)</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-address"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-respondent-phone"
+                  class="block text-sm font-medium text-gray-700"
+                  >Phone</label
+                >
+                <input
+                  type="text"
+                  id="unified-respondent-phone"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <!-- Legally Responsible Person -->
+            <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">
+              Legally Responsible Person or Next of Kin
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label
+                  for="unified-lrp-name"
+                  class="block text-sm font-medium text-gray-700"
+                  >Name</label
+                >
+                <input
+                  type="text"
+                  id="unified-lrp-name"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-lrp-relationship"
+                  class="block text-sm font-medium text-gray-700"
+                  >Relationship</label
+                >
+                <input
+                  type="text"
+                  id="unified-lrp-relationship"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label
+                  for="unified-lrp-address"
+                  class="block text-sm font-medium text-gray-700"
+                  >Address (Street or Box Number, City, State, Zip)</label
+                >
+                <input
+                  type="text"
+                  id="unified-lrp-address"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-lrp-phone"
+                  class="block text-sm font-medium text-gray-700"
+                  >Phone</label
+                >
+                <input
+                  type="text"
+                  id="unified-lrp-phone"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <!-- Petitioner Info -->
+            <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">
+              Petitioner
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
                   for="unified-petitioner-name"
                   class="block text-sm font-medium text-gray-700"
-                  >Your Full Name & Credentials</label
+                  >Name</label
                 >
                 <input
                   type="text"
@@ -90,13 +300,13 @@
               </div>
               <div>
                 <label
-                  for="unified-petitioner-phone"
+                  for="unified-petitioner-relationship"
                   class="block text-sm font-medium text-gray-700"
-                  >Your Phone Number</label
+                  >Relationship</label
                 >
                 <input
                   type="text"
-                  id="unified-petitioner-phone"
+                  id="unified-petitioner-relationship"
                   class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
@@ -104,7 +314,7 @@
                 <label
                   for="unified-petitioner-address"
                   class="block text-sm font-medium text-gray-700"
-                  >Your Full Address</label
+                  >Address (Street or Box Number, City, State, Zip)</label
                 >
                 <input
                   type="text"
@@ -114,49 +324,13 @@
               </div>
               <div>
                 <label
-                  for="unified-petitioner-relationship"
+                  for="unified-petitioner-phone"
                   class="block text-sm font-medium text-gray-700"
-                  >Relationship to Respondent</label
+                  >Phone</label
                 >
                 <input
                   type="text"
-                  id="unified-petitioner-relationship"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="unified-facility-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Facility Name</label
-                >
-                <input
-                  type="text"
-                  id="unified-facility-name"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label
-                  for="unified-facility-address"
-                  class="block text-sm font-medium text-gray-700"
-                  >Facility Address</label
-                >
-                <input
-                  type="text"
-                  id="unified-facility-address"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="unified-facility-phone"
-                  class="block text-sm font-medium text-gray-700"
-                  >Facility Phone</label
-                >
-                <input
-                  type="text"
-                  id="unified-facility-phone"
+                  id="unified-petitioner-phone"
                   class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
@@ -179,92 +353,10 @@
             </div>
           </fieldset>
 
-          <!-- Respondent Info -->
+          <!-- Exam Details -->
           <fieldset class="border border-gray-300 rounded-lg p-4">
             <legend class="text-lg font-medium text-gray-700 px-2">
-              Respondent Information
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="md:col-span-2">
-                <label
-                  for="unified-respondent-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Respondent's Full Name</label
-                >
-                <input
-                  type="text"
-                  id="unified-respondent-name"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="unified-county"
-                  class="block text-sm font-medium text-gray-700"
-                  >County of Residence</label
-                >
-                <select
-                  id="unified-county"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <!-- Options will be populated by script -->
-                </select>
-              </div>
-              <div>
-                <label
-                  for="unified-respondent-dob"
-                  class="block text-sm font-medium text-gray-700"
-                  >DOB (MM/DD/YYYY)</label
-                >
-                <input
-                  type="text"
-                  id="unified-respondent-dob"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="unified-respondent-age"
-                  class="block text-sm font-medium text-gray-700"
-                  >Age</label
-                >
-                <input
-                  type="text"
-                  id="unified-respondent-age"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="unified-respondent-gender"
-                  class="block text-sm font-medium text-gray-700"
-                  >Gender</label
-                >
-                <input
-                  type="text"
-                  id="unified-respondent-gender"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="unified-respondent-race"
-                  class="block text-sm font-medium text-gray-700"
-                  >Race</label
-                >
-                <input
-                  type="text"
-                  id="unified-respondent-race"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Examination Details -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Examination Details
+              Exam Details
             </legend>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -306,7 +398,7 @@
             </div>
           </fieldset>
 
-          <!-- Criteria -->
+          <!-- Commitment Criteria -->
           <fieldset class="border border-gray-300 rounded-lg p-4">
             <legend class="text-lg font-medium text-gray-700 px-2">
               Commitment Criteria
@@ -338,8 +430,7 @@
                   <label
                     for="unified-check-mi-danger-self"
                     class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    SELF.</label
+                    >Dangerous to Self</label
                   >
                 </div>
                 <div class="flex items-start">
@@ -351,8 +442,7 @@
                   <label
                     for="unified-check-mi-danger-others"
                     class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    OTHERS.</label
+                    >Dangerous to Others</label
                   >
                 </div>
               </div>
@@ -382,8 +472,7 @@
                   <label
                     for="unified-check-sa-danger-self"
                     class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    SELF.</label
+                    >Dangerous to Self</label
                   >
                 </div>
                 <div class="flex items-start">
@@ -395,74 +484,256 @@
                   <label
                     for="unified-check-sa-danger-others"
                     class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    OTHERS.</label
+                    >Dangerous to Others</label
                   >
                 </div>
               </div>
             </div>
+          </fieldset>
+
+          <!-- Findings & Health Screening -->
+          <fieldset class="border border-gray-300 rounded-lg p-4">
+            <legend class="text-lg font-medium text-gray-700 px-2">
+              Findings & Health Screening
+            </legend>
             <div class="mt-4">
               <label
-                for="unified-facts"
+                for="unified-findings"
                 class="block text-sm font-medium text-gray-700"
-                >Facts supporting the above criteria (specific behaviors,
-                threats, etc.)</label
+                >Clear description of findings for each criterion checked</label
               >
               <textarea
-                id="unified-facts"
-                rows="6"
+                id="unified-findings"
+                rows="4"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              ></textarea>
+            </div>
+            <div class="mt-4">
+              <label
+                for="unified-impression"
+                class="block text-sm font-medium text-gray-700"
+                >Impression/Diagnosis</label
+              >
+              <input
+                type="text"
+                id="unified-impression"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div>
+                <label
+                  for="unified-hr"
+                  class="block text-sm font-medium text-gray-700"
+                  >Heart Rate</label
+                >
+                <input
+                  type="text"
+                  id="unified-hr"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-rr"
+                  class="block text-sm font-medium text-gray-700"
+                  >Respiratory Rate</label
+                >
+                <input
+                  type="text"
+                  id="unified-rr"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="unified-temp"
+                  class="block text-sm font-medium text-gray-700"
+                  >Temperature</label
+                >
+                <input
+                  type="text"
+                  id="unified-temp"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            <div class="mt-4">
+              <label
+                for="unified-medical-problems"
+                class="block text-sm font-medium text-gray-700"
+                >Known/reported medical problems</label
+              >
+              <textarea
+                id="unified-medical-problems"
+                rows="2"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              ></textarea>
+            </div>
+            <div class="mt-4">
+              <label
+                for="unified-allergies"
+                class="block text-sm font-medium text-gray-700"
+                >Known/reported allergies</label
+              >
+              <textarea
+                id="unified-allergies"
+                rows="2"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              ></textarea>
+            </div>
+            <div class="mt-4">
+              <label
+                for="unified-medications"
+                class="block text-sm font-medium text-gray-700"
+                >Known/reported current medications</label
+              >
+              <textarea
+                id="unified-medications"
+                rows="2"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               ></textarea>
             </div>
           </fieldset>
 
-          <!-- LEO -->
+          <!-- Medical Red Flags & Consult Triggers -->
           <fieldset class="border border-gray-300 rounded-lg p-4">
             <legend class="text-lg font-medium text-gray-700 px-2">
-              Law Enforcement
+              Medical Red Flags & Consult Triggers
             </legend>
-            <div class="flex items-start">
-              <input
-                id="unified-leo-present"
-                type="checkbox"
-                class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                for="unified-leo-present"
-                class="ml-3 block text-sm font-medium text-gray-700"
-                >Was a law enforcement officer present during the
-                examination?</label
-              >
-            </div>
-            <div
-              id="unified-leo-details"
-              class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
+                <h3 class="font-medium text-gray-800 border-b pb-1 mb-2">
+                  Medical Red Flags
+                </h3>
+                <div class="space-y-2">
+                  <div class="flex items-start">
+                    <input id="flag-chest-pain" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-chest-pain" class="ml-3 text-sm text-gray-700">Chest pain or shortness of breath</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="flag-overdose" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-overdose" class="ml-3 text-sm text-gray-700">Suspected overdose</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="flag-severe-pain" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-severe-pain" class="ml-3 text-sm text-gray-700">Presence of severe pain</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="flag-disoriented" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-disoriented" class="ml-3 text-sm text-gray-700">Disoriented/confused</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="flag-head-trauma" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-head-trauma" class="ml-3 text-sm text-gray-700">Head trauma</label>
+                  </div>
+                   <div class="flex items-start">
+                    <input id="flag-physical-trauma" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-physical-trauma" class="ml-3 text-sm text-gray-700">Recent physical trauma</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="flag-weakness" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="flag-weakness" class="ml-3 text-sm text-gray-700">New weakness/numbness</label>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-medium text-gray-800 border-b pb-1 mb-2">
+                  Consult Triggers
+                </h3>
+                <div class="space-y-2">
+                  <div class="flex items-start">
+                    <input id="trigger-age" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-age" class="ml-3 text-sm text-gray-700">Age < 12 or > 65</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="trigger-bp" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-bp" class="ml-3 text-sm text-gray-700">Abnormal BP</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="trigger-hr" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-hr" class="ml-3 text-sm text-gray-700">Abnormal Heart Rate</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="trigger-rr" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-rr" class="ml-3 text-sm text-gray-700">Abnormal Resp Rate</label>
+                  </div>
+                   <div class="flex items-start">
+                    <input id="trigger-temp" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-temp" class="ml-3 text-sm text-gray-700">Abnormal Temperature</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="trigger-diabetes" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-diabetes" class="ml-3 text-sm text-gray-700">Diabetes (not taking meds)</label>
+                  </div>
+                   <div class="flex items-start">
+                    <input id="trigger-seizures" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-seizures" class="ml-3 text-sm text-gray-700">Seizures (not taking meds)</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="trigger-asthma" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-asthma" class="ml-3 text-sm text-gray-700">Asthma/COPD (not taking meds)</label>
+                  </div>
+                  <div class="flex items-start">
+                    <input id="trigger-pregnancy" type="checkbox" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                    <label for="trigger-pregnancy" class="ml-3 text-sm text-gray-700">Known or suspected pregnancy</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Disposition / Signatures -->
+          <fieldset class="border border-gray-300 rounded-lg p-4">
+            <legend class="text-lg font-medium text-gray-700 px-2">
+              Disposition
+            </legend>
+            <div class="space-y-3">
+              <div class="flex items-start">
+                <input id="disp-inpatient" name="disposition" type="radio" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                <label for="disp-inpatient" class="ml-3 text-sm text-gray-700">Recommend Inpatient Commitment</label>
+              </div>
+              <div class="flex items-start">
+                <input id="disp-outpatient" name="disposition" type="radio" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                <label for="disp-outpatient" class="ml-3 text-sm text-gray-700">Recommend Outpatient Commitment</label>
+              </div>
+              <div class="flex items-start">
+                <input id="disp-substance-abuse" name="disposition" type="radio" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                <label for="disp-substance-abuse" class="ml-3 text-sm text-gray-700">Recommend Substance Abuse Commitment</label>
+              </div>
+              <div class="flex items-start">
+                <input id="disp-voluntary" name="disposition" type="radio" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                <label for="disp-voluntary" class="ml-3 text-sm text-gray-700">Respondent Consented to Voluntary Treatment</label>
+              </div>
+              <div class="flex items-start">
+                <input id="disp-release" name="disposition" type="radio" class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                <label for="disp-release" class="ml-3 text-sm text-gray-700">Release Respondent and Terminate Proceedings</label>
+              </div>
+            </div>
+             <div class="mt-4">
                 <label
-                  for="unified-leo-name"
+                  for="unified-examiner-name"
                   class="block text-sm font-medium text-gray-700"
-                  >Officer Name & Title</label
+                  >Examiner's Printed Name, Credentials, and Title</label
                 >
                 <input
                   type="text"
-                  id="unified-leo-name"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  id="unified-examiner-name"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-              <div>
+              <div class="mt-4">
                 <label
-                  for="unified-leo-agency"
+                  for="unified-facility-info"
                   class="block text-sm font-medium text-gray-700"
-                  >Law Enforcement Agency</label
+                  >Facility Name, Address, and Phone</label
                 >
                 <input
                   type="text"
-                  id="unified-leo-agency"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  id="unified-facility-info"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-            </div>
           </fieldset>
 
           <!-- Button -->
@@ -481,251 +752,7 @@
           <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
             AOC-SP-300: Affidavit and Petition
           </h2>
-
-          <!-- County -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Jurisdiction
-            </legend>
-            <div>
-              <label
-                for="aoc-county"
-                class="block text-sm font-medium text-gray-700"
-                >County</label
-              >
-              <select
-                id="aoc-county"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                <!-- Options will be populated by script -->
-              </select>
-            </div>
-          </fieldset>
-
-          <!-- Petitioner Info -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Petitioner Information
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="aoc-petitioner-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Your Full Name</label
-                >
-                <input
-                  type="text"
-                  id="aoc-petitioner-name"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="aoc-petitioner-phone"
-                  class="block text-sm font-medium text-gray-700"
-                  >Your Phone Number</label
-                >
-                <input
-                  type="text"
-                  id="aoc-petitioner-phone"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label
-                  for="aoc-petitioner-address"
-                  class="block text-sm font-medium text-gray-700"
-                  >Your Full Address</label
-                >
-                <input
-                  type="text"
-                  id="aoc-petitioner-address"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="aoc-petitioner-relationship"
-                  class="block text-sm font-medium text-gray-700"
-                  >Relationship to Respondent</label
-                >
-                <input
-                  type="text"
-                  id="aoc-petitioner-relationship"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-            <div class="flex items-start mt-4">
-              <div class="flex h-5 items-center">
-                <input
-                  id="aoc-remember-me"
-                  type="checkbox"
-                  class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label for="aoc-remember-me" class="font-medium text-gray-700"
-                  >Remember my information</label
-                >
-                <p class="text-gray-500">
-                  Saves your info in this browser's local storage.
-                </p>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Respondent Info -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Respondent Information
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="md:col-span-2">
-                <label
-                  for="aoc-respondent-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Respondent's Full Name</label
-                >
-                <input
-                  type="text"
-                  id="aoc-respondent-name"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="aoc-respondent-age"
-                  class="block text-sm font-medium text-gray-700"
-                  >Age</label
-                >
-                <input
-                  type="text"
-                  id="aoc-respondent-age"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="aoc-respondent-dob"
-                  class="block text-sm font-medium text-gray-700"
-                  >DOB (MM/DD/YYYY)</label
-                >
-                <input
-                  type="text"
-                  id="aoc-respondent-dob"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="aoc-respondent-gender"
-                  class="block text-sm font-medium text-gray-700"
-                  >Gender</label
-                >
-                <input
-                  type="text"
-                  id="aoc-respondent-gender"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="aoc-respondent-race"
-                  class="block text-sm font-medium text-gray-700"
-                  >Race</label
-                >
-                <input
-                  type="text"
-                  id="aoc-respondent-race"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Criteria -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Commitment Criteria
-            </legend>
-            <div class="space-y-2">
-              <div class="flex items-start">
-                <input
-                  id="aoc-check-mi"
-                  type="checkbox"
-                  class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label
-                  for="aoc-check-mi"
-                  class="ml-3 block text-sm font-medium text-gray-700"
-                  >Has a mental illness.</label
-                >
-              </div>
-              <div class="flex items-start">
-                <input
-                  id="aoc-check-sa"
-                  type="checkbox"
-                  class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label
-                  for="aoc-check-sa"
-                  class="ml-3 block text-sm font-medium text-gray-700"
-                  >Is a substance abuser.</label
-                >
-              </div>
-              <div class="flex items-start">
-                <input
-                  id="aoc-check-danger-self"
-                  type="checkbox"
-                  class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label
-                  for="aoc-check-danger-self"
-                  class="ml-3 block text-sm font-medium text-gray-700"
-                  >Poses an immediate substantial likelihood of serious harm to
-                  self.</label
-                >
-              </div>
-              <div class="flex items-start">
-                <input
-                  id="aoc-check-danger-others"
-                  type="checkbox"
-                  class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label
-                  for="aoc-check-danger-others"
-                  class="ml-3 block text-sm font-medium text-gray-700"
-                  >Poses an immediate substantial likelihood of serious harm to
-                  others.</label
-                >
-              </div>
-            </div>
-            <div class="mt-4">
-              <label
-                for="aoc-facts"
-                class="block text-sm font-medium text-gray-700"
-                >Facts supporting the above criteria (specific behaviors,
-                threats, etc.)</label
-              >
-              <textarea
-                id="aoc-facts"
-                rows="6"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              ></textarea>
-            </div>
-          </fieldset>
-
-          <!-- Button -->
-          <div class="pt-4">
-            <button
-              id="generate-aoc"
-              class="generate-btn w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Generate AOC-SP-300 PDF
-            </button>
-          </div>
+          <!-- This section is intentionally left sparse as the unified form is the primary focus -->
         </section>
 
         <!-- FORM 2: DMH-5-72-19 -->
@@ -733,357 +760,7 @@
           <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
             DMH-5-72-19: First Examination
           </h2>
-
-          <!-- Clinician Info -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Clinician & Facility Information
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="dmh-clinician-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Your Full Name & Credentials</label
-                >
-                <input
-                  type="text"
-                  id="dmh-clinician-name"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-clinician-facility"
-                  class="block text-sm font-medium text-gray-700"
-                  >Your Facility Name</label
-                >
-                <input
-                  type="text"
-                  id="dmh-clinician-facility"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label
-                  for="dmh-facility-address"
-                  class="block text-sm font-medium text-gray-700"
-                  >Facility Address</label
-                >
-                <input
-                  type="text"
-                  id="dmh-facility-address"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-facility-phone"
-                  class="block text-sm font-medium text-gray-700"
-                  >Facility Phone</label
-                >
-                <input
-                  type="text"
-                  id="dmh-facility-phone"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-            <div class="flex items-start mt-4">
-              <div class="flex h-5 items-center">
-                <input
-                  id="dmh-remember-me"
-                  type="checkbox"
-                  class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label for="dmh-remember-me" class="font-medium text-gray-700"
-                  >Remember my information</label
-                >
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Respondent Info -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Respondent Information
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="md:col-span-2">
-                <label
-                  for="dmh-respondent-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Respondent's Full Name</label
-                >
-                <input
-                  type="text"
-                  id="dmh-respondent-name"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-county"
-                  class="block text-sm font-medium text-gray-700"
-                  >County of Residence</label
-                >
-                <select
-                  id="dmh-county"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <!-- Options will be populated by script -->
-                </select>
-              </div>
-              <div>
-                <label
-                  for="dmh-respondent-dob"
-                  class="block text-sm font-medium text-gray-700"
-                  >DOB (MM/DD/YYYY)</label
-                >
-                <input
-                  type="text"
-                  id="dmh-respondent-dob"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-respondent-age"
-                  class="block text-sm font-medium text-gray-700"
-                  >Age</label
-                >
-                <input
-                  type="text"
-                  id="dmh-respondent-age"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-respondent-gender"
-                  class="block text-sm font-medium text-gray-700"
-                  >Gender</label
-                >
-                <input
-                  type="text"
-                  id="dmh-respondent-gender"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Examination Details -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Examination Details
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="dmh-exam-date"
-                  class="block text-sm font-medium text-gray-700"
-                  >Date of Exam</label
-                >
-                <input
-                  type="date"
-                  id="dmh-exam-date"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-exam-time"
-                  class="block text-sm font-medium text-gray-700"
-                  >Time of Exam</label
-                >
-                <input
-                  type="time"
-                  id="dmh-exam-time"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label
-                  for="dmh-exam-location"
-                  class="block text-sm font-medium text-gray-700"
-                  >Location of Exam</label
-                >
-                <input
-                  type="text"
-                  id="dmh-exam-location"
-                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Criteria -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Section I - Criteria For Commitment
-            </legend>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Mental Illness -->
-              <div class="space-y-3">
-                <h3 class="font-medium text-gray-800 border-b pb-1">
-                  Mental Illness
-                </h3>
-                <div class="flex items-start">
-                  <input
-                    id="dmh-check-mi"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label for="dmh-check-mi" class="ml-3 text-sm text-gray-700"
-                    >Individual has a mental illness.</label
-                  >
-                </div>
-                <div class="flex items-start">
-                  <input
-                    id="dmh-check-mi-danger-self"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label
-                    for="dmh-check-mi-danger-self"
-                    class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    SELF.</label
-                  >
-                </div>
-                <div class="flex items-start">
-                  <input
-                    id="dmh-check-mi-danger-others"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label
-                    for="dmh-check-mi-danger-others"
-                    class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    OTHERS.</label
-                  >
-                </div>
-              </div>
-              <!-- Substance Abuse -->
-              <div class="space-y-3">
-                <h3 class="font-medium text-gray-800 border-b pb-1">
-                  Substance Abuse
-                </h3>
-                <div class="flex items-start">
-                  <input
-                    id="dmh-check-sa"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label for="dmh-check-sa" class="ml-3 text-sm text-gray-700"
-                    >Individual is a substance abuser.</label
-                  >
-                </div>
-                <div class="flex items-start">
-                  <input
-                    id="dmh-check-sa-danger-self"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label
-                    for="dmh-check-sa-danger-self"
-                    class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    SELF.</label
-                  >
-                </div>
-                <div class="flex items-start">
-                  <input
-                    id="dmh-check-sa-danger-others"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label
-                    for="dmh-check-sa-danger-others"
-                    class="ml-3 text-sm text-gray-700"
-                    >Poses immediate substantial likelihood of serious harm to
-                    OTHERS.</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="mt-4">
-              <label
-                for="dmh-facts"
-                class="block text-sm font-medium text-gray-700"
-                >Facts supporting the above criteria (behaviors, threats,
-                suicidality, homicidality, etc.)</label
-              >
-              <textarea
-                id="dmh-facts"
-                rows="6"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              ></textarea>
-            </div>
-          </fieldset>
-
-          <!-- LEO -->
-          <fieldset class="border border-gray-300 rounded-lg p-4">
-            <legend class="text-lg font-medium text-gray-700 px-2">
-              Law Enforcement
-            </legend>
-            <div class="flex items-start">
-              <input
-                id="dmh-leo-present"
-                type="checkbox"
-                class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                for="dmh-leo-present"
-                class="ml-3 block text-sm font-medium text-gray-700"
-                >Was a law enforcement officer present during the
-                examination?</label
-              >
-            </div>
-            <div
-              id="leo-details"
-              class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <div>
-                <label
-                  for="dmh-leo-name"
-                  class="block text-sm font-medium text-gray-700"
-                  >Officer Name & Title</label
-                >
-                <input
-                  type="text"
-                  id="dmh-leo-name"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label
-                  for="dmh-leo-agency"
-                  class="block text-sm font-medium text-gray-700"
-                  >Law Enforcement Agency</label
-                >
-                <input
-                  type="text"
-                  id="dmh-leo-agency"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Button -->
-          <div class="pt-4">
-            <button
-              id="generate-dmh"
-              class="generate-btn w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Generate DMH-5-72-19 PDF
-            </button>
-          </div>
+          <!-- This section is intentionally left sparse as the unified form is the primary focus -->
         </section>
       </main>
 
