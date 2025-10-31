@@ -145,30 +145,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = pdfDoc.getForm();
 
     form.getTextField("County").setText(data.county);
-    form.getTextField("Name of Respondent").setText(data.respondentName);
-    form.getTextField("Age").setText(data.respondentAge);
-    form.getTextField("Race").setText(data.respondentRace);
-    form.getTextField("Sex").setText(data.respondentGender);
-    form.getTextField("Date of Birth").setText(data.respondentDob);
+    form.getTextField("RespondentName").setText(data.respondentName);
+    form.getTextField("RespDOB").setText(data.respondentDob);
 
-    if (data.isMi)
-      form.getCheckBox("A.  The respondent has a mental illness").check();
-    if (data.isSa)
-      form.getCheckBox("B. The respondent is a substance abuser").check();
-    if (data.isDangerSelf)
-      form.getCheckBox("1. The respondent is dangerous to self").check();
-    if (data.isDangerOthers)
-      form.getCheckBox("2. The respondent is dangerous to others").check();
+    if (data.isMi) form.getCheckBox("CkBox_001").check();
+    if (data.isSa) form.getCheckBox("CkBox_002").check();
+    if (data.isDangerSelf || data.isDangerOthers)
+      form.getCheckBox("CkBox_003").check();
 
-    form.getTextField("Facts").setText(data.facts);
+    form.getTextField("Memo_001").setText(data.facts);
 
-    form.getTextField("Name of Petitioner").setText(data.petitionerName);
-    form
-      .getTextField("Relationship to Respondent")
-      .setText(data.petitionerRelationship);
-    form.getTextField("Street Address").setText(data.petitionerAddress);
-    form.getTextField("City State Zip Code").setText(""); // Assuming address field contains city, state, zip
-    form.getTextField("Telephone No").setText(data.petitionerPhone);
+    form.getTextField("PetName").setText(data.petitionerName);
+    form.getTextField("RelationshipResp").setText(data.petitionerRelationship);
+    form.getTextField("PetitAddr1").setText(data.petitionerAddress);
+    form.getTextField("PetitionerHomePhoneNo").setText(data.petitionerPhone);
 
     return await pdfDoc.save();
   }
@@ -181,43 +171,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = pdfDoc.getForm();
 
     form.getTextField("Name of Respondent").setText(data.respondentName);
-    form.getTextField("County of Residence").setText(data.county);
-    form.getTextField("Date of Birth").setText(data.respondentDob);
+    form.getTextField("County").setText(data.county);
+    form.getTextField("DOB").setText(data.respondentDob);
     form.getTextField("Age").setText(data.respondentAge);
     form.getTextField("Sex").setText(data.respondentGender);
 
-    form.getTextField("Location of Examination").setText(data.examLocation);
-    form.getTextField("Date of Examination").setText(data.examDate);
-    form.getTextField("Time of Examination").setText(data.examTime);
+    if (data.examDate) {
+      const parts = data.examDate.split("-"); // YYYY-MM-DD
+      const formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
+      form.getTextField("undefined").setText(formattedDate);
+    }
+    form.getTextField("undefined_2").setText(data.examTime);
+    form.getTextField("undefined_3").setText(data.examLocation);
 
-    if (data.isMi) form.getCheckBox("Check Box1").check();
-    if (data.isMiDangerSelf) form.getCheckBox("Check Box2").check();
-    if (data.isMiDangerOthers) form.getCheckBox("Check Box3").check();
+    if (data.isMi)
+      form.getCheckBox("An individual with a mental illness").check();
+    if (data.isMiDangerSelf) form.getCheckBox("Self or").check();
+    if (data.isMiDangerOthers) form.getCheckBox("Others").check();
 
-    if (data.isSa) form.getCheckBox("Check Box4").check();
-    if (data.isSaDangerSelf) form.getCheckBox("Check Box5").check();
-    if (data.isSaDangerOthers) form.getCheckBox("Check Box6").check();
+    if (data.isSa) form.getCheckBox("A Substance Abuser").check();
+    if (data.isSaDangerSelf) form.getCheckBox("Self or_2").check();
+    if (data.isSaDangerOthers) form.getCheckBox("Others_2").check();
 
     form
-      .getTextField("Facts supporting the above criteria")
+      .getTextField(
+        "Clear description of findings findings for each criterion checked in Section I must be described",
+      )
       .setText(data.facts);
 
-    if (data.isLeoPresent) {
-      form.getCheckBox("Yes").check();
-      form
-        .getTextField("Name and Title of Law Enforcement Officer")
-        .setText(data.leoName);
-      form.getTextField("Law Enforcement Agency").setText(data.leoAgency);
-    } else {
-      form.getCheckBox("No").check();
-    }
-
-    form
-      .getTextField("Print Name of Physician or Eligible Psychologist")
-      .setText(data.clinicianName);
-    form.getTextField("Name of Facility").setText(data.clinicianFacility);
-    form.getTextField("Address").setText(data.facilityAddress);
-    form.getTextField("Telephone No").setText(data.facilityPhone);
+    form.getTextField("Print Name of Examiner").setText(data.clinicianName);
+    form.getTextField("Address of Facility").setText(data.clinicianFacility);
+    form.getTextField("Address of Facility_2").setText(data.facilityAddress);
+    form.getTextField("Telephone Number").setText(data.facilityPhone);
 
     return await pdfDoc.save();
   }
