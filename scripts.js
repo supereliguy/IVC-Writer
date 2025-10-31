@@ -50,7 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const showSpinner = () => document.getElementById("loading-spinner").classList.remove("hidden");
   const hideSpinner = () => document.getElementById("loading-spinner").classList.add("hidden");
 
-  const formatDate = (dateStr) => dateStr ? `${dateStr.slice(5, 7)}/${dateStr.slice(8, 10)}/${dateStr.slice(0, 4)}` : '';
+  const formatDate = (dateStr) => {
+    if (!dateStr) return { full: '', mm: '', dd: '', yyyy: '' };
+    const [yyyy, mm, dd] = dateStr.split('-');
+    return { full: `${mm}/${dd}/${yyyy}`, mm, dd, yyyy };
+  };
 
   async function generateAocPdf(data) {
     const pdfBytes = await fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
@@ -65,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('RespState').setText(data.respondentState);
     form.getTextField('RespZip').setText(data.respondentZip);
     form.getTextField('RespSSN').setText(data.respondentSsn);
-    form.getTextField('RespDOB').setText(data.respondentDob);
+    form.getTextField('RespDOB').setText(data.respondentDob.full);
     form.getTextField('RespDLNo').setText(data.respondentDl);
     form.getTextField('RespDLState').setText(data.respondentDlState);
     form.getTextField('LastKnownLocationOfRespondent').setText(data.respondentLastLocation);
@@ -89,14 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('OtherPerHomePhoneNo').setText(data.witnessHomePhone);
     form.getTextField('OtherPerBusPhoneNo').setText(data.witnessBusPhone);
 
-    form.getTextField('Date1').setText(data.examDate);
+    form.getTextField('Date1').setText(data.examDate.full);
     if(data.certification === "DepCSC") form.getCheckBox('CkBox_DepCSC').check();
     if(data.certification === "AsstCSC") form.getCheckBox('CkBox_AsstCSC').check();
     if(data.certification === "CSC") form.getCheckBox('CkBox_CSC').check();
     if(data.certification === "Mag") form.getCheckBox('CkBox_Mag').check();
     if(data.certification === "Notary") form.getCheckBox('Notary_Ckbx').check();
     form.getTextField('CountyCommission').setText(data.notaryCounty);
-    form.getTextField('DateCommExpires').setText(data.notaryExpiration);
+    form.getTextField('DateCommExpires').setText(data.notaryExpiration.full);
 
     form.getTextField('PetName').setText(data.petitionerName);
     form.getTextField('PetitAddr1').setText(data.petitionerStreet);
@@ -106,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('RelationshipResp').setText(data.petitionerRelationship);
     form.getTextField('PetitionerHomePhoneNo').setText(data.petitionerHomePhone);
     form.getTextField('PetitionerBusPhoneNo').setText(data.petitionerBusPhone);
-    form.getTextField('DateWaiver').setText(data.waiverDate);
+    form.getTextField('DateWaiver').setText(data.waiverDate.full);
     
     return pdfDoc.save();
   }
@@ -120,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Client Record').setText(data.clientRecord);
     form.getTextField('File').setText(data.fileNo);
     form.getTextField('Name of Respondent').setText(data.respondentName);
-    form.getTextField('DOB').setText(data.respondentDob);
+    form.getTextField('DOB').setText(data.respondentDob.full);
     form.getTextField('Age').setText(data.respondentAge);
     form.getTextField('Sex').setText(data.respondentSex);
     form.getTextField('Race').setText(data.respondentRace);
@@ -148,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Zip_3').setText(data.petitionerZip);
     form.getTextField('Phone_3').setText(data.petitionerHomePhone);
 
-    form.getTextField('was conducted on').setText(data.examDate);
+    form.getTextField('was conducted on').setText(data.examDate.full);
     form.getTextField('at').setText(data.examTime);
     form.getTextField('OR').setText(data.examLocation);
     
@@ -165,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('HR').setText(data.hr);
     form.getTextField('RR').setText(data.rr);
     form.getTextField('Temp').setText(data.temp);
-    form.getTextField('BP').setText(data.bp);
+    // form.getTextField('BP').setText(data.bp);
     form.getTextField('Knownreported medical problems diabetes hypertension heart attacks sickle cell anemia asthma etc').setText(data.medicalProblems);
     form.getTextField('Knownreported allergies').setText(data.allergies);
     form.getTextField('Knownreported current medications please list').setText(data.medications);
@@ -202,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Address of Facility').setText(facilityName || '');
     form.getTextField('City and State').setText(addressParts.slice(0, 2).join(',').trim());
     form.getTextField('Telephone Number').setText(addressParts.length > 2 ? addressParts.slice(2).join(',').trim() : '');
-    form.getTextField('Date').setText(data.examDate);
+    form.getTextField('Date').setText(data.examDate.full);
     
     return pdfDoc.save();
   }
