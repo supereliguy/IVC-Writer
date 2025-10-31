@@ -27,11 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('input[name="disposition"]').forEach(radio => {
     radio.addEventListener('change', () => document.getElementById('outpatient-fields').classList.toggle('hidden', radio.value !== 'outpatient'));
   });
-
+  
   document.querySelectorAll('input[name="interpreter"]').forEach(radio => {
     radio.addEventListener('change', () => document.getElementById('interpreter-details').classList.toggle('hidden', radio.value !== 'yes'));
   });
-
+  
   const tabButtons = document.querySelectorAll(".tab-button");
   const formSections = document.querySelectorAll(".form-section");
   tabButtons.forEach(button => {
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pdfBytes = await fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
-
+    
     form.getTextField('FileNo').setText(data.fileNo);
     form.getTextField('County').setText(data.county);
     form.getTextField('RespondentName').setText(data.respondentName);
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data.isMi && data.isMiId) form.getCheckBox('CkBox_002').check();
     if (data.isSa && (data.isSaDangerSelf || data.isSaDangerOthers)) form.getCheckBox('CkBox_003').check();
     form.getTextField('Memo_001').setText(data.findings);
-
+    
     form.getTextField('OtherPerName').setText(data.witnessName);
     form.getTextField('OthrPersonAddr1').setText(data.witnessStreet);
     form.getTextField('OthrPersonCity').setText(data.witnessCity);
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('PetitionerHomePhoneNo').setText(data.petitionerHomePhone);
     form.getTextField('PetitionerBusPhoneNo').setText(data.petitionerBusPhone);
     form.getTextField('DateWaiver').setText(data.waiverDate);
-
+    
     return pdfDoc.save();
   }
 
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pdfBytes = await fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
-
+    
     form.getTextField('County').setText(data.county);
     form.getTextField('Client Record').setText(data.clientRecord);
     form.getTextField('File').setText(data.fileNo);
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('State_2').setText(data.lrpState);
     form.getTextField('Zip_2').setText(data.lrpZip);
     form.getTextField('Phone_2').setText(data.lrpPhone);
-
+    
     form.getTextField('Petitioner Name').setText(data.petitionerName);
     form.getTextField('Relationship_2').setText(data.petitionerRelationship);
     form.getTextField('Address Street or Box Number_3').setText(data.petitionerStreet);
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('was conducted on').setText(data.examDate);
     form.getTextField('at').setText(data.examTime);
     form.getTextField('OR').setText(data.examLocation);
-
+    
     if (data.isMi) form.getCheckBox('An individual with a mental illness').check();
     if (data.isMiDangerSelf) form.getCheckBox('Self or').check();
     if (data.isMiDangerOthers) form.getCheckBox('Others').check();
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Knownreported medical problems diabetes hypertension heart attacks sickle cell anemia asthma etc').setText(data.medicalProblems);
     form.getTextField('Knownreported allergies').setText(data.allergies);
     form.getTextField('Knownreported current medications please list').setText(data.medications);
-
+    
     if (data.flagChestPain) form.getCheckBox('Chest pain or shortness of breath').check();
     if (data.flagOverdose) form.getCheckBox('Suspected overdose on substances or medications within the past 24 hours including acetaminophen').check();
     if (data.flagSeverePain) form.getCheckBox('Presence of severe pain eg abdominal pain head pain').check();
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('City and State').setText(addressParts.slice(0, 2).join(',').trim());
     form.getTextField('Telephone Number').setText(addressParts.length > 2 ? addressParts.slice(2).join(',').trim() : '');
     form.getTextField('Date').setText(data.examDate);
-
+    
     return pdfDoc.save();
   }
 
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hideSpinner();
     }
   });
-
+  
   // --- Local Storage & Initialization ---
   const localSaveInputs = document.querySelectorAll(".local-save");
   const rememberCheckbox = document.getElementById("unified-remember-me");
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (rememberCheckbox.checked) localStorage.setItem(input.id, input.value);
     });
   });
-
+  
   setDefaultDateTime();
   loadSavedData();
 });
