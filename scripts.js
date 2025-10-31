@@ -56,19 +56,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const pdfBytes = await fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
-    const { street: rStreet, city: rCity, state: rState, zip: rZip } = data.respondentAddress;
-    const { street: pStreet, city: pCity, state: pState, zip: pZip } = data.petitionerAddress;
 
     form.getTextField('FileNo').setText(data.fileNo);
     form.getTextField('County').setText(data.county);
     form.getTextField('RespondentName').setText(data.respondentName);
-    form.getTextField('RespAddr1').setText(rStreet);
-    form.getTextField('RespCity').setText(rCity);
-    form.getTextField('RespState').setText(rState);
-    form.getTextField('RespZip').setText(rZip);
+    form.getTextField('RespAddr1').setText(data.respondentStreet);
+    form.getTextField('RespCity').setText(data.respondentCity);
+    form.getTextField('RespState').setText(data.respondentState);
+    form.getTextField('RespZip').setText(data.respondentZip);
     form.getTextField('RespSSN').setText(data.respondentSsn);
     form.getTextField('RespDOB').setText(data.respondentDob);
     form.getTextField('RespDLNo').setText(data.respondentDl);
+    form.getTextField('RespDLState').setText(data.respondentDlState);
     form.getTextField('LastKnownLocationOfRespondent').setText(data.respondentLastLocation);
 
     if (data.interpreter === 'no') form.getCheckBox('NoInterpreterNotNeededCkBox').check();
@@ -82,11 +81,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data.isSa && (data.isSaDangerSelf || data.isSaDangerOthers)) form.getCheckBox('CkBox_003').check();
     form.getTextField('Memo_001').setText(data.findings);
 
+    form.getTextField('OtherPerName').setText(data.witnessName);
+    form.getTextField('OthrPersonAddr1').setText(data.witnessStreet);
+    form.getTextField('OthrPersonCity').setText(data.witnessCity);
+    form.getTextField('OtherPersonState').setText(data.witnessState);
+    form.getTextField('OtherPersonZip').setText(data.witnessZip);
+    form.getTextField('OtherPerHomePhoneNo').setText(data.witnessHomePhone);
+    form.getTextField('OtherPerBusPhoneNo').setText(data.witnessBusPhone);
+
+    form.getTextField('Date1').setText(data.examDate);
+    if(data.certification === "DepCSC") form.getCheckBox('CkBox_DepCSC').check();
+    if(data.certification === "AsstCSC") form.getCheckBox('CkBox_AsstCSC').check();
+    if(data.certification === "CSC") form.getCheckBox('CkBox_CSC').check();
+    if(data.certification === "Mag") form.getCheckBox('CkBox_Mag').check();
+    if(data.certification === "Notary") form.getCheckBox('Notary_Ckbx').check();
+    form.getTextField('CountyCommission').setText(data.notaryCounty);
+    form.getTextField('DateCommExpires').setText(data.notaryExpiration);
+
     form.getTextField('PetName').setText(data.petitionerName);
-    form.getTextField('PetitAddr1').setText(pStreet);
-    form.getTextField('PetitCity').setText(pCity);
-    form.getTextField('PetitState').setText(pState);
-    form.getTextField('PetitZip').setText(pZip);
+    form.getTextField('PetitAddr1').setText(data.petitionerStreet);
+    form.getTextField('PetitCity').setText(data.petitionerCity);
+    form.getTextField('PetitState').setText(data.petitionerState);
+    form.getTextField('PetitZip').setText(data.petitionerZip);
     form.getTextField('RelationshipResp').setText(data.petitionerRelationship);
     form.getTextField('PetitionerHomePhoneNo').setText(data.petitionerHomePhone);
     form.getTextField('PetitionerBusPhoneNo').setText(data.petitionerBusPhone);
@@ -99,9 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const pdfBytes = await fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
-    const { street: rStreet, city: rCity, state: rState, zip: rZip } = data.respondentAddress;
-    const { street: lrpStreet, city: lrpCity, state: lrpState, zip: lrpZip } = data.lrpAddress;
-    const { street: pStreet, city: pCity, state: pState, zip: pZip } = data.petitionerAddress;
 
     form.getTextField('County').setText(data.county);
     form.getTextField('Client Record').setText(data.clientRecord);
@@ -112,27 +125,27 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Sex').setText(data.respondentSex);
     form.getTextField('Race').setText(data.respondentRace);
     form.getTextField('MS').setText(data.respondentMs);
-    form.getTextField('Address Street or Box Number').setText(rStreet);
-    form.getTextField('City').setText(rCity);
-    form.getTextField('State').setText(rState);
-    form.getTextField('Zip').setText(rZip);
+    form.getTextField('Address Street or Box Number').setText(data.respondentStreet);
+    form.getTextField('City').setText(data.respondentCity);
+    form.getTextField('State').setText(data.respondentState);
+    form.getTextField('Zip').setText(data.respondentZip);
     form.getTextField('County_2').setText(data.county);
     form.getTextField('Phone').setText(data.respondentPhone);
 
     form.getTextField('Legally Responsible Person or Next of Kin Name').setText(data.lrpName);
     form.getTextField('Relationship').setText(data.lrpRelationship);
-    form.getTextField('Address Street or Box Number_2').setText(lrpStreet);
-    form.getTextField('City_2').setText(lrpCity);
-    form.getTextField('State_2').setText(lrpState);
-    form.getTextField('Zip_2').setText(lrpZip);
+    form.getTextField('Address Street or Box Number_2').setText(data.lrpStreet);
+    form.getTextField('City_2').setText(data.lrpCity);
+    form.getTextField('State_2').setText(data.lrpState);
+    form.getTextField('Zip_2').setText(data.lrpZip);
     form.getTextField('Phone_2').setText(data.lrpPhone);
 
     form.getTextField('Petitioner Name').setText(data.petitionerName);
     form.getTextField('Relationship_2').setText(data.petitionerRelationship);
-    form.getTextField('Address Street or Box Number_3').setText(pStreet);
-    form.getTextField('City_3').setText(pCity);
-    form.getTextField('State_3').setText(pState);
-    form.getTextField('Zip_3').setText(pZip);
+    form.getTextField('Address Street or Box Number_3').setText(data.petitionerStreet);
+    form.getTextField('City_3').setText(data.petitionerCity);
+    form.getTextField('State_3').setText(data.petitionerState);
+    form.getTextField('Zip_3').setText(data.petitionerZip);
     form.getTextField('Phone_3').setText(data.petitionerHomePhone);
 
     form.getTextField('was conducted on').setText(data.examDate);
@@ -200,16 +213,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const getValue = id => document.getElementById(id).value;
       const isChecked = id => document.getElementById(id).checked;
       const getRadio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
-      const parseAddress = (str) => {
-        const parts = str.split(',').map(s => s.trim());
-        return { street: parts[0] || '', city: parts[1] || '', state: (parts[2] || '').split(' ')[0] || '', zip: (parts[2] || '').split(' ')[1] || '' };
-      };
 
       const data = {
         county: getValue("unified-county"), clientRecord: getValue("unified-client-record"), fileNo: getValue("unified-file-no"),
-        respondentName: getValue("unified-respondent-name"), respondentDob: formatDate(getValue("unified-respondent-dob")), respondentAge: getValue("unified-respondent-age"), respondentSex: getValue("unified-respondent-sex"), respondentRace: getValue("unified-respondent-race"), respondentMs: getValue("unified-respondent-ms"), respondentAddress: parseAddress(getValue("unified-respondent-address")), respondentPhone: getValue("unified-respondent-phone"), respondentSsn: getValue("unified-respondent-ssn"), respondentDl: getValue("unified-respondent-dl"), respondentLastLocation: getValue("unified-respondent-last-location"),
-        lrpName: getValue("unified-lrp-name"), lrpRelationship: getValue("unified-lrp-relationship"), lrpAddress: parseAddress(getValue("unified-lrp-address")), lrpPhone: getValue("unified-lrp-phone"),
-        petitionerName: getValue("unified-petitioner-name"), petitionerRelationship: getValue("unified-petitioner-relationship"), petitionerAddress: parseAddress(getValue("unified-petitioner-address")), petitionerHomePhone: getValue("unified-petitioner-home-phone"), petitionerBusPhone: getValue("unified-petitioner-bus-phone"),
+        respondentName: getValue("unified-respondent-name"), respondentDob: formatDate(getValue("unified-respondent-dob")), respondentAge: getValue("unified-respondent-age"), respondentSex: getValue("unified-respondent-sex"), respondentRace: getValue("unified-respondent-race"), respondentMs: getValue("unified-respondent-ms"), respondentStreet: getValue("unified-respondent-street"), respondentCity: getValue("unified-respondent-city"), respondentState: getValue("unified-respondent-state"), respondentZip: getValue("unified-respondent-zip"), respondentPhone: getValue("unified-respondent-phone"), respondentSsn: getValue("unified-respondent-ssn"), respondentDl: getValue("unified-respondent-dl"), respondentDlState: getValue("unified-respondent-dl-state"), respondentLastLocation: getValue("unified-respondent-last-location"),
+        lrpName: getValue("unified-lrp-name"), lrpRelationship: getValue("unified-lrp-relationship"), lrpStreet: getValue("unified-lrp-street"), lrpCity: getValue("unified-lrp-city"), lrpState: getValue("unified-lrp-state"), lrpZip: getValue("unified-lrp-zip"), lrpPhone: getValue("unified-lrp-phone"),
+        petitionerName: getValue("unified-petitioner-name"), petitionerRelationship: getValue("unified-petitioner-relationship"), petitionerStreet: getValue("unified-petitioner-street"), petitionerCity: getValue("unified-petitioner-city"), petitionerState: getValue("unified-petitioner-state"), petitionerZip: getValue("unified-petitioner-zip"), petitionerHomePhone: getValue("unified-petitioner-home-phone"), petitionerBusPhone: getValue("unified-petitioner-bus-phone"),
+        witnessName: getValue("unified-witness-name"), witnessStreet: getValue("unified-witness-street"), witnessCity: getValue("unified-witness-city"), witnessState: getValue("unified-witness-state"), witnessZip: getValue("unified-witness-zip"), witnessHomePhone: getValue("unified-witness-home-phone"), witnessBusPhone: getValue("unified-witness-bus-phone"),
         interpreter: getRadio("interpreter"), interpreterExplanation: getValue("unified-interpreter-explanation"),
         examDate: formatDate(getValue("unified-exam-date")), examTime: getValue("unified-exam-time"), examLocation: getValue("unified-exam-location"),
         findings: getValue("unified-findings"), impression: getValue("unified-impression"),
@@ -219,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         flagChestPain: isChecked("flag-chest-pain"), flagOverdose: isChecked("flag-overdose"), flagSeverePain: isChecked("flag-severe-pain"), flagDisoriented: isChecked("flag-disoriented"), flagHeadTrauma: isChecked("flag-head-trauma"), flagPhysicalTrauma: isChecked("flag-physical-trauma"), flagWeakness: isChecked("flag-weakness"),
         triggerAge: isChecked("trigger-age"), triggerBp: isChecked("trigger-bp"), triggerHr: isChecked("trigger-hr"), triggerRr: isChecked("trigger-rr"), triggerTemp: isChecked("trigger-temp"), triggerDiabetes: isChecked("trigger-diabetes"), triggerSeizures: isChecked("trigger-seizures"), triggerAsthma: isChecked("trigger-asthma"), triggerPregnancy: isChecked("trigger-pregnancy"),
         disposition: getRadio("disposition"), outpatientFacilityName: getValue("unified-outpatient-facility-name"), outpatientFacilityContact: getValue("unified-outpatient-facility-contact"),
-        examinerName: getValue("unified-examiner-name"), facilityInfo: getValue("unified-facility-info"), waiverDate: formatDate(getValue("unified-waiver-date")),
+        examinerName: getValue("unified-examiner-name"), facilityInfo: getValue("unified-facility-info"), notaryCounty: getValue("unified-notary-county"), notaryExpiration: formatDate(getValue("unified-notary-expiration")), certification: getRadio("certification"), waiverDate: formatDate(getValue("unified-waiver-date")),
       };
 
       const aocPdfBytes = await generateAocPdf(data);

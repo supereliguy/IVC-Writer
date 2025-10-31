@@ -62,35 +62,67 @@
             <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">Respondent</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div class="md:col-span-2"><label for="unified-respondent-name" class="block text-sm font-medium text-gray-700">Full Name</label><input type="text" id="unified-respondent-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
-              <div><label for="unified-respondent-dob" class="block text-sm font-medium text-gray-700">DOB</label><input type="text" id="unified-respondent-dob" placeholder="MM/DD/YYYY" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+              <div><label for="unified-respondent-dob" class="block text-sm font-medium text-gray-700">DOB</label><input type="date" id="unified-respondent-dob" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div><label for="unified-respondent-age" class="block text-sm font-medium text-gray-700">Age</label><input type="text" id="unified-respondent-age" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div><label for="unified-respondent-sex" class="block text-sm font-medium text-gray-700">Sex</label><input type="text" id="unified-respondent-sex" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div><label for="unified-respondent-race" class="block text-sm font-medium text-gray-700">Race</label><input type="text" id="unified-respondent-race" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div><label for="unified-respondent-ms" class="block text-sm font-medium text-gray-700">Marital Status</label><input type="text" id="unified-respondent-ms" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
-              <div class="md:col-span-3"><label for="unified-respondent-address" class="block text-sm font-medium text-gray-700">Address (Street, City, State, Zip)</label><input type="text" id="unified-respondent-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
-              <div><label for="unified-respondent-phone" class="block text-sm font-medium text-gray-700">Phone</label><input type="text" id="unified-respondent-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div class="md:col-span-4"><label for="unified-respondent-street" class="block text-sm font-medium text-gray-700">Street Address</label><input type="text" id="unified-respondent-street" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-respondent-city" class="block text-sm font-medium text-gray-700">City</label><input type="text" id="unified-respondent-city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-respondent-state" class="block text-sm font-medium text-gray-700">State</label><input type="text" id="unified-respondent-state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-respondent-zip" class="block text-sm font-medium text-gray-700">Zip</label><input type="text" id="unified-respondent-zip" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-respondent-phone" class="block text-sm font-medium text-gray-700">Phone</label><input type="text" id="unified-respondent-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+            </div>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div><label for="unified-respondent-ssn" class="block text-sm font-medium text-gray-700">SSN</label><input type="text" id="unified-respondent-ssn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div><label for="unified-respondent-dl" class="block text-sm font-medium text-gray-700">Driver's License No.</label><input type="text" id="unified-respondent-dl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+              <div><label for="unified-respondent-dl-state" class="block text-sm font-medium text-gray-700">DL State</label><input type="text" id="unified-respondent-dl-state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div class="md:col-span-3"><label for="unified-respondent-last-location" class="block text-sm font-medium text-gray-700">Last Known Location</label><input type="text" id="unified-respondent-last-location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
             </div>
 
             <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">Legally Responsible Person or Next of Kin</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div><label for="unified-lrp-name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="unified-lrp-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
               <div><label for="unified-lrp-relationship" class="block text-sm font-medium text-gray-700">Relationship</label><input type="text" id="unified-lrp-relationship" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
-              <div class="md:col-span-2"><label for="unified-lrp-address" class="block text-sm font-medium text-gray-700">Address</label><input type="text" id="unified-lrp-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
-              <div><label for="unified-lrp-phone" class="block text-sm font-medium text-gray-700">Phone</label><input type="text" id="unified-lrp-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+            </div>
+             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div class="md:col-span-4"><label for="unified-lrp-street" class="block text-sm font-medium text-gray-700">Street Address</label><input type="text" id="unified-lrp-street" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-lrp-city" class="block text-sm font-medium text-gray-700">City</label><input type="text" id="unified-lrp-city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-lrp-state" class="block text-sm font-medium text-gray-700">State</label><input type="text" id="unified-lrp-state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-lrp-zip" class="block text-sm font-medium text-gray-700">Zip</label><input type="text" id="unified-lrp-zip" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-lrp-phone" class="block text-sm font-medium text-gray-700">Phone</label><input type="text" id="unified-lrp-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
             </div>
 
             <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">Petitioner</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div><label for="unified-petitioner-name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="unified-petitioner-name" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
                 <div><label for="unified-petitioner-relationship" class="block text-sm font-medium text-gray-700">Relationship</label><input type="text" id="unified-petitioner-relationship" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
-                <div class="md:col-span-2"><label for="unified-petitioner-address" class="block text-sm font-medium text-gray-700">Address</label><input type="text" id="unified-petitioner-address" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div class="md:col-span-4"><label for="unified-petitioner-street" class="block text-sm font-medium text-gray-700">Street Address</label><input type="text" id="unified-petitioner-street" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-petitioner-city" class="block text-sm font-medium text-gray-700">City</label><input type="text" id="unified-petitioner-city" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-petitioner-state" class="block text-sm font-medium text-gray-700">State</label><input type="text" id="unified-petitioner-state" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-petitioner-zip" class="block text-sm font-medium text-gray-700">Zip</label><input type="text" id="unified-petitioner-zip" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
                 <div><label for="unified-petitioner-home-phone" class="block text-sm font-medium text-gray-700">Home Phone</label><input type="text" id="unified-petitioner-home-phone" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
                 <div><label for="unified-petitioner-bus-phone" class="block text-sm font-medium text-gray-700">Business Phone</label><input type="text" id="unified-petitioner-bus-phone" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
             </div>
              <div class="flex items-start mt-4"><div class="flex h-5 items-center"><input id="unified-remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300"/></div><div class="ml-3 text-sm"><label for="unified-remember-me" class="font-medium text-gray-700">Remember my information</label></div></div>
+          </fieldset>
+
+            <h3 class="text-lg font-medium text-gray-800 border-b pb-1 mb-4">Other Person (Testifying Witness)</h3>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div><label for="unified-witness-name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="unified-witness-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+            </div>
+             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div class="md:col-span-4"><label for="unified-witness-street" class="block text-sm font-medium text-gray-700">Street Address</label><input type="text" id="unified-witness-street" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-witness-city" class="block text-sm font-medium text-gray-700">City</label><input type="text" id="unified-witness-city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-witness-state" class="block text-sm font-medium text-gray-700">State</label><input type="text" id="unified-witness-state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-witness-zip" class="block text-sm font-medium text-gray-700">Zip</label><input type="text" id="unified-witness-zip" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-witness-home-phone" class="block text-sm font-medium text-gray-700">Home Phone</label><input type="text" id="unified-witness-home-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-witness-bus-phone" class="block text-sm font-medium text-gray-700">Business Phone</label><input type="text" id="unified-witness-bus-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+            </div>
           </fieldset>
 
           <!-- Interpreter Section -->
@@ -200,9 +232,23 @@
 
           <!-- Examiner & Waiver -->
           <fieldset class="border border-gray-300 rounded-lg p-4">
-             <legend class="text-lg font-medium text-gray-700 px-2">Examiner & Waiver</legend>
+             <legend class="text-lg font-medium text-gray-700 px-2">Examiner, Notary & Waiver</legend>
              <div><label for="unified-examiner-name" class="block text-sm font-medium text-gray-700">Examiner's Printed Name, Credentials, and Title</label><input type="text" id="unified-examiner-name" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
              <div class="mt-4"><label for="unified-facility-info" class="block text-sm font-medium text-gray-700">Facility Name, Address, and Phone</label><input type="text" id="unified-facility-info" class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label for="unified-notary-county" class="block text-sm font-medium text-gray-700">Notary's County of Commission</label><input type="text" id="unified-notary-county" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+                <div><label for="unified-notary-expiration" class="block text-sm font-medium text-gray-700">Date Commission Expires</label><input type="date" id="unified-notary-expiration" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
+             </div>
+             <div class="mt-4">
+                <p class="block text-sm font-medium text-gray-700 mb-2">Certified By:</p>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-start"><input id="cert-dep-csc" name="certification" type="radio" value="DepCSC" class="h-4 w-4 mt-0.5"/><label for="cert-dep-csc" class="ml-2 text-sm">Dep. CSC</label></div>
+                    <div class="flex items-start"><input id="cert-asst-csc" name="certification" type="radio" value="AsstCSC" class="h-4 w-4 mt-0.5"/><label for="cert-asst-csc" class="ml-2 text-sm">Asst. CSC</label></div>
+                    <div class="flex items-start"><input id="cert-csc" name="certification" type="radio" value="CSC" class="h-4 w-4 mt-0.5"/><label for="cert-csc" class="ml-2 text-sm">CSC</label></div>
+                    <div class="flex items-start"><input id="cert-magistrate" name="certification" type="radio" value="Mag" class="h-4 w-4 mt-0.5"/><label for="cert-magistrate" class="ml-2 text-sm">Magistrate</label></div>
+                    <div class="flex items-start"><input id="cert-notary" name="certification" type="radio" value="Notary" class="h-4 w-4 mt-0.5"/><label for="cert-notary" class="ml-2 text-sm">Notary</label></div>
+                </div>
+             </div>
              <div class="mt-4"><label for="unified-waiver-date" class="block text-sm font-medium text-gray-700">Petitioner’s Waiver Of Notice Of Hearing Date</label><input type="date" id="unified-waiver-date" class="default-date mt-1 block w-full rounded-md border-gray-300 shadow-sm"/></div>
           </fieldset>
 
