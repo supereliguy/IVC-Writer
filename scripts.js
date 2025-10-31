@@ -5,124 +5,37 @@ const { PDFDocument, rgb, StandardFonts } = PDFLib;
 document.addEventListener("DOMContentLoaded", () => {
   // --- County List ---
   const ncCounties = [
-    "Alamance",
-    "Alexander",
-    "Alleghany",
-    "Anson",
-    "Ashe",
-    "Avery",
-    "Beaufort",
-    "Bertie",
-    "Bladen",
-    "Brunswick",
-    "Buncombe",
-    "Burke",
-    "Cabarrus",
-    "Caldwell",
-    "Camden",
-    "Carteret",
-    "Caswell",
-    "Catawba",
-    "Chatham",
-    "Cherokee",
-    "Chowan",
-    "Clay",
-    "Cleveland",
-    "Columbus",
-    "Craven",
-    "Cumberland",
-    "Currituck",
-    "Dare",
-    "Davidson",
-    "Davie",
-    "Duplin",
-    "Durham",
-    "Edgecombe",
-    "Forsyth",
-    "Franklin",
-    "Gaston",
-    "Gates",
-    "Graham",
-    "Granville",
-    "Greene",
-    "Guilford",
-    "Halifax",
-    "Harnett",
-    "Haywood",
-    "Henderson",
-    "Hertford",
-    "Hoke",
-    "Hyde",
-    "Iredell",
-    "Jackson",
-    "Johnston",
-    "Jones",
-    "Lee",
-    "Lenoir",
-    "Lincoln",
-    "Macon",
-    "Madison",
-    "Martin",
-    "McDowell",
-    "Mecklenburg",
-    "Mitchell",
-    "Montgomery",
-    "Moore",
-    "Nash",
-    "New Hanover",
-    "Northampton",
-    "Onslow",
-    "Orange",
-    "Pamlico",
-    "Pasquotank",
-    "Pender",
-    "Perquimans",
-    "Person",
-    "Pitt",
-    "Polk",
-    "Randolph",
-    "Richmond",
-    "Robeson",
-    "Rockingham",
-    "Rowan",
-    "Rutherford",
-    "Sampson",
-    "Scotland",
-    "Stanly",
-    "Stokes",
-    "Surry",
-    "Swain",
-    "Transylvania",
-    "Tyrrell",
-    "Union",
-    "Vance",
-    "Wake",
-    "Warren",
-    "Washington",
-    "Watauga",
-    "Wayne",
-    "Wilkes",
-    "Wilson",
-    "Yadkin",
-    "Yancey",
+    "Alamance", "Alexander", "Alleghany", "Anson", "Ashe", "Avery", "Beaufort",
+    "Bertie", "Bladen", "Brunswick", "Buncombe", "Burke", "Cabarrus", "Caldwell",
+    "Camden", "Carteret", "Caswell", "Catawba", "Chatham", "Cherokee", "Chowan",
+    "Clay", "Cleveland", "Columbus", "Craven", "Cumberland", "Currituck", "Dare",
+    "Davidson", "Davie", "Duplin", "Durham", "Edgecombe", "Forsyth", "Franklin",
+    "Gaston", "Gates", "Graham", "Granville", "Greene", "Guilford", "Halifax",
+    "Harnett", "Haywood", "Henderson", "Hertford", "Hoke", "Hyde", "Iredell",
+    "Jackson", "Johnston", "Jones", "Lee", "Lenoir", "Lincoln", "Macon",
+    "Madison", "Martin", "McDowell", "Mecklenburg", "Mitchell", "Montgomery",
+    "Moore", "Nash", "New Hanover", "Northampton", "Onslow", "Orange", "Pamlico",
+    "Pasquotank", "Pender", "Perquimans", "Person", "Pitt", "Polk", "Randolph",
+    "Richmond", "Robeson", "Rockingham", "Rowan", "Rutherford", "Sampson",
+    "Scotland", "Stanly", "Stokes", "Surry", "Swain", "Transylvania", "Tyrrell",
+    "Union", "Vance", "Wake", "Warren", "Washington", "Watauga", "Wayne",
+    "Wilkes", "Wilson", "Yadkin", "Yancey"
   ];
 
   const unifiedCountyDropdown = document.getElementById("unified-county");
+  // The individual form tabs are less important now, but we'll keep them functional.
   const aocCountyDropdown = document.getElementById("aoc-county");
   const dmhCountyDropdown = document.getElementById("dmh-county");
 
   ncCounties.forEach((county) => {
-    const option1 = document.createElement("option");
-    option1.value = county;
-    option1.textContent = county;
-    aocCountyDropdown.appendChild(option1);
-
-    const option2 = document.createElement("option");
-    option2.value = county;
-    option2.textContent = county;
-    dmhCountyDropdown.appendChild(option2.cloneNode(true));
-    unifiedCountyDropdown.appendChild(option2);
+    const option = document.createElement("option");
+    option.value = county;
+    option.textContent = county;
+    unifiedCountyDropdown.appendChild(option.cloneNode(true));
+    if(aocCountyDropdown) aocCountyDropdown.appendChild(option.cloneNode(true));
+    if(dmhCountyDropdown) dmhCountyDropdown.appendChild(option.cloneNode(true));
   });
+
 
   // --- PDF GENERATION ---
   const FORM_URL_AOC = "./AOC-SP-300.pdf";
@@ -138,44 +51,110 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- PDF Generation Logic ---
   async function generateAocPdf(data) {
-    const existingPdfBytes = await fetch(FORM_URL_AOC).then((res) =>
-      res.arrayBuffer(),
-    );
+    const existingPdfBytes = await fetch(FORM_URL_AOC).then((res) => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
 
+    // Helper to split addresses
+    const splitAddress = (fullAddress) => {
+        const parts = fullAddress.split(',');
+        const street = parts[0] || '';
+        const city = (parts[1] || '').trim();
+        const stateZip = (parts[2] || '').trim().split(' ');
+        const state = stateZip[0] || '';
+        const zip = stateZip[1] || '';
+        return { street, city, state, zip };
+    };
+
+    const respAddr = splitAddress(data.respondentAddress);
+    const petAddr = splitAddress(data.petitionerAddress);
+
+    // Header
+    form.getTextField("FileNo").setText(data.fileNo);
     form.getTextField("County").setText(data.county);
+
+    // Respondent Info
     form.getTextField("RespondentName").setText(data.respondentName);
+    form.getTextField("RespAddr1").setText(respAddr.street);
+    form.getTextField("RespCity").setText(respAddr.city);
+    form.getTextField("RespState").setText(respAddr.state);
+    form.getTextField("RespZip").setText(respAddr.zip);
     form.getTextField("RespDOB").setText(data.respondentDob);
 
-    if (data.isMi) form.getCheckBox("CkBox_001").check();
-    if (data.isSa) form.getCheckBox("CkBox_002").check();
-    if (data.isDangerSelf || data.isDangerOthers)
+    // Commitment Type
+    // CkBox_001: Mental illness & dangerousness
+    if (data.isMi && (data.isMiDangerSelf || data.isMiDangerOthers)) {
+      form.getCheckBox("CkBox_001").check();
+    }
+    // CkBox_003: Substance abuse and dangerousness
+    if (data.isSa && (data.isSaDangerSelf || data.isSaDangerOthers)) {
       form.getCheckBox("CkBox_003").check();
+    }
 
-    form.getTextField("Memo_001").setText(data.facts);
+    form.getTextField("Memo_001").setText(data.findings);
 
+    // Petitioner Info
     form.getTextField("PetName").setText(data.petitionerName);
+    form.getTextField("PetitAddr1").setText(petAddr.street);
+    form.getTextField("PetitCity").setText(petAddr.city);
+    form.getTextField("PetitState").setText(petAddr.state);
+    form.getTextField("PetitZip").setText(petAddr.zip);
     form.getTextField("RelationshipResp").setText(data.petitionerRelationship);
-    form.getTextField("PetitAddr1").setText(data.petitionerAddress);
     form.getTextField("PetitionerHomePhoneNo").setText(data.petitionerPhone);
 
     return await pdfDoc.save();
   }
 
   async function generateDmhPdf(data) {
-    const existingPdfBytes = await fetch(FORM_URL_DMH).then((res) =>
-      res.arrayBuffer(),
-    );
+    const existingPdfBytes = await fetch(FORM_URL_DMH).then((res) => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
 
-    form.getTextField("Name of Respondent").setText(data.respondentName);
+    // Header
     form.getTextField("County").setText(data.county);
+    form.getTextField("Client Record").setText(data.clientRecord);
+    form.getTextField("File").setText(data.fileNo);
+
+    // Respondent & Contacts
+    form.getTextField("Name of Respondent").setText(data.respondentName);
     form.getTextField("DOB").setText(data.respondentDob);
     form.getTextField("Age").setText(data.respondentAge);
-    form.getTextField("Sex").setText(data.respondentGender);
+    form.getTextField("Sex").setText(data.respondentSex);
+    form.getTextField("Race").setText(data.respondentRace);
+    form.getTextField("MS").setText(data.respondentMs);
 
+    const respAddrParts = data.respondentAddress.split(',');
+    form.getTextField("Address Street or Box Number").setText(respAddrParts[0] || '');
+    form.getTextField("City").setText((respAddrParts[1] || '').trim());
+    const stateZip = (respAddrParts[2] || '').trim().split(' ');
+    form.getTextField("State").setText(stateZip[0] || '');
+    form.getTextField("Zip").setText(stateZip[1] || '');
+    form.getTextField("County_2").setText(data.county);
+    form.getTextField("Phone").setText(data.respondentPhone);
+
+    // Legally Responsible Person
+    form.getTextField("Legally Responsible Person or Next of Kin Name").setText(data.lrpName);
+    form.getTextField("Relationship").setText(data.lrpRelationship);
+    const lrpAddrParts = data.lrpAddress.split(',');
+    form.getTextField("Address Street or Box Number_2").setText(lrpAddrParts[0] || '');
+    form.getTextField("City_2").setText((lrpAddrParts[1] || '').trim());
+    const lrpStateZip = (lrpAddrParts[2] || '').trim().split(' ');
+    form.getTextField("State_2").setText(lrpStateZip[0] || '');
+    form.getTextField("Zip_2").setText(lrpStateZip[1] || '');
+    form.getTextField("Phone_2").setText(data.lrpPhone);
+
+    // Petitioner
+    form.getTextField("Petitioner Name").setText(data.petitionerName);
+    form.getTextField("Relationship_2").setText(data.petitionerRelationship);
+    const petAddrParts = data.petitionerAddress.split(',');
+    form.getTextField("Address Street or Box Number_3").setText(petAddrParts[0] || '');
+    form.getTextField("City_3").setText((petAddrParts[1] || '').trim());
+    const petStateZip = (petAddrParts[2] || '').trim().split(' ');
+    form.getTextField("State_3").setText(petStateZip[0] || '');
+    form.getTextField("Zip_3").setText(petStateZip[1] || '');
+    form.getTextField("Phone_3").setText(data.petitionerPhone);
+
+    // Exam Details
     if (data.examDate) {
       const parts = data.examDate.split("-"); // YYYY-MM-DD
       const formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
@@ -184,25 +163,58 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("undefined_2").setText(data.examTime);
     form.getTextField("undefined_3").setText(data.examLocation);
 
-    if (data.isMi)
-      form.getCheckBox("An individual with a mental illness").check();
+    // Commitment Criteria
+    if (data.isMi) form.getCheckBox("An individual with a mental illness").check();
     if (data.isMiDangerSelf) form.getCheckBox("Self or").check();
     if (data.isMiDangerOthers) form.getCheckBox("Others").check();
-
     if (data.isSa) form.getCheckBox("A Substance Abuser").check();
     if (data.isSaDangerSelf) form.getCheckBox("Self or_2").check();
     if (data.isSaDangerOthers) form.getCheckBox("Others_2").check();
 
-    form
-      .getTextField(
-        "Clear description of findings findings for each criterion checked in Section I must be described",
-      )
-      .setText(data.facts);
+    // Findings & Health Screening
+    form.getTextField("Clear description of findings findings for each criterion checked in Section I must be described").setText(data.findings);
+    form.getTextField("ImpressionDiagnosis").setText(data.impression);
+    form.getTextField("HR").setText(data.hr);
+    form.getTextField("RR").setText(data.rr);
+    form.getTextField("Temp").setText(data.temp);
+    form.getTextField("Knownreported medical problems diabetes hypertension heart attacks sickle cell anemia asthma etc").setText(data.medicalProblems);
+    form.getTextField("Knownreported allergies").setText(data.allergies);
+    form.getTextField("Knownreported current medications please list").setText(data.medications);
 
-    form.getTextField("Print Name of Examiner").setText(data.clinicianName);
-    form.getTextField("Address of Facility").setText(data.clinicianFacility);
-    form.getTextField("Address of Facility_2").setText(data.facilityAddress);
-    form.getTextField("Telephone Number").setText(data.facilityPhone);
+    // Medical Red Flags
+    if (data.flagChestPain) form.getCheckBox("Chest pain or shortness of breath").check();
+    if (data.flagOverdose) form.getCheckBox("Suspected overdose on substances or medications within the past 24 hours including acetaminophen").check();
+    if (data.flagSeverePain) form.getCheckBox("Presence of severe pain eg abdominal pain head pain").check();
+    if (data.flagDisoriented) form.getCheckBox("Disoriented confused or unable to maintain balance").check();
+    if (data.flagHeadTrauma) form.getCheckBox("Head trauma or recent loss of consciousness").check();
+    if (data.flagPhysicalTrauma) form.getCheckBox("Recent physical trauma or profuse bleeding").check();
+    if (data.flagWeakness) form.getCheckBox("New weakness numbness speech difficulties or visual changes").check();
+
+    // Consult Triggers
+    if (data.triggerAge) form.getCheckBox("Age 12 or 65 years old").check();
+    if (data.triggerBp) form.getCheckBox("Systolic BP 160 or 100 andor diastolic 100 or 60").check();
+    if (data.triggerHr) form.getCheckBox("Heart Rate 110 or 55 bpm").check();
+    if (data.triggerRr) form.getCheckBox("Respiratory Rate 20 or 12 breaths per minute").check();
+    if (data.triggerTemp) form.getCheckBox("Temperature 380 C 1004 F or 360 C 968 F").check();
+    if (data.triggerDiabetes) form.getCheckBox("Known diagnosis of diabetes and not taking prescribed medications").check();
+    if (data.triggerSeizures) form.getCheckBox("Recent seizure or history of seizures and not taking seizure medications").check();
+    if (data.triggerAsthma) form.getCheckBox("Known diagnosis of asthma or chronic obstructive pulmonary disease and not taking prescribed medications").check();
+    if (data.triggerPregnancy) form.getCheckBox("Known or suspected pregnancy").check();
+
+    // Disposition
+    if (data.dispInpatient) form.getCheckBox("Inpatient Commitment for").check();
+    if (data.dispOutpatient) form.getCheckBox("Outpatient Commitment respondent must meet ALL of the first four criteria outlined in Section I Outpatient").check();
+    if (data.dispSubstanceAbuse) form.getCheckBox("Substance Abuse Commitment respondent must meet both criteria outlined in Section I Substance Abuse").check();
+    if (data.dispVoluntary) form.getCheckBox("Respondent or Legally Responsible Person Consented to Voluntary Treatment").check();
+    if (data.dispRelease) form.getCheckBox("Release Respondent and Terminate Proceedings insufficient findings to indicate that respondent meets commitment criteria").check();
+
+    // Examiner Info
+    form.getTextField("Print Name of Examiner").setText(data.examinerName);
+    const facilityParts = data.facilityInfo.split(',');
+    form.getTextField("Address of Facility").setText(facilityParts[0] || '');
+    form.getTextField("City and State").setText(`${(facilityParts[1] || '').trim()}, ${(facilityParts[2] || '').trim()}`);
+    form.getTextField("Telephone Number").setText((facilityParts[3] || '').trim());
+
 
     return await pdfDoc.save();
   }
@@ -210,50 +222,98 @@ document.addEventListener("DOMContentLoaded", () => {
   async function generateBothPdfs() {
     showSpinner();
     try {
+      // Helper function to get value from an element
+      const getValue = (id) => document.getElementById(id).value;
+      const isChecked = (id) => document.getElementById(id).checked;
+      const getRadio = (name) => {
+          const radios = document.getElementsByName(name);
+          for (let i = 0; i < radios.length; i++) {
+              if (radios[i].checked) return radios[i].id;
+          }
+          return null;
+      }
+
       const data = {
-        petitionerName: document.getElementById("unified-petitioner-name")
-          .value,
-        petitionerPhone: document.getElementById("unified-petitioner-phone")
-          .value,
-        petitionerAddress: document.getElementById("unified-petitioner-address")
-          .value,
-        petitionerRelationship: document.getElementById(
-          "unified-petitioner-relationship",
-        ).value,
-        clinicianName: document.getElementById("unified-petitioner-name").value,
-        clinicianFacility: document.getElementById("unified-facility-name")
-          .value,
-        facilityAddress: document.getElementById("unified-facility-address")
-          .value,
-        facilityPhone: document.getElementById("unified-facility-phone").value,
-        respondentName: document.getElementById("unified-respondent-name")
-          .value,
-        county: document.getElementById("unified-county").value,
-        respondentDob: document.getElementById("unified-respondent-dob").value,
-        respondentAge: document.getElementById("unified-respondent-age").value,
-        respondentGender: document.getElementById("unified-respondent-gender")
-          .value,
-        respondentRace: document.getElementById("unified-respondent-race")
-          .value,
-        examDate: document.getElementById("unified-exam-date").value,
-        examTime: document.getElementById("unified-exam-time").value,
-        examLocation: document.getElementById("unified-exam-location").value,
-        isMi: document.getElementById("unified-check-mi").checked,
-        isMiDangerSelf: document.getElementById("unified-check-mi-danger-self")
-          .checked,
-        isMiDangerOthers: document.getElementById(
-          "unified-check-mi-danger-others",
-        ).checked,
-        isSa: document.getElementById("unified-check-sa").checked,
-        isSaDangerSelf: document.getElementById("unified-check-sa-danger-self")
-          .checked,
-        isSaDangerOthers: document.getElementById(
-          "unified-check-sa-danger-others",
-        ).checked,
-        facts: document.getElementById("unified-facts").value,
-        isLeoPresent: document.getElementById("unified-leo-present").checked,
-        leoName: document.getElementById("unified-leo-name").value,
-        leoAgency: document.getElementById("unified-leo-agency").value,
+        // General / Header
+        county: getValue("unified-county"),
+        clientRecord: getValue("unified-client-record"),
+        fileNo: getValue("unified-file-no"),
+
+        // Respondent Info
+        respondentName: getValue("unified-respondent-name"),
+        respondentDob: getValue("unified-respondent-dob"),
+        respondentAge: getValue("unified-respondent-age"),
+        respondentSex: getValue("unified-respondent-sex"),
+        respondentRace: getValue("unified-respondent-race"),
+        respondentMs: getValue("unified-respondent-ms"),
+        respondentAddress: getValue("unified-respondent-address"),
+        respondentPhone: getValue("unified-respondent-phone"),
+
+        // Legally Responsible Person
+        lrpName: getValue("unified-lrp-name"),
+        lrpRelationship: getValue("unified-lrp-relationship"),
+        lrpAddress: getValue("unified-lrp-address"),
+        lrpPhone: getValue("unified-lrp-phone"),
+
+        // Petitioner Info
+        petitionerName: getValue("unified-petitioner-name"),
+        petitionerRelationship: getValue("unified-petitioner-relationship"),
+        petitionerAddress: getValue("unified-petitioner-address"),
+        petitionerPhone: getValue("unified-petitioner-phone"),
+
+        // Exam Details
+        examDate: getValue("unified-exam-date"),
+        examTime: getValue("unified-exam-time"),
+        examLocation: getValue("unified-exam-location"),
+
+        // Commitment Criteria
+        isMi: isChecked("unified-check-mi"),
+        isMiDangerSelf: isChecked("unified-check-mi-danger-self"),
+        isMiDangerOthers: isChecked("unified-check-mi-danger-others"),
+        isSa: isChecked("unified-check-sa"),
+        isSaDangerSelf: isChecked("unified-check-sa-danger-self"),
+        isSaDangerOthers: isChecked("unified-check-sa-danger-others"),
+
+        // Findings & Health Screening
+        findings: getValue("unified-findings"),
+        impression: getValue("unified-impression"),
+        hr: getValue("unified-hr"),
+        rr: getValue("unified-rr"),
+        temp: getValue("unified-temp"),
+        medicalProblems: getValue("unified-medical-problems"),
+        allergies: getValue("unified-allergies"),
+        medications: getValue("unified-medications"),
+
+        // Medical Red Flags
+        flagChestPain: isChecked("flag-chest-pain"),
+        flagOverdose: isChecked("flag-overdose"),
+        flagSeverePain: isChecked("flag-severe-pain"),
+        flagDisoriented: isChecked("flag-disoriented"),
+        flagHeadTrauma: isChecked("flag-head-trauma"),
+        flagPhysicalTrauma: isChecked("flag-physical-trauma"),
+        flagWeakness: isChecked("flag-weakness"),
+
+        // Consult Triggers
+        triggerAge: isChecked("trigger-age"),
+        triggerBp: isChecked("trigger-bp"),
+        triggerHr: isChecked("trigger-hr"),
+        triggerRr: isChecked("trigger-rr"),
+        triggerTemp: isChecked("trigger-temp"),
+        triggerDiabetes: isChecked("trigger-diabetes"),
+        triggerSeizures: isChecked("trigger-seizures"),
+        triggerAsthma: isChecked("trigger-asthma"),
+        triggerPregnancy: isChecked("trigger-pregnancy"),
+
+        // Disposition
+        dispInpatient: isChecked("disp-inpatient"),
+        dispOutpatient: isChecked("disp-outpatient"),
+        dispSubstanceAbuse: isChecked("disp-substance-abuse"),
+        dispVoluntary: isChecked("disp-voluntary"),
+        dispRelease: isChecked("disp-release"),
+
+        // Examiner Info
+        examinerName: getValue("unified-examiner-name"),
+        facilityInfo: getValue("unified-facility-info"),
       };
 
       const aocPdfBytes = await generateAocPdf(data);
@@ -292,122 +352,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  document
-    .getElementById("generate-aoc")
-    .addEventListener("click", async () => {
-      showSpinner();
-      try {
-        const data = {
-          county: document.getElementById("aoc-county").value,
-          respondentName: document.getElementById("aoc-respondent-name").value,
-          respondentAge: document.getElementById("aoc-respondent-age").value,
-          respondentRace: document.getElementById("aoc-respondent-race").value,
-          respondentGender: document.getElementById("aoc-respondent-gender")
-            .value,
-          respondentDob: document.getElementById("aoc-respondent-dob").value,
-          isMi: document.getElementById("aoc-check-mi").checked,
-          isSa: document.getElementById("aoc-check-sa").checked,
-          isDangerSelf: document.getElementById("aoc-check-danger-self")
-            .checked,
-          isDangerOthers: document.getElementById("aoc-check-danger-others")
-            .checked,
-          facts: document.getElementById("aoc-facts").value,
-          petitionerName: document.getElementById("aoc-petitioner-name").value,
-          petitionerRelationship: document.getElementById(
-            "aoc-petitioner-relationship",
-          ).value,
-          petitionerAddress: document.getElementById("aoc-petitioner-address")
-            .value,
-          petitionerPhone: document.getElementById("aoc-petitioner-phone")
-            .value,
-        };
-        const pdfBytes = await generateAocPdf(data);
-        saveAs(
-          new Blob([pdfBytes], { type: "application/pdf" }),
-          "Completed-AOC-SP-300.pdf",
-        );
-      } catch (error) {
-        console.error("Error generating AOC PDF:", error);
-        alert(
-          "Error generating PDF. Check the console and make sure the PDF files are in your GitHub repository.",
-        );
-      } finally {
-        hideSpinner();
-      }
-    });
+  document.getElementById("generate-both").addEventListener("click", generateBothPdfs);
 
-  document
-    .getElementById("generate-dmh")
-    .addEventListener("click", async () => {
-      showSpinner();
-      try {
-        const data = {
-          clinicianName: document.getElementById("dmh-clinician-name").value,
-          clinicianFacility: document.getElementById("dmh-clinician-facility")
-            .value,
-          facilityAddress: document.getElementById("dmh-facility-address")
-            .value,
-          facilityPhone: document.getElementById("dmh-facility-phone").value,
-          respondentName: document.getElementById("dmh-respondent-name").value,
-          county: document.getElementById("dmh-county").value,
-          respondentDob: document.getElementById("dmh-respondent-dob").value,
-          respondentAge: document.getElementById("dmh-respondent-age").value,
-          respondentGender: document.getElementById("dmh-respondent-gender")
-            .value,
-          examDate: document.getElementById("dmh-exam-date").value,
-          examTime: document.getElementById("dmh-exam-time").value,
-          examLocation: document.getElementById("dmh-exam-location").value,
-          isMi: document.getElementById("dmh-check-mi").checked,
-          isMiDangerSelf: document.getElementById("dmh-check-mi-danger-self")
-            .checked,
-          isMiDangerOthers: document.getElementById(
-            "dmh-check-mi-danger-others",
-          ).checked,
-          isSa: document.getElementById("dmh-check-sa").checked,
-          isSaDangerSelf: document.getElementById("dmh-check-sa-danger-self")
-            .checked,
-          isSaDangerOthers: document.getElementById(
-            "dmh-check-sa-danger-others",
-          ).checked,
-          facts: document.getElementById("dmh-facts").value,
-          isLeoPresent: document.getElementById("dmh-leo-present").checked,
-          leoName: document.getElementById("dmh-leo-name").value,
-          leoAgency: document.getElementById("dmh-leo-agency").value,
-        };
-        const pdfBytes = await generateDmhPdf(data);
-        saveAs(
-          new Blob([pdfBytes], { type: "application/pdf" }),
-          "Completed-DMH-5-72-19.pdf",
-        );
-      } catch (error) {
-        console.error("Error generating DMH PDF:", error);
-        alert(
-          "Error generating PDF. Check the console and make sure the PDF files are in your GitHub repository.",
-        );
-      } finally {
-        hideSpinner();
-      }
-    });
+  // The individual generate buttons are now less critical, but we'll leave the listeners
+  const generateAocBtn = document.getElementById("generate-aoc");
+  if(generateAocBtn) {
+      generateAocBtn.addEventListener("click", () => alert("Please use the Unified Form tab to generate both PDFs at once."));
+  }
 
-  document
-    .getElementById("generate-both")
-    .addEventListener("click", generateBothPdfs);
-
-  // LEO Details Toggle
-  document
-    .getElementById("unified-leo-present")
-    .addEventListener("change", function () {
-      document
-        .getElementById("unified-leo-details")
-        .classList.toggle("hidden", !this.checked);
-    });
-  document
-    .getElementById("dmh-leo-present")
-    .addEventListener("change", function () {
-      document
-        .getElementById("leo-details")
-        .classList.toggle("hidden", !this.checked);
-    });
+  const generateDmhBtn = document.getElementById("generate-dmh");
+  if(generateDmhBtn) {
+    generateDmhBtn.addEventListener("click", () => alert("Please use the Unified Form tab to generate both PDFs at once."));
+  }
 
   // --- Local Storage Logic ---
   const localSaveInputs = document.querySelectorAll(".local-save");
