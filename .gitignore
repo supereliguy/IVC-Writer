@@ -9,3 +9,6 @@ ehthumbs.db
 IDE files
 .vscode/
 .idea/
+
+# Logs
+server.log

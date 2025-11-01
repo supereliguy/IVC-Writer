@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- PDF Generation ---
   const FORM_URL_AOC = "./AOC-SP-300.pdf";
-  const FORM_URL_DMH = "./DMH 5-72-19.pdf";
+  const FORM_URL_DMH = "./DMH-5-72-19.pdf";
 
   const showSpinner = () => document.getElementById("loading-spinner").classList.remove("hidden");
   const hideSpinner = () => document.getElementById("loading-spinner").classList.add("hidden");
@@ -167,10 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Clear description of findings findings for each criterion checked in Section I must be described').setText(data.findings);
     form.getTextField('ImpressionDiagnosis').setText(data.impression);
     const vitals = `HR: ${data.hr}, RR: ${data.rr}, Temp: ${data.temp}, BP: ${data.bp}`;
-    form.getTextField('HR / RR / Temp / BP').setText(vitals);
-    form.getTextField('Knownreported medical problems').setText(data.medicalProblems);
-    form.getTextField('Knownreported allergies').setText(data.allergies);
-    form.getTextField('Knownreported current medications').setText(data.medications);
+    form.getTextField('HR RR Temp BP').setText(vitals);
+    form.getTextField('Known reported medical problems').setText(data.medicalProblems);
+    form.getTextField('Known reported allergies').setText(data.allergies);
+    form.getTextField('Known reported current medications').setText(data.medications);
     
     if (data.flagChestPain) form.getCheckBox('Chest pain or shortness of breath').check();
     if (data.flagOverdose) form.getCheckBox('Suspected overdose on substances or medications within the past 24 hours including acetaminophen').check();
