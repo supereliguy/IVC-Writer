@@ -24,12 +24,24 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.default-time').forEach(el => el.value = `${hh}:${min}`);
   }
 
-  document.querySelectorAll('input[name="disposition"]').forEach(radio => {
+  document.querySelectorAll('input[name="unified-disposition"]').forEach(radio => {
     radio.addEventListener('change', () => document.getElementById('outpatient-fields').classList.toggle('hidden', radio.value !== 'outpatient'));
   });
+   document.querySelectorAll('input[name="aoc-disposition"]').forEach(radio => {
+    radio.addEventListener('change', () => document.getElementById('aoc-outpatient-fields').classList.toggle('hidden', radio.value !== 'outpatient'));
+  });
+   document.querySelectorAll('input[name="dmh-disposition"]').forEach(radio => {
+    radio.addEventListener('change', () => document.getElementById('dmh-outpatient-fields').classList.toggle('hidden', radio.value !== 'outpatient'));
+  });
   
-  document.querySelectorAll('input[name="interpreter"]').forEach(radio => {
+  document.querySelectorAll('input[name="unified-interpreter"]').forEach(radio => {
     radio.addEventListener('change', () => document.getElementById('interpreter-details').classList.toggle('hidden', radio.value !== 'yes'));
+  });
+   document.querySelectorAll('input[name="aoc-interpreter"]').forEach(radio => {
+    radio.addEventListener('change', () => document.getElementById('aoc-interpreter-details').classList.toggle('hidden', radio.value !== 'yes'));
+  });
+   document.querySelectorAll('input[name="dmh-interpreter"]').forEach(radio => {
+    radio.addEventListener('change', () => document.getElementById('dmh-interpreter-details').classList.toggle('hidden', radio.value !== 'yes'));
   });
   
   const tabButtons = document.querySelectorAll(".tab-button");
@@ -170,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('RR').setText(data.rr);
     form.getTextField('Temp').setText(data.temp);
     form.getTextField('undefined').setText(data.bp);
-    form.getTextField('Known reported medical problems').setText(data.medicalProblems);
+
     form.getTextField('Known reported allergies').setText(data.allergies);
     form.getTextField('Known reported current medications').setText(data.medications);
     
@@ -211,39 +223,69 @@ document.addEventListener("DOMContentLoaded", () => {
     return pdfDoc.save();
   }
 
+  function collectFormData(prefix) {
+      const getValue = id => document.getElementById(`${prefix}-${id}`).value;
+      const isChecked = id => document.getElementById(`${prefix}-${id}`).checked;
+      const getRadio = name => { const el = document.querySelector(`input[name="${prefix}-${name}"]:checked`); return el ? el.value : null; };
+
+      return {
+        county: getValue("county"), clientRecord: getValue("client-record"), fileNo: getValue("file-no"),
+        respondentName: getValue("respondent-name"), respondentDob: formatDate(getValue("respondent-dob")), respondentAge: getValue("respondent-age"), respondentSex: getValue("respondent-sex"), respondentRace: getValue("respondent-race"), respondentMs: getValue("respondent-ms"), respondentStreet: getValue("respondent-street"), respondentCity: getValue("respondent-city"), respondentState: getValue("respondent-state"), respondentZip: getValue("respondent-zip"), respondentPhone: getValue("respondent-phone"), respondentSsn: getValue("respondent-ssn"), respondentDl: getValue("respondent-dl"), respondentDlState: getValue("respondent-dl-state"), respondentLastLocation: getValue("respondent-last-location"),
+        lrpName: getValue("lrp-name"), lrpRelationship: getValue("lrp-relationship"), lrpStreet: getValue("lrp-street"), lrpCity: getValue("lrp-city"), lrpState: getValue("lrp-state"), lrpZip: getValue("lrp-zip"), lrpPhone: getValue("lrp-phone"),
+        petitionerName: getValue("petitioner-name"), petitionerRelationship: getValue("petitioner-relationship"), petitionerStreet: getValue("petitioner-street"), petitionerCity: getValue("petitioner-city"), petitionerState: getValue("petitioner-state"), petitionerZip: getValue("petitioner-zip"), petitionerHomePhone: getValue("petitioner-home-phone"), petitionerBusPhone: getValue("petitioner-bus-phone"),
+        witnessName: getValue("witness-name"), witnessStreet: getValue("witness-street"), witnessCity: getValue("witness-city"), witnessState: getValue("witness-state"), witnessZip: getValue("witness-zip"), witnessHomePhone: getValue("witness-home-phone"), witnessBusPhone: getValue("witness-bus-phone"),
+        interpreter: getRadio("interpreter"), interpreterExplanation: getValue("interpreter-explanation"),
+        examDate: formatDate(getValue("exam-date")), examTime: getValue("exam-time"), examLocation: getValue("exam-location"),
+        findings: getValue("findings"), impression: getValue("impression"),
+        isMi: isChecked("check-mi"), isMiDangerSelf: isChecked("check-mi-danger-self"), isMiDangerOthers: isChecked("check-mi-danger-others"), isMiId: isChecked("check-mi-id"),
+        isSa: isChecked("check-sa"), isSaDangerSelf: isChecked("check-sa-danger-self"), isSaDangerOthers: isChecked("check-sa-danger-others"),
+        hr: getValue("hr"), rr: getValue("rr"), temp: getValue("temp"), bp: getValue("bp"), medicalProblems: getValue("medical-problems"), allergies: getValue("allergies"), medications: getValue("medications"),
+        flagChestPain: isChecked("flag-chest-pain"), flagOverdose: isChecked("flag-overdose"), flagSeverePain: isChecked("flag-severe-pain"), flagDisoriented: isChecked("flag-disoriented"), flagHeadTrauma: isChecked("flag-head-trauma"), flagPhysicalTrauma: isChecked("flag-physical-trauma"), flagWeakness: isChecked("flag-weakness"),
+        triggerAge: isChecked("trigger-age"), triggerBp: isChecked("trigger-bp"), triggerHr: isChecked("trigger-hr"), triggerRr: isChecked("trigger-rr"), triggerTemp: isChecked("trigger-temp"), triggerDiabetes: isChecked("trigger-diabetes"), triggerSeizures: isChecked("trigger-seizures"), triggerAsthma: isChecked("trigger-asthma"), triggerPregnancy: isChecked("trigger-pregnancy"),
+        disposition: getRadio("disposition"), outpatientFacilityName: getValue("outpatient-facility-name"), outpatientFacilityContact: getValue("outpatient-facility-contact"),
+        examinerName: getValue("examiner-name"), facilityInfo: getValue("facility-info"), notaryCounty: getValue("notary-county"), notaryExpiration: formatDate(getValue("notary-expiration")), certification: getRadio("certification"), waiverDate: formatDate(getValue("waiver-date")),
+      };
+  }
+
   document.getElementById("generate-both").addEventListener("click", async () => {
     showSpinner();
     try {
-      const getValue = id => document.getElementById(id).value;
-      const isChecked = id => document.getElementById(id).checked;
-      const getRadio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
-
-      const data = {
-        county: getValue("unified-county"), clientRecord: getValue("unified-client-record"), fileNo: getValue("unified-file-no"),
-        respondentName: getValue("unified-respondent-name"), respondentDob: formatDate(getValue("unified-respondent-dob")), respondentAge: getValue("unified-respondent-age"), respondentSex: getValue("unified-respondent-sex"), respondentRace: getValue("unified-respondent-race"), respondentMs: getValue("unified-respondent-ms"), respondentStreet: getValue("unified-respondent-street"), respondentCity: getValue("unified-respondent-city"), respondentState: getValue("unified-respondent-state"), respondentZip: getValue("unified-respondent-zip"), respondentPhone: getValue("unified-respondent-phone"), respondentSsn: getValue("unified-respondent-ssn"), respondentDl: getValue("unified-respondent-dl"), respondentDlState: getValue("unified-respondent-dl-state"), respondentLastLocation: getValue("unified-respondent-last-location"),
-        lrpName: getValue("unified-lrp-name"), lrpRelationship: getValue("unified-lrp-relationship"), lrpStreet: getValue("unified-lrp-street"), lrpCity: getValue("unified-lrp-city"), lrpState: getValue("unified-lrp-state"), lrpZip: getValue("unified-lrp-zip"), lrpPhone: getValue("unified-lrp-phone"),
-        petitionerName: getValue("unified-petitioner-name"), petitionerRelationship: getValue("unified-petitioner-relationship"), petitionerStreet: getValue("unified-petitioner-street"), petitionerCity: getValue("unified-petitioner-city"), petitionerState: getValue("unified-petitioner-state"), petitionerZip: getValue("unified-petitioner-zip"), petitionerHomePhone: getValue("unified-petitioner-home-phone"), petitionerBusPhone: getValue("unified-petitioner-bus-phone"),
-        witnessName: getValue("unified-witness-name"), witnessStreet: getValue("unified-witness-street"), witnessCity: getValue("unified-witness-city"), witnessState: getValue("unified-witness-state"), witnessZip: getValue("unified-witness-zip"), witnessHomePhone: getValue("unified-witness-home-phone"), witnessBusPhone: getValue("unified-witness-bus-phone"),
-        interpreter: getRadio("interpreter"), interpreterExplanation: getValue("unified-interpreter-explanation"),
-        examDate: formatDate(getValue("unified-exam-date")), examTime: getValue("unified-exam-time"), examLocation: getValue("unified-exam-location"),
-        findings: getValue("unified-findings"), impression: getValue("unified-impression"),
-        isMi: isChecked("unified-check-mi"), isMiDangerSelf: isChecked("unified-check-mi-danger-self"), isMiDangerOthers: isChecked("unified-check-mi-danger-others"), isMiId: isChecked("unified-check-mi-id"),
-        isSa: isChecked("unified-check-sa"), isSaDangerSelf: isChecked("unified-check-sa-danger-self"), isSaDangerOthers: isChecked("unified-check-sa-danger-others"),
-        hr: getValue("unified-hr"), rr: getValue("unified-rr"), temp: getValue("unified-temp"), bp: getValue("unified-bp"), medicalProblems: getValue("unified-medical-problems"), allergies: getValue("unified-allergies"), medications: getValue("unified-medications"),
-        flagChestPain: isChecked("flag-chest-pain"), flagOverdose: isChecked("flag-overdose"), flagSeverePain: isChecked("flag-severe-pain"), flagDisoriented: isChecked("flag-disoriented"), flagHeadTrauma: isChecked("flag-head-trauma"), flagPhysicalTrauma: isChecked("flag-physical-trauma"), flagWeakness: isChecked("flag-weakness"),
-        triggerAge: isChecked("trigger-age"), triggerBp: isChecked("trigger-bp"), triggerHr: isChecked("trigger-hr"), triggerRr: isChecked("trigger-rr"), triggerTemp: isChecked("trigger-temp"), triggerDiabetes: isChecked("trigger-diabetes"), triggerSeizures: isChecked("trigger-seizures"), triggerAsthma: isChecked("trigger-asthma"), triggerPregnancy: isChecked("trigger-pregnancy"),
-        disposition: getRadio("disposition"), outpatientFacilityName: getValue("unified-outpatient-facility-name"), outpatientFacilityContact: getValue("unified-outpatient-facility-contact"),
-        examinerName: getValue("unified-examiner-name"), facilityInfo: getValue("unified-facility-info"), notaryCounty: getValue("unified-notary-county"), notaryExpiration: formatDate(getValue("unified-notary-expiration")), certification: getRadio("certification"), waiverDate: formatDate(getValue("unified-waiver-date")),
-      };
-
+      const data = collectFormData("unified");
       const aocPdfBytes = await generateAocPdf(data);
       saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
       const dmhPdfBytes = await generateDmhPdf(data);
       saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
-
     } catch (error) {
       console.error("Error generating PDFs:", error);
       alert("Error generating PDFs. Check console for details.");
+    } finally {
+      hideSpinner();
+    }
+  });
+
+   document.getElementById("generate-aoc").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const data = collectFormData("aoc");
+      const aocPdfBytes = await generateAocPdf(data);
+      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Error generating PDF. Check console for details.");
+    } finally {
+      hideSpinner();
+    }
+  });
+
+   document.getElementById("generate-dmh").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const data = collectFormData("dmh");
+      const dmhPdfBytes = await generateDmhPdf(data);
+      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Error generating PDF. Check console for details.");
     } finally {
       hideSpinner();
     }
