@@ -166,8 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     form.getTextField('Clear description of findings findings for each criterion checked in Section I must be described').setText(data.findings);
     form.getTextField('ImpressionDiagnosis').setText(data.impression);
-    const vitals = `HR: ${data.hr}, RR: ${data.rr}, Temp: ${data.temp}, BP: ${data.bp}`;
-    form.getTextField('HR RR Temp BP').setText(vitals);
+    form.getTextField('HR').setText(data.hr);
+    form.getTextField('RR').setText(data.rr);
+    form.getTextField('Temp').setText(data.temp);
+    form.getTextField('undefined').setText(data.bp);
     form.getTextField('Knownreported medical problems').setText(data.medicalProblems);
     form.getTextField('Knownreported allergies').setText(data.allergies);
     form.getTextField('Knownreported current medications').setText(data.medications);
