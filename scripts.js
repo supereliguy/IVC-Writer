@@ -185,6 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('Knownreported medical problems diabetes hypertension heart attacks sickle cell anemia asthma etc').setText(data.medicalProblems);
     form.getTextField('Knownreported allergies').setText(data.allergies);
     form.getTextField('Knownreported current medications please list').setText(data.medications);
+
+    form.getTextField('Known reported allergies').setText(data.allergies);
+    form.getTextField('Known reported current medications').setText(data.medications);
     
     if (data.flagChestPain) form.getCheckBox('Chest pain or shortness of breath').check();
     if (data.flagOverdose) form.getCheckBox('Suspected overdose on substances or medications within the past 24 hours including acetaminophen').check();
