@@ -181,10 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField('HR').setText(data.hr);
     form.getTextField('RR').setText(data.rr);
     form.getTextField('Temp').setText(data.temp);
-    form.getTextField('undefined').setText(data.bp);
+    form.getTextField('undefined_5').setText(data.bp);
 
-    form.getTextField('Known reported allergies').setText(data.allergies);
-    form.getTextField('Known reported current medications').setText(data.medications);
+    form.getTextField('Knownreported allergies').setText(data.allergies);
+    form.getTextField('Knownreported current medications please list').setText(data.medications);
     
     if (data.flagChestPain) form.getCheckBox('Chest pain or shortness of breath').check();
     if (data.flagOverdose) form.getCheckBox('Suspected overdose on substances or medications within the past 24 hours including acetaminophen').check();
@@ -193,11 +193,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data.flagHeadTrauma) form.getCheckBox('Head trauma or recent loss of consciousness').check();
     if (data.flagPhysicalTrauma) form.getCheckBox('Recent physical trauma or profuse bleeding').check();
     if (data.flagWeakness) form.getCheckBox('New weakness numbness speech difficulties or visual changes').check();
-    if (data.triggerAge) form.getCheckBox('Age 12 or 65 years old').check();
-    if (data.triggerBp) form.getCheckBox('Systolic BP 160 or 100 andor diastolic 100 or 60').check();
-    if (data.triggerHr) form.getCheckBox('Heart Rate 110 or 55 bpm').check();
-    if (data.triggerRr) form.getCheckBox('Respiratory Rate 20 or 12 breaths per minute').check();
-    if (data.triggerTemp) form.getCheckBox('Temperature 380 C 1004 F or 360 C 968 F').check();
+    if (data.triggerAge) form.getCheckBox('Age  12 or  65 years old').check();
+    if (data.triggerBp) form.getCheckBox('Systolic BP  160 or  100 andor diastolic  100 or  60').check();
+    if (data.triggerHr) form.getCheckBox('Heart Rate 110 or  55 bpm').check();
+    if (data.triggerRr) form.getCheckBox('Respiratory Rate  20 or  12 breaths per minute').check();
+    if (data.triggerTemp) form.getCheckBox('Temperature  380 C 1004 F or  360 C 968 F').check();
     if (data.triggerDiabetes) form.getCheckBox('Known diagnosis of diabetes and not taking prescribed medications').check();
     if (data.triggerSeizures) form.getCheckBox('Recent seizure or history of seizures and not taking seizure medications').check();
     if (data.triggerAsthma) form.getCheckBox('Known diagnosis of asthma or chronic obstructive pulmonary disease and not taking prescribed medications').check();
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data.disposition === 'outpatient') {
       form.getCheckBox('Outpatient Commitment respondent must meet ALL of the first four criteria outlined in Section I Outpatient').check();
       form.getTextField('Proposed Outpatient Treatment Center or Physician Name').setText(data.outpatientFacilityName);
-      form.getTextField('Address Phone Number').setText(data.outpatientFacilityContact);
+      form.getTextField('Address  Phone Number').setText(data.outpatientFacilityContact);
     }
     if (data.disposition === 'substance') form.getCheckBox('Substance Abuse Commitment respondent must meet both criteria outlined in Section I Substance Abuse').check();
     if (data.disposition === 'voluntary') form.getCheckBox('Respondent or Legally Responsible Person Consented to Voluntary Treatment').check();
@@ -216,8 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const [facilityName, ...addressParts] = data.facilityInfo.split(',');
     form.getTextField('Print Name of Examiner').setText(data.examinerName);
     form.getTextField('Address of Facility').setText(facilityName || '');
-    form.getTextField('City and State').setText(addressParts.slice(0, 2).join(',').trim());
-    form.getTextField('Telephone Number').setText(addressParts.length > 2 ? addressParts.slice(2).join(',').trim() : '');
+    form.getTextField('City and State').setText(addressParts.length ? addressParts.slice(0, -1).join(',').trim() : '');
+    form.getTextField('Telephone Number').setText(addressParts.length ? addressParts[addressParts.length - 1].trim() : '');
     form.getTextField('Date').setText(data.examDate.full);
     
     return pdfDoc.save();
