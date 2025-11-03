@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "prettier": "^3.6.2"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.3.2",
+    "pdf-lib": "^1.17.1"
   }
 }
