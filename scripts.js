@@ -297,6 +297,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const localSaveInputs = document.querySelectorAll(".local-save");
   const rememberCheckbox = document.getElementById("unified-remember-me");
 
+  function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+
   const loadSavedData = () => {
     if (localStorage.getItem("rememberMe") === "true") {
       rememberCheckbox.checked = true;
@@ -317,9 +326,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   localSaveInputs.forEach(input => {
-    input.addEventListener("input", () => {
+    input.addEventListener("input", debounce(() => {
       if (rememberCheckbox.checked) localStorage.setItem(input.id, input.value);
-    });
+    }, 300));
   });
   
   setDefaultDateTime();
