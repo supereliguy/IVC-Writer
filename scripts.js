@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- PDF Generation ---
   const FORM_URL_AOC = "./AOC-SP-300.pdf";
   const FORM_URL_DMH = "./DMH-5-72-19.pdf";
+  let aocPdfCache = null;
+  let dmhPdfCache = null;
 
   const showSpinner = () => document.getElementById("loading-spinner").classList.remove("hidden");
   const hideSpinner = () => document.getElementById("loading-spinner").classList.add("hidden");
@@ -71,8 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   async function generateAocPdf(data) {
-    const pdfBytes = await fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    if (!aocPdfCache) {
+      aocPdfCache = await fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
+    }
+    const pdfDoc = await PDFDocument.load(aocPdfCache);
     const form = pdfDoc.getForm();
     
     form.getTextField('FileNo').setText(data.fileNo);
@@ -130,8 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function generateDmhPdf(data) {
-    const pdfBytes = await fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    if (!dmhPdfCache) {
+      dmhPdfCache = await fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
+    }
+    const pdfDoc = await PDFDocument.load(dmhPdfCache);
     const form = pdfDoc.getForm();
     
     form.getTextField('County').setText(data.county);
