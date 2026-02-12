@@ -1,6 +1,12 @@
 // Get PDF libraries
 const { PDFDocument } = PDFLib;
 
+const FORM_URL_AOC = "./AOC-SP-300.pdf";
+const FORM_URL_DMH = "./DMH-5-72-19.pdf";
+
+const aocPdfPromise = fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
+const dmhPdfPromise = fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
+
 document.addEventListener("DOMContentLoaded", () => {
   // --- County List ---
   const ncCounties = ["Alamance", "Alexander", "Alleghany", "Anson", "Ashe", "Avery", "Beaufort", "Bertie", "Bladen", "Brunswick", "Buncombe", "Burke", "Cabarrus", "Caldwell", "Camden", "Carteret", "Caswell", "Catawba", "Chatham", "Cherokee", "Chowan", "Clay", "Cleveland", "Columbus", "Craven", "Cumberland", "Currituck", "Dare", "Davidson", "Davie", "Duplin", "Durham", "Edgecombe", "Forsyth", "Franklin", "Gaston", "Gates", "Graham", "Granville", "Greene", "Guilford", "Halifax", "Harnett", "Haywood", "Henderson", "Hertford", "Hoke", "Hyde", "Iredell", "Jackson", "Johnston", "Jones", "Lee", "Lenoir", "Lincoln", "Macon", "Madison", "Martin", "McDowell", "Mecklenburg", "Mitchell", "Montgomery", "Moore", "Nash", "New Hanover", "Northampton", "Onslow", "Orange", "Pamlico", "Pasquotank", "Pender", "Perquimans", "Person", "Pitt", "Polk", "Randolph", "Richmond", "Robeson", "Rockingham", "Rowan", "Rutherford", "Sampson", "Scotland", "Stanly", "Stokes", "Surry", "Swain", "Transylvania", "Tyrrell", "Union", "Vance", "Wake", "Warren", "Washington", "Watauga", "Wayne", "Wilkes", "Wilson", "Yadkin", "Yancey"];
@@ -58,11 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // --- PDF Generation ---
-  const FORM_URL_AOC = "./AOC-SP-300.pdf";
-  const FORM_URL_DMH = "./DMH-5-72-19.pdf";
-  let aocPdfCache = null;
-  let dmhPdfCache = null;
-
   const showSpinner = () => document.getElementById("loading-spinner").classList.remove("hidden");
   const hideSpinner = () => document.getElementById("loading-spinner").classList.add("hidden");
 
@@ -73,9 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   async function generateAocPdf(data) {
-    if (!aocPdfCache) {
-      aocPdfCache = await fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
-    }
+    const aocPdfCache = await aocPdfPromise;
     const pdfDoc = await PDFDocument.load(aocPdfCache);
     const form = pdfDoc.getForm();
     
@@ -134,9 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function generateDmhPdf(data) {
-    if (!dmhPdfCache) {
-      dmhPdfCache = await fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
-    }
+    const dmhPdfCache = await dmhPdfPromise;
     const pdfDoc = await PDFDocument.load(dmhPdfCache);
     const form = pdfDoc.getForm();
     
