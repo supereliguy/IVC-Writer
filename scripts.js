@@ -21,6 +21,40 @@ document.addEventListener("DOMContentLoaded", () => {
   countyDropdowns.forEach(dropdown => dropdown.appendChild(fragment.cloneNode(true)));
 
   // --- UI Interactivity ---
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+
+    let borderColorClass = 'border-blue-500';
+    let textColorClass = 'text-blue-700';
+
+    if (type === 'success') {
+      borderColorClass = 'border-green-500';
+      textColorClass = 'text-green-700';
+    } else if (type === 'error') {
+      borderColorClass = 'border-red-500';
+      textColorClass = 'text-red-700';
+    }
+
+    toast.className = `pointer-events-auto bg-white border-l-4 ${borderColorClass} ${textColorClass} p-4 rounded shadow-lg transform transition-all duration-300 translate-y-0 opacity-100 flex items-center mb-2`;
+    toast.setAttribute('role', 'status');
+    toast.innerHTML = `<span class="font-medium">${message}</span>`;
+
+    container.appendChild(toast);
+
+    // Animate in
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-y-2', 'opacity-0');
+    });
+
+    setTimeout(() => {
+      toast.classList.add('translate-y-2', 'opacity-0');
+      toast.addEventListener('transitionend', () => {
+        toast.remove();
+      });
+    }, 3000);
+  }
+
   function setDefaultDateTime() {
     const now = new Date();
     const yyyy = now.getFullYear();
@@ -260,9 +294,10 @@ document.addEventListener("DOMContentLoaded", () => {
       saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
       const dmhPdfBytes = await generateDmhPdf(data);
       saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      showToast("Both PDFs Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDFs:", error);
-      alert("Error generating PDFs. Check console for details.");
+      showToast("Error generating PDFs. Check console for details.", "error");
     } finally {
       hideSpinner();
     }
@@ -274,9 +309,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = collectFormData("aoc");
       const aocPdfBytes = await generateAocPdf(data);
       saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
+      showToast("AOC PDF Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("Error generating PDF. Check console for details.");
+      showToast("Error generating PDF. Check console for details.", "error");
     } finally {
       hideSpinner();
     }
@@ -288,9 +324,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = collectFormData("dmh");
       const dmhPdfBytes = await generateDmhPdf(data);
       saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      showToast("DMH PDF Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("Error generating PDF. Check console for details.");
+      showToast("Error generating PDF. Check console for details.", "error");
     } finally {
       hideSpinner();
     }
@@ -298,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // --- Local Storage & Initialization ---
   const localSaveInputs = document.querySelectorAll(".local-save");
-  const rememberCheckbox = document.getElementById("unified-remember-me");
+  const rememberCheckboxes = document.querySelectorAll('input[type="checkbox"][id$="-remember-me"]');
 
   function debounce(func, wait) {
     let timeout;
@@ -310,8 +347,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const loadSavedData = () => {
-    if (localStorage.getItem("rememberMe") === "true") {
-      rememberCheckbox.checked = true;
+    const isRemembered = localStorage.getItem("rememberMe") === "true";
+    if (isRemembered) {
+      rememberCheckboxes.forEach(cb => cb.checked = true);
       localSaveInputs.forEach(input => {
         const savedValue = localStorage.getItem(input.id);
         if (savedValue) input.value = savedValue;
@@ -319,18 +357,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  rememberCheckbox.addEventListener("change", () => {
-    localStorage.setItem("rememberMe", rememberCheckbox.checked);
-    if (rememberCheckbox.checked) {
-      localSaveInputs.forEach(input => localStorage.setItem(input.id, input.value));
-    } else {
-      localSaveInputs.forEach(input => localStorage.removeItem(input.id));
-    }
+  rememberCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", (e) => {
+      const isChecked = e.target.checked;
+
+      // Sync all checkboxes
+      rememberCheckboxes.forEach(cb => cb.checked = isChecked);
+
+      localStorage.setItem("rememberMe", isChecked);
+
+      if (isChecked) {
+        localSaveInputs.forEach(input => localStorage.setItem(input.id, input.value));
+        showToast("Preferences saved. Your petitioner info will be remembered.", "success");
+      } else {
+        localSaveInputs.forEach(input => localStorage.removeItem(input.id));
+        showToast("Preferences cleared. Petitioner info will not be saved.", "info");
+      }
+    });
   });
 
   localSaveInputs.forEach(input => {
     input.addEventListener("input", debounce(() => {
-      if (rememberCheckbox.checked) localStorage.setItem(input.id, input.value);
+      if (localStorage.getItem("rememberMe") === "true") {
+        localStorage.setItem(input.id, input.value);
+      }
     }, 300));
   });
   
