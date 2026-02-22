@@ -405,4 +405,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setDefaultDateTime();
   loadSavedData();
+
+  // --- Auto-Expand Textareas ---
+  const autoResizeTextarea = (textarea) => {
+    if (textarea.offsetParent === null) return; // Skip hidden elements
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  };
+
+  const textareas = document.querySelectorAll('textarea');
+  textareas.forEach(textarea => {
+    textarea.style.overflowY = 'hidden';
+    textarea.style.resize = 'none';
+    textarea.addEventListener('input', () => autoResizeTextarea(textarea));
+  });
+
+  // Resize on window resize
+  window.addEventListener('resize', () => {
+    textareas.forEach(autoResizeTextarea);
+  });
+
+  // Trigger resize on tab switch
+  document.querySelectorAll(".tab-button").forEach(button => {
+    button.addEventListener("click", () => {
+      const formId = "form-" + button.dataset.form;
+      setTimeout(() => {
+        const container = document.getElementById(formId);
+        if (container) {
+          container.querySelectorAll("textarea").forEach(autoResizeTextarea);
+        }
+      }, 0);
+    });
+  });
+
+  // Initial resize for visible textareas
+  textareas.forEach(autoResizeTextarea);
 });
