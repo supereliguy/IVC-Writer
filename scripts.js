@@ -88,12 +88,39 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const tabButtons = document.querySelectorAll(".tab-button");
   const formSections = document.querySelectorAll(".form-section");
+  const tabButtonsArray = Array.from(tabButtons);
+
   tabButtons.forEach(button => {
     button.addEventListener("click", () => {
-      tabButtons.forEach(btn => btn.classList.remove("tab-active"));
+      tabButtons.forEach(btn => {
+        btn.classList.remove("tab-active");
+        btn.setAttribute("aria-selected", "false");
+        btn.setAttribute("tabindex", "-1");
+      });
       formSections.forEach(sec => sec.classList.add("hidden"));
+
       button.classList.add("tab-active");
+      button.setAttribute("aria-selected", "true");
+      button.setAttribute("tabindex", "0");
       document.getElementById("form-" + button.dataset.form).classList.remove("hidden");
+    });
+
+    button.addEventListener("keydown", (e) => {
+      const index = tabButtonsArray.indexOf(button);
+      let newIndex = -1;
+
+      if (e.key === "ArrowRight") {
+        newIndex = (index + 1) % tabButtonsArray.length;
+      } else if (e.key === "ArrowLeft") {
+        newIndex = (index - 1 + tabButtonsArray.length) % tabButtonsArray.length;
+      }
+
+      if (newIndex !== -1) {
+        e.preventDefault();
+        const newButton = tabButtonsArray[newIndex];
+        newButton.focus();
+        newButton.click(); // Automatic activation
+      }
     });
   });
 
