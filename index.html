@@ -35,9 +35,13 @@
         **in your browser**. No information is ever sent to a server.
       </div>
 
-      <nav class="flex border-b border-gray-200 px-4 lg:px-6">
+      <nav class="flex border-b border-gray-200 px-4 lg:px-6" role="tablist" aria-label="Form Sections">
         <button
           id="tab-btn-unified"
+          role="tab"
+          aria-selected="true"
+          aria-controls="form-unified"
+          tabindex="0"
           class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px tab-active focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           data-form="unified"
         >
@@ -45,6 +49,10 @@
         </button>
         <button
           id="tab-btn-aoc"
+          role="tab"
+          aria-selected="false"
+          aria-controls="form-aoc"
+          tabindex="-1"
           class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           data-form="aoc"
         >
@@ -52,6 +60,10 @@
         </button>
         <button
           id="tab-btn-dmh"
+          role="tab"
+          aria-selected="false"
+          aria-controls="form-dmh"
+          tabindex="-1"
           class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           data-form="dmh"
         >
@@ -64,7 +76,13 @@
         tabindex="-1"
         class="p-4 lg:p-6 focus:outline-none"
       >
-        <section id="form-unified" class="form-section space-y-4">
+        <section
+          id="form-unified"
+          role="tabpanel"
+          aria-labelledby="tab-btn-unified"
+          tabindex="0"
+          class="form-section space-y-4"
+        >
           <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
             Unified Data Entry
           </h2>
@@ -1293,7 +1311,13 @@
           </div>
         </section>
 
-        <section id="form-aoc" class="form-section space-y-4 hidden">
+        <section
+          id="form-aoc"
+          role="tabpanel"
+          aria-labelledby="tab-btn-aoc"
+          tabindex="0"
+          class="form-section space-y-4 hidden"
+        >
           <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
             AOC-SP-300 Data Entry
           </h2>
@@ -2513,7 +2537,13 @@
             </button>
           </div>
         </section>
-        <section id="form-dmh" class="form-section space-y-4 hidden">
+        <section
+          id="form-dmh"
+          role="tabpanel"
+          aria-labelledby="tab-btn-dmh"
+          tabindex="0"
+          class="form-section space-y-4 hidden"
+        >
           <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
             DMH-5-72-19 Data Entry
           </h2>
