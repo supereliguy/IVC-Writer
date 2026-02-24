@@ -8,6 +8,9 @@ const aocPdfPromise = fetch(FORM_URL_AOC).then(res => res.arrayBuffer());
 const dmhPdfPromise = fetch(FORM_URL_DMH).then(res => res.arrayBuffer());
 
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Unsaved Changes State ---
+  window.isFormDirty = false;
+
   // --- County List ---
   const ncCounties = ["Alamance", "Alexander", "Alleghany", "Anson", "Ashe", "Avery", "Beaufort", "Bertie", "Bladen", "Brunswick", "Buncombe", "Burke", "Cabarrus", "Caldwell", "Camden", "Carteret", "Caswell", "Catawba", "Chatham", "Cherokee", "Chowan", "Clay", "Cleveland", "Columbus", "Craven", "Cumberland", "Currituck", "Dare", "Davidson", "Davie", "Duplin", "Durham", "Edgecombe", "Forsyth", "Franklin", "Gaston", "Gates", "Graham", "Granville", "Greene", "Guilford", "Halifax", "Harnett", "Haywood", "Henderson", "Hertford", "Hoke", "Hyde", "Iredell", "Jackson", "Johnston", "Jones", "Lee", "Lenoir", "Lincoln", "Macon", "Madison", "Martin", "McDowell", "Mecklenburg", "Mitchell", "Montgomery", "Moore", "Nash", "New Hanover", "Northampton", "Onslow", "Orange", "Pamlico", "Pasquotank", "Pender", "Perquimans", "Person", "Pitt", "Polk", "Randolph", "Richmond", "Robeson", "Rockingham", "Rowan", "Rutherford", "Sampson", "Scotland", "Stanly", "Stokes", "Surry", "Swain", "Transylvania", "Tyrrell", "Union", "Vance", "Wake", "Warren", "Washington", "Watauga", "Wayne", "Wilkes", "Wilson", "Yadkin", "Yancey"];
   const countyDropdowns = document.querySelectorAll("#unified-county, #aoc-county, #dmh-county");
@@ -321,6 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
       saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
       const dmhPdfBytes = await generateDmhPdf(data);
       saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      window.isFormDirty = false;
       showToast("Both PDFs Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDFs:", error);
@@ -336,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = collectFormData("aoc");
       const aocPdfBytes = await generateAocPdf(data);
       saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
+      window.isFormDirty = false;
       showToast("AOC PDF Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -351,6 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = collectFormData("dmh");
       const dmhPdfBytes = await generateDmhPdf(data);
       saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      window.isFormDirty = false;
       showToast("DMH PDF Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -467,4 +473,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial resize for visible textareas
   textareas.forEach(autoResizeTextarea);
+
+  // --- Unsaved Changes Listeners ---
+  document.addEventListener("input", (e) => {
+    if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) {
+      window.isFormDirty = true;
+    }
+  });
+
+  window.addEventListener("beforeunload", (e) => {
+    if (window.isFormDirty) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  });
 });
