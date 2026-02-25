@@ -292,29 +292,145 @@ document.addEventListener("DOMContentLoaded", () => {
     return pdfDoc.save();
   }
 
-  function collectFormData(prefix) {
-      const getValue = id => document.getElementById(`${prefix}-${id}`).value;
-      const isChecked = id => document.getElementById(`${prefix}-${id}`).checked;
-      const getRadio = name => { const el = document.querySelector(`input[name="${prefix}-${name}"]:checked`); return el ? el.value : null; };
 
-      return {
-        county: getValue("county"), clientRecord: getValue("client-record"), fileNo: getValue("file-no"),
-        respondentName: getValue("respondent-name"), respondentDob: formatDate(getValue("respondent-dob")), respondentAge: getValue("respondent-age"), respondentSex: getValue("respondent-sex"), respondentRace: getValue("respondent-race"), respondentMs: getValue("respondent-ms"), respondentStreet: getValue("respondent-street"), respondentCity: getValue("respondent-city"), respondentState: getValue("respondent-state"), respondentZip: getValue("respondent-zip"), respondentPhone: getValue("respondent-phone"), respondentSsn: getValue("respondent-ssn"), respondentDl: getValue("respondent-dl"), respondentDlState: getValue("respondent-dl-state"), respondentLastLocation: getValue("respondent-last-location"),
-        lrpName: getValue("lrp-name"), lrpRelationship: getValue("lrp-relationship"), lrpStreet: getValue("lrp-street"), lrpCity: getValue("lrp-city"), lrpState: getValue("lrp-state"), lrpZip: getValue("lrp-zip"), lrpPhone: getValue("lrp-phone"),
-        petitionerName: getValue("petitioner-name"), petitionerRelationship: getValue("petitioner-relationship"), petitionerStreet: getValue("petitioner-street"), petitionerCity: getValue("petitioner-city"), petitionerState: getValue("petitioner-state"), petitionerZip: getValue("petitioner-zip"), petitionerHomePhone: getValue("petitioner-home-phone"), petitionerBusPhone: getValue("petitioner-bus-phone"),
-        witnessName: getValue("witness-name"), witnessStreet: getValue("witness-street"), witnessCity: getValue("witness-city"), witnessState: getValue("witness-state"), witnessZip: getValue("witness-zip"), witnessHomePhone: getValue("witness-home-phone"), witnessBusPhone: getValue("witness-bus-phone"),
-        interpreter: getRadio("interpreter"), interpreterExplanation: getValue("interpreter-explanation"),
-        examDate: formatDate(getValue("exam-date")), examTime: getValue("exam-time"), examLocation: getValue("exam-location"),
-        findings: getValue("findings"), impression: getValue("impression"),
-        isMi: isChecked("check-mi"), isMiDangerSelf: isChecked("check-mi-danger-self"), isMiDangerOthers: isChecked("check-mi-danger-others"), isMiId: isChecked("check-mi-id"),
-        isSa: isChecked("check-sa"), isSaDangerSelf: isChecked("check-sa-danger-self"), isSaDangerOthers: isChecked("check-sa-danger-others"),
-        hr: getValue("hr"), rr: getValue("rr"), temp: getValue("temp"), bp: getValue("bp"), medicalProblems: getValue("medical-problems"), allergies: getValue("allergies"), medications: getValue("medications"),
-        flagChestPain: isChecked("flag-chest-pain"), flagOverdose: isChecked("flag-overdose"), flagSeverePain: isChecked("flag-severe-pain"), flagDisoriented: isChecked("flag-disoriented"), flagHeadTrauma: isChecked("flag-head-trauma"), flagPhysicalTrauma: isChecked("flag-physical-trauma"), flagWeakness: isChecked("flag-weakness"),
-        triggerAge: isChecked("trigger-age"), triggerBp: isChecked("trigger-bp"), triggerHr: isChecked("trigger-hr"), triggerRr: isChecked("trigger-rr"), triggerTemp: isChecked("trigger-temp"), triggerDiabetes: isChecked("trigger-diabetes"), triggerSeizures: isChecked("trigger-seizures"), triggerAsthma: isChecked("trigger-asthma"), triggerPregnancy: isChecked("trigger-pregnancy"),
-        disposition: getRadio("disposition"), outpatientFacilityName: getValue("outpatient-facility-name"), outpatientFacilityContact: getValue("outpatient-facility-contact"),
-        examinerName: getValue("examiner-name"), facilityInfo: getValue("facility-info"), notaryCounty: getValue("notary-county"), notaryExpiration: formatDate(getValue("notary-expiration")), certification: getRadio("certification"), waiverDate: formatDate(getValue("waiver-date")),
-      };
+  const FORM_SCHEMA = {
+    county: { id: "county", type: "value" },
+    clientRecord: { id: "client-record", type: "value" },
+    fileNo: { id: "file-no", type: "value" },
+    respondentName: { id: "respondent-name", type: "value" },
+    respondentDob: { id: "respondent-dob", type: "value", transform: "formatDate" },
+    respondentAge: { id: "respondent-age", type: "value" },
+    respondentSex: { id: "respondent-sex", type: "value" },
+    respondentRace: { id: "respondent-race", type: "value" },
+    respondentMs: { id: "respondent-ms", type: "value" },
+    respondentStreet: { id: "respondent-street", type: "value" },
+    respondentCity: { id: "respondent-city", type: "value" },
+    respondentState: { id: "respondent-state", type: "value" },
+    respondentZip: { id: "respondent-zip", type: "value" },
+    respondentPhone: { id: "respondent-phone", type: "value" },
+    respondentSsn: { id: "respondent-ssn", type: "value" },
+    respondentDl: { id: "respondent-dl", type: "value" },
+    respondentDlState: { id: "respondent-dl-state", type: "value" },
+    respondentLastLocation: { id: "respondent-last-location", type: "value" },
+    lrpName: { id: "lrp-name", type: "value" },
+    lrpRelationship: { id: "lrp-relationship", type: "value" },
+    lrpStreet: { id: "lrp-street", type: "value" },
+    lrpCity: { id: "lrp-city", type: "value" },
+    lrpState: { id: "lrp-state", type: "value" },
+    lrpZip: { id: "lrp-zip", type: "value" },
+    lrpPhone: { id: "lrp-phone", type: "value" },
+    petitionerName: { id: "petitioner-name", type: "value" },
+    petitionerRelationship: { id: "petitioner-relationship", type: "value" },
+    petitionerStreet: { id: "petitioner-street", type: "value" },
+    petitionerCity: { id: "petitioner-city", type: "value" },
+    petitionerState: { id: "petitioner-state", type: "value" },
+    petitionerZip: { id: "petitioner-zip", type: "value" },
+    petitionerHomePhone: { id: "petitioner-home-phone", type: "value" },
+    petitionerBusPhone: { id: "petitioner-bus-phone", type: "value" },
+    witnessName: { id: "witness-name", type: "value" },
+    witnessStreet: { id: "witness-street", type: "value" },
+    witnessCity: { id: "witness-city", type: "value" },
+    witnessState: { id: "witness-state", type: "value" },
+    witnessZip: { id: "witness-zip", type: "value" },
+    witnessHomePhone: { id: "witness-home-phone", type: "value" },
+    witnessBusPhone: { id: "witness-bus-phone", type: "value" },
+    interpreter: { id: "interpreter", type: "radio" },
+    interpreterExplanation: { id: "interpreter-explanation", type: "value" },
+    examDate: { id: "exam-date", type: "value", transform: "formatDate" },
+    examTime: { id: "exam-time", type: "value" },
+    examLocation: { id: "exam-location", type: "value" },
+    findings: { id: "findings", type: "value" },
+    impression: { id: "impression", type: "value" },
+    isMi: { id: "check-mi", type: "checked" },
+    isMiDangerSelf: { id: "check-mi-danger-self", type: "checked" },
+    isMiDangerOthers: { id: "check-mi-danger-others", type: "checked" },
+    isMiId: { id: "check-mi-id", type: "checked" },
+    isSa: { id: "check-sa", type: "checked" },
+    isSaDangerSelf: { id: "check-sa-danger-self", type: "checked" },
+    isSaDangerOthers: { id: "check-sa-danger-others", type: "checked" },
+    hr: { id: "hr", type: "value" },
+    rr: { id: "rr", type: "value" },
+    temp: { id: "temp", type: "value" },
+    bp: { id: "bp", type: "value" },
+    medicalProblems: { id: "medical-problems", type: "value" },
+    allergies: { id: "allergies", type: "value" },
+    medications: { id: "medications", type: "value" },
+    flagChestPain: { id: "flag-chest-pain", type: "checked" },
+    flagOverdose: { id: "flag-overdose", type: "checked" },
+    flagSeverePain: { id: "flag-severe-pain", type: "checked" },
+    flagDisoriented: { id: "flag-disoriented", type: "checked" },
+    flagHeadTrauma: { id: "flag-head-trauma", type: "checked" },
+    flagPhysicalTrauma: { id: "flag-physical-trauma", type: "checked" },
+    flagWeakness: { id: "flag-weakness", type: "checked" },
+    triggerAge: { id: "trigger-age", type: "checked" },
+    triggerBp: { id: "trigger-bp", type: "checked" },
+    triggerHr: { id: "trigger-hr", type: "checked" },
+    triggerRr: { id: "trigger-rr", type: "checked" },
+    triggerTemp: { id: "trigger-temp", type: "checked" },
+    triggerDiabetes: { id: "trigger-diabetes", type: "checked" },
+    triggerSeizures: { id: "trigger-seizures", type: "checked" },
+    triggerAsthma: { id: "trigger-asthma", type: "checked" },
+    triggerPregnancy: { id: "trigger-pregnancy", type: "checked" },
+    disposition: { id: "disposition", type: "radio" },
+    outpatientFacilityName: { id: "outpatient-facility-name", type: "value" },
+    outpatientFacilityContact: { id: "outpatient-facility-contact", type: "value" },
+    examinerName: { id: "examiner-name", type: "value" },
+    facilityInfo: { id: "facility-info", type: "value" },
+    notaryCounty: { id: "notary-county", type: "value" },
+    notaryExpiration: { id: "notary-expiration", type: "value", transform: "formatDate" },
+    certification: { id: "certification", type: "radio" },
+    waiverDate: { id: "waiver-date", type: "value", transform: "formatDate" },
+  };
+
+  const formCache = { unified: {}, aoc: {}, dmh: {} };
+
+  function initFormCache() {
+      ['unified', 'aoc', 'dmh'].forEach(prefix => {
+          for (const [key, config] of Object.entries(FORM_SCHEMA)) {
+              if (config.type === 'radio') {
+                 formCache[prefix][key] = document.querySelectorAll(`input[name="${prefix}-${config.id}"]`);
+              } else {
+                 formCache[prefix][key] = document.getElementById(`${prefix}-${config.id}`);
+              }
+          }
+      });
   }
+
+  initFormCache();
+
+  function collectFormData(prefix) {
+      const data = {};
+      const cache = formCache[prefix];
+
+      for (const [key, config] of Object.entries(FORM_SCHEMA)) {
+          const el = cache[key];
+          if (!el) {
+              data[key] = null;
+              continue;
+          }
+
+          let val = null;
+          if (config.type === 'checked') {
+              val = el.checked;
+          } else if (config.type === 'radio') {
+              for (const radio of el) {
+                  if (radio.checked) {
+                      val = radio.value;
+                      break;
+                  }
+              }
+          } else {
+              val = el.value;
+          }
+
+          if (config.transform === 'formatDate') {
+              val = formatDate(val);
+          }
+          data[key] = val;
+      }
+      return data;
+  }
+
 
   document.getElementById("generate-both").addEventListener("click", async () => {
     showSpinner();
