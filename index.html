@@ -575,11 +575,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="unified-witness-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="unified-witness-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="unified-respondent"
+                    data-target="unified-witness"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="unified-witness-street"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
@@ -1243,7 +1255,7 @@
                 ><input
                   type="text"
                   id="unified-notary-county"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
               <div>
@@ -1254,7 +1266,7 @@
                 ><input
                   type="date"
                   id="unified-notary-expiration"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
             </div>
@@ -1832,11 +1844,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="aoc-witness-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="aoc-witness-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="aoc-respondent"
+                    data-target="aoc-witness"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="aoc-witness-street"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
@@ -2492,7 +2516,7 @@
                 ><input
                   type="text"
                   id="aoc-notary-county"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
               <div>
@@ -2503,7 +2527,7 @@
                 ><input
                   type="date"
                   id="aoc-notary-expiration"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
             </div>
@@ -3082,11 +3106,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="dmh-witness-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="dmh-witness-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="dmh-respondent"
+                    data-target="dmh-witness"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="dmh-witness-street"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
@@ -3742,7 +3778,7 @@
                 ><input
                   type="text"
                   id="dmh-notary-county"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
               <div>
@@ -3753,7 +3789,7 @@
                 ><input
                   type="date"
                   id="dmh-notary-expiration"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  class="local-save mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
             </div>

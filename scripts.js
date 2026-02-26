@@ -700,12 +700,14 @@ document.addEventListener("DOMContentLoaded", () => {
       showSpinner();
       try {
         const data = collectFormData("unified");
-        const aocPdfBytes = await generateAocPdf(data);
+        const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
+          generateAocPdf(data),
+          generateDmhPdf(data),
+        ]);
         saveAs(
           new Blob([aocPdfBytes], { type: "application/pdf" }),
           "Completed-AOC-SP-300.pdf",
         );
-        const dmhPdfBytes = await generateDmhPdf(data);
         saveAs(
           new Blob([dmhPdfBytes], { type: "application/pdf" }),
           "Completed-DMH-5-72-19.pdf",
@@ -777,6 +779,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // Radio groups to persist (by name attribute)
+  const savedRadioGroupNames = [
+    "unified-certification",
+    "aoc-certification",
+    "dmh-certification",
+  ];
+
   const loadSavedData = () => {
     const isRemembered = localStorage.getItem("rememberMe") === "true";
     if (isRemembered) {
@@ -784,6 +793,16 @@ document.addEventListener("DOMContentLoaded", () => {
       localSaveInputs.forEach((input) => {
         const savedValue = localStorage.getItem(input.id);
         if (savedValue) input.value = savedValue;
+      });
+      // Restore saved radio selections
+      savedRadioGroupNames.forEach((name) => {
+        const savedValue = localStorage.getItem(`radio_${name}`);
+        if (savedValue) {
+          const radio = document.querySelector(
+            `input[name="${name}"][value="${savedValue}"]`,
+          );
+          if (radio) radio.checked = true;
+        }
       });
     }
   };
@@ -801,14 +820,23 @@ document.addEventListener("DOMContentLoaded", () => {
         localSaveInputs.forEach((input) =>
           localStorage.setItem(input.id, input.value),
         );
+        savedRadioGroupNames.forEach((name) => {
+          const checked = document.querySelector(
+            `input[name="${name}"]:checked`,
+          );
+          if (checked) localStorage.setItem(`radio_${name}`, checked.value);
+        });
         showToast(
-          "Preferences saved. Your petitioner info will be remembered.",
+          "Preferences saved. Your information will be remembered.",
           "success",
         );
       } else {
         localSaveInputs.forEach((input) => localStorage.removeItem(input.id));
+        savedRadioGroupNames.forEach((name) =>
+          localStorage.removeItem(`radio_${name}`),
+        );
         showToast(
-          "Preferences cleared. Petitioner info will not be saved.",
+          "Preferences cleared. Your information will not be saved.",
           "info",
         );
       }
@@ -824,6 +852,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }, 300),
     );
+  });
+
+  // Save certification radio on change
+  savedRadioGroupNames.forEach((name) => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach((radio) => {
+      radio.addEventListener("change", () => {
+        if (localStorage.getItem("rememberMe") === "true") {
+          localStorage.setItem(`radio_${name}`, radio.value);
+        }
+      });
+    });
   });
 
   // --- Phone Number Formatting ---
@@ -844,6 +883,129 @@ document.addEventListener("DOMContentLoaded", () => {
       e.target.value = formattedPhoneNumber;
     });
   });
+
+  // --- SSN Auto-Formatting ---
+  const formatSsn = (value) => {
+    if (!value) return value;
+    const digits = value.replace(/[^\d]/g, "");
+    if (digits.length < 4) return digits;
+    if (digits.length < 6) {
+      return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+    }
+    return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5, 9)}`;
+  };
+
+  document
+    .querySelectorAll(
+      "#unified-respondent-ssn, #aoc-respondent-ssn, #dmh-respondent-ssn",
+    )
+    .forEach((input) => {
+      input.addEventListener("input", (e) => {
+        e.target.value = formatSsn(e.target.value);
+      });
+    });
+
+  // --- Auto-Calculate Age from DOB ---
+  function calculateAge(dobStr) {
+    if (!dobStr) return "";
+    const dob = new Date(dobStr + "T00:00:00");
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age >= 0 ? String(age) : "";
+  }
+
+  ["unified", "aoc", "dmh"].forEach((prefix) => {
+    const dobInput = document.getElementById(`${prefix}-respondent-dob`);
+    const ageInput = document.getElementById(`${prefix}-respondent-age`);
+    if (dobInput && ageInput) {
+      dobInput.addEventListener("change", () => {
+        const age = calculateAge(dobInput.value);
+        ageInput.value = age;
+        ageInput.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+    }
+  });
+
+  // --- Auto-Check Vital Sign Triggers ---
+  function setupVitalSignTriggers() {
+    ["unified", "aoc", "dmh"].forEach((prefix) => {
+      const hrInput = document.getElementById(`${prefix}-hr`);
+      const rrInput = document.getElementById(`${prefix}-rr`);
+      const tempInput = document.getElementById(`${prefix}-temp`);
+      const bpInput = document.getElementById(`${prefix}-bp`);
+      const ageInput = document.getElementById(`${prefix}-respondent-age`);
+
+      const triggerHr = document.getElementById(`${prefix}-trigger-hr`);
+      const triggerRr = document.getElementById(`${prefix}-trigger-rr`);
+      const triggerTemp = document.getElementById(`${prefix}-trigger-temp`);
+      const triggerBp = document.getElementById(`${prefix}-trigger-bp`);
+      const triggerAge = document.getElementById(`${prefix}-trigger-age`);
+
+      if (hrInput && triggerHr) {
+        hrInput.addEventListener("input", () => {
+          const hr = parseFloat(hrInput.value);
+          if (!isNaN(hr)) {
+            triggerHr.checked = hr >= 110 || hr <= 55;
+          }
+        });
+      }
+
+      if (rrInput && triggerRr) {
+        rrInput.addEventListener("input", () => {
+          const rr = parseFloat(rrInput.value);
+          if (!isNaN(rr)) {
+            triggerRr.checked = rr >= 20 || rr <= 12;
+          }
+        });
+      }
+
+      if (tempInput && triggerTemp) {
+        tempInput.addEventListener("input", () => {
+          const temp = parseFloat(tempInput.value);
+          if (!isNaN(temp)) {
+            // Support both Fahrenheit and Celsius
+            if (temp > 50) {
+              // Fahrenheit
+              triggerTemp.checked = temp >= 100.4 || temp <= 96.8;
+            } else {
+              // Celsius
+              triggerTemp.checked = temp >= 38.0 || temp <= 36.0;
+            }
+          }
+        });
+      }
+
+      if (bpInput && triggerBp) {
+        bpInput.addEventListener("input", () => {
+          const match = bpInput.value.match(/(\d+)\s*\/\s*(\d+)/);
+          if (match) {
+            const systolic = parseInt(match[1], 10);
+            const diastolic = parseInt(match[2], 10);
+            triggerBp.checked =
+              systolic >= 160 ||
+              systolic <= 100 ||
+              diastolic >= 100 ||
+              diastolic <= 60;
+          }
+        });
+      }
+
+      if (ageInput && triggerAge) {
+        ageInput.addEventListener("input", () => {
+          const age = parseInt(ageInput.value, 10);
+          if (!isNaN(age)) {
+            triggerAge.checked = age < 12 || age > 65;
+          }
+        });
+      }
+    });
+  }
+
+  setupVitalSignTriggers();
 
   // --- Address Copying ---
   function setupAddressCopying() {
@@ -883,6 +1045,15 @@ document.addEventListener("DOMContentLoaded", () => {
   setupAddressCopying();
   setDefaultDateTime();
   loadSavedData();
+
+  // --- Default State Fields to NC (after loadSavedData so localStorage takes priority) ---
+  document
+    .querySelectorAll(
+      '[id$="-respondent-state"], [id$="-respondent-dl-state"], [id$="-lrp-state"], [id$="-petitioner-state"], [id$="-witness-state"]',
+    )
+    .forEach((input) => {
+      if (!input.value) input.value = "NC";
+    });
 
   // --- Auto-Expand Textareas ---
   const autoResizeTextarea = (textarea) => {
