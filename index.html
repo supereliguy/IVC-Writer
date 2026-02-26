@@ -35,7 +35,11 @@
         **in your browser**. No information is ever sent to a server.
       </div>
 
-      <nav class="flex border-b border-gray-200 px-4 lg:px-6" role="tablist" aria-label="Form Sections">
+      <nav
+        class="flex border-b border-gray-200 px-4 lg:px-6"
+        role="tablist"
+        aria-label="Form Sections"
+      >
         <button
           id="tab-btn-unified"
           role="tab"
@@ -347,11 +351,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="unified-lrp-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="unified-lrp-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="unified-respondent"
+                    data-target="unified-lrp"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="unified-lrp-street"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
@@ -436,11 +452,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="unified-petitioner-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="unified-petitioner-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="unified-respondent"
+                    data-target="unified-petitioner"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="unified-petitioner-street"
                   autocomplete="street-address"
@@ -1582,11 +1610,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="aoc-lrp-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="aoc-lrp-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="aoc-respondent"
+                    data-target="aoc-lrp"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="aoc-lrp-street"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
@@ -1671,11 +1711,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="aoc-petitioner-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="aoc-petitioner-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="aoc-respondent"
+                    data-target="aoc-petitioner"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="aoc-petitioner-street"
                   autocomplete="street-address"
@@ -2808,11 +2860,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="dmh-lrp-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="dmh-lrp-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="dmh-respondent"
+                    data-target="dmh-lrp"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="dmh-lrp-street"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
@@ -2897,11 +2961,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div class="md:col-span-4">
-                <label
-                  for="dmh-petitioner-street"
-                  class="block text-sm font-medium text-gray-700"
-                  >Street Address</label
-                ><input
+                <div class="flex justify-between items-center mb-1">
+                  <label
+                    for="dmh-petitioner-street"
+                    class="block text-sm font-medium text-gray-700"
+                    >Street Address</label
+                  >
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 rounded px-1"
+                    data-action="copy-address"
+                    data-source="dmh-respondent"
+                    data-target="dmh-petitioner"
+                  >
+                    Copy from Respondent
+                  </button>
+                </div>
+                <input
                   type="text"
                   id="dmh-petitioner-street"
                   autocomplete="street-address"
