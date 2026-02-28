@@ -661,6 +661,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initFormCache();
 
+  // --- Accessibility ---
+  // Ensure keyboard accessibility for checkboxes and radio buttons
+  document
+    .querySelectorAll('input[type="checkbox"], input[type="radio"]')
+    .forEach((el) => {
+      el.classList.add(
+        "focus:outline-none",
+        "focus:ring-2",
+        "focus:ring-blue-500",
+        "focus:ring-offset-1",
+      );
+    });
+
   function collectFormData(prefix) {
     const data = {};
     const cache = formCache[prefix];
