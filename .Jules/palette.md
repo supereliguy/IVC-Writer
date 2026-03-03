@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2024-05-15 - Focus rings on inputs without @tailwindcss/forms
+**Learning:** Without the `@tailwindcss/forms` plugin, standard input checkboxes and radios require explicit focus classes (e.g., `focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1`). Injecting them via JS causes them to be purged by the JIT compiler, so they must be added inline in HTML.
+**Action:** When working with vanilla inputs in Tailwind without form plugins, ensure focus states are explicitly styled in the HTML template.
