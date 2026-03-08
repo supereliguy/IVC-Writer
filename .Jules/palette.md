@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2024-11-20 - Native Autocomplete for Demographic Inputs
+**Learning:** For repetitive demographic fields (Sex, Race, Marital Status), free-text inputs create inconsistency and friction, while custom dropdown components add unnecessary weight. The native `<datalist>` element provides lightweight, accessible autocomplete without heavy JavaScript dependencies, allowing users to type or select from consistent options.
+**Action:** Connect demographic text inputs to shared `<datalist>` elements to guide user input while preserving flexibility.
