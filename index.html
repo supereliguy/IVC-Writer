@@ -188,6 +188,7 @@
                   type="text"
                   id="unified-respondent-sex"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="sex-options"
                 />
               </div>
               <div>
@@ -199,6 +200,7 @@
                   type="text"
                   id="unified-respondent-race"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="race-options"
                 />
               </div>
               <div>
@@ -210,6 +212,7 @@
                   type="text"
                   id="unified-respondent-ms"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="ms-options"
                 />
               </div>
             </div>
@@ -1459,6 +1462,7 @@
                   type="text"
                   id="aoc-respondent-sex"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="sex-options"
                 />
               </div>
               <div>
@@ -1470,6 +1474,7 @@
                   type="text"
                   id="aoc-respondent-race"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="race-options"
                 />
               </div>
               <div>
@@ -1481,6 +1486,7 @@
                   type="text"
                   id="aoc-respondent-ms"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="ms-options"
                 />
               </div>
             </div>
@@ -2721,6 +2727,7 @@
                   type="text"
                   id="dmh-respondent-sex"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="sex-options"
                 />
               </div>
               <div>
@@ -2732,6 +2739,7 @@
                   type="text"
                   id="dmh-respondent-race"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="race-options"
                 />
               </div>
               <div>
@@ -2743,6 +2751,7 @@
                   type="text"
                   id="dmh-respondent-ms"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  list="ms-options"
                 />
               </div>
             </div>
@@ -3898,5 +3907,28 @@
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
     <script src="scripts.js"></script>
+
+    <datalist id="sex-options">
+      <option value="Male"></option>
+      <option value="Female"></option>
+      <option value="Other"></option>
+      <option value="Unknown"></option>
+    </datalist>
+    <datalist id="race-options">
+      <option value="White"></option>
+      <option value="Black or African American"></option>
+      <option value="Asian"></option>
+      <option value="American Indian or Alaska Native"></option>
+      <option value="Native Hawaiian or Other Pacific Islander"></option>
+      <option value="Other"></option>
+      <option value="Unknown"></option>
+    </datalist>
+    <datalist id="ms-options">
+      <option value="Single"></option>
+      <option value="Married"></option>
+      <option value="Divorced"></option>
+      <option value="Widowed"></option>
+      <option value="Separated"></option>
+    </datalist>
   </body>
 </html>
