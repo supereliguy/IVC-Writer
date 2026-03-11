@@ -1043,6 +1043,67 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   setupAddressCopying();
+
+  // --- Fill Unknown for Respondent Fields ---
+  function setupFillUnknown() {
+    const fillButtons = document.querySelectorAll(
+      'button[data-action="fill-unknown"]',
+    );
+    fillButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const prefix = button.dataset.prefix;
+        // Text/tel fields to fill with "Unknown" (skip name and dob)
+        const textFields = [
+          "respondent-age",
+          "respondent-street",
+          "respondent-city",
+          "respondent-state",
+          "respondent-zip",
+          "respondent-phone",
+          "respondent-ssn",
+          "respondent-dl",
+          "respondent-dl-state",
+          "respondent-last-location",
+        ];
+        // Select fields to set to "Unknown"
+        const selectFields = [
+          "respondent-sex",
+          "respondent-race",
+          "respondent-ms",
+        ];
+
+        let filledCount = 0;
+        textFields.forEach((field) => {
+          const el = document.getElementById(`${prefix}-${field}`);
+          if (el && !el.value) {
+            el.value = "Unknown";
+            el.dispatchEvent(new Event("input", { bubbles: true }));
+            filledCount++;
+          }
+        });
+        selectFields.forEach((field) => {
+          const el = document.getElementById(`${prefix}-${field}`);
+          if (el && !el.value) {
+            el.value = "Unknown";
+            el.dispatchEvent(new Event("change", { bubbles: true }));
+            filledCount++;
+          }
+        });
+
+        if (filledCount > 0) {
+          showToast(
+            `Filled ${filledCount} empty field${filledCount > 1 ? "s" : ""} with "Unknown"`,
+            "success",
+          );
+          window.isFormDirty = true;
+        } else {
+          showToast("All fields already have values", "info");
+        }
+      });
+    });
+  }
+
+  setupFillUnknown();
   setDefaultDateTime();
   loadSavedData();
 
