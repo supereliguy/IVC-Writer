@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2026-03-15 - Focus Visibility for Raw Inputs
+**Learning:** When using Tailwind CSS without the `@tailwindcss/forms` plugin, raw HTML `<input type="checkbox">` and `<input type="radio">` elements do not have adequate default focus indicators for keyboard navigation.
+**Action:** Always apply explicit focus classes (e.g., `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1`) to these elements to ensure they are accessible via keyboard without impacting mouse click aesthetics.
