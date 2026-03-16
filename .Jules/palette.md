@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2026-03-16 - ARIA Live Regions for Client-Side Notifications
+**Learning:** For client-side single-page applications where actions (like generating a PDF or showing a temporary toast notification) don't trigger a page reload, screen reader users are left unaware of success or loading states.
+**Action:** Always wrap dynamic notification elements (like `#toast-container`) with `aria-live="polite"` and `aria-atomic="true"`, and use `role="status"` on loading spinners so screen readers announce these critical non-visual state changes.
