@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2026-03-05 - Explicit focus-visible classes on checkboxes and radios
+**Learning:** Using `focus-visible` over `focus` for checkboxes and radio buttons ensures keyboard navigation users receive a clear focus indicator while preventing annoying focus rings from appearing when mouse users click the same elements. Since the `@tailwindcss/forms` plugin is not used, explicit classes are required directly in the HTML.
+**Action:** Always append explicit focus classes (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1`) to all `<input type="checkbox">` and `<input type="radio">` elements, avoiding dynamic JavaScript injection.
