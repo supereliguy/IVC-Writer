@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2026-03-05 - Screen Reader Accessibility for Dynamic Notifications
+**Learning:** Visual-only indicators for dynamic events, like toast notifications and loading spinners, are inaccessible to screen reader users. Without ARIA live regions, users relying on assistive technologies are unaware of these important updates.
+**Action:** Always use `aria-live="polite"` (and `aria-atomic="true"` when appropriate) on notification containers to ensure they are announced by screen readers without interrupting the user's current task. Add `role="status"` to loading indicators, and explicitly hide decorative loading animations with `aria-hidden="true"`.
