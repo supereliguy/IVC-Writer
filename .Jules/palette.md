@@ -11,3 +11,7 @@
 ## 2026-02-24 - Unsaved Changes Protection
 **Learning:** For long, data-intensive forms that exist purely client-side, the risk of accidental data loss (via refresh or tab close) is high and frustrating. Users expect a safety net.
 **Action:** Implement a lightweight `beforeunload` check that tracks form dirtiness and warns users before they leave, resetting only on successful completion/download.
+
+## 2026-03-27 - Keyboard Focus on Checkboxes and Radios
+**Learning:** When not using utility-based forms plugins (like `@tailwindcss/forms`), custom styling on inputs like checkboxes and radios can inadvertently suppress browser default focus rings. This creates a severe accessibility issue for keyboard users who cannot see which option is focused.
+**Action:** Always explicitly apply `focus-visible` classes (e.g., `focus-visible:ring-2`, `focus-visible:outline-none`) to these elements. Using `focus-visible` over plain `focus` ensures the ring is only shown during keyboard navigation, preserving a clean aesthetic for mouse interactions.
