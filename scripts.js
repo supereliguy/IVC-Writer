@@ -1393,6 +1393,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Remove transition class after animation completes
     setTimeout(() => {
       document.documentElement.classList.remove("theme-transition");
-    }, 350);
+    }, 550);
   });
 });
