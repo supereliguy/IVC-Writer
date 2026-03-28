@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Yancey",
   ];
   const countyDropdowns = document.querySelectorAll(
-    "#unified-county, #aoc-county, #dmh-county",
+    "#unified-county, #aoc-county, #dmh-county, #ed-county",
   );
   const fragment = document.createDocumentFragment();
   ncCounties.forEach((county) => {
@@ -233,6 +233,107 @@ document.addEventListener("DOMContentLoaded", () => {
           .classList.toggle("hidden", radio.value !== "yes"),
       );
     });
+
+  // --- Narrative Snippet Builder ---
+  function setupNarrativeSnippets() {
+    document.querySelectorAll(".narrative-snippet").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.closest(".narrative-snippet-group").dataset.target;
+        const textarea = document.getElementById(targetId);
+        if (!textarea) return;
+
+        const snippet = btn.dataset.snippet;
+
+        // Toggle: if snippet already in text, remove it; otherwise append
+        if (textarea.value.includes(snippet)) {
+          textarea.value = textarea.value.replace(snippet, "");
+          btn.classList.remove("ring-2", "ring-offset-1");
+          btn.style.opacity = "1";
+        } else {
+          textarea.value += snippet;
+          btn.classList.add("ring-2", "ring-offset-1");
+          btn.style.opacity = "0.7";
+        }
+
+        // Auto-resize textarea
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
+
+        // Auto-check commitment criteria based on selected snippets (ED mode)
+        autoCheckCriteriaFromNarrative(targetId);
+      });
+    });
+
+    // Clear narrative button
+    document.querySelectorAll('[id$="-clear-narrative"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const prefix = btn.id.replace("-clear-narrative", "");
+        const textarea = document.getElementById(`${prefix}-findings`);
+        if (textarea) {
+          textarea.value = "";
+          textarea.style.height = "auto";
+          textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        // Reset all snippet button states in this tab's section
+        const section = btn.closest(".form-section");
+        if (section) {
+          section.querySelectorAll(".narrative-snippet").forEach((s) => {
+            s.classList.remove("ring-2", "ring-offset-1");
+            s.style.opacity = "1";
+          });
+        }
+      });
+    });
+  }
+
+  function autoCheckCriteriaFromNarrative(targetId) {
+    const prefix = targetId.replace("-findings", "");
+    const textarea = document.getElementById(targetId);
+    if (!textarea) return;
+    const text = textarea.value.toLowerCase();
+
+    const miCheckbox = document.getElementById(`${prefix}-check-mi`);
+    const miSelf = document.getElementById(`${prefix}-check-mi-danger-self`);
+    const miOthers = document.getElementById(`${prefix}-check-mi-danger-others`);
+    const saCheckbox = document.getElementById(`${prefix}-check-sa`);
+    const saSelf = document.getElementById(`${prefix}-check-sa-danger-self`);
+    const saOthers = document.getElementById(`${prefix}-check-sa-danger-others`);
+
+    if (miCheckbox) {
+      miCheckbox.checked = /mental illness|depression|bipolar|schizophreni|schizoaffective|ptsd|anxiety|psycho|psychiatric/.test(text);
+    }
+    if (miSelf) {
+      miSelf.checked = /suicid|self-harm|harm to the patient|unable to care for self|cannot contract for safety|overdose/.test(text);
+    }
+    if (miOthers) {
+      miOthers.checked = /homicid|harm to others|aggressive|threatening|destruction of property|risk of serious harm to others/.test(text);
+    }
+    if (saCheckbox) {
+      saCheckbox.checked = /substance abuse|active use of|polysubstance|dual diagnosis/.test(text);
+    }
+    if (saSelf) {
+      saSelf.checked = saCheckbox && saCheckbox.checked && /suicid|harm to the patient|overdose|unable to care for self/.test(text);
+    }
+    if (saOthers) {
+      saOthers.checked = saCheckbox && saCheckbox.checked && /homicid|harm to others|aggressive|destruction of property/.test(text);
+    }
+  }
+
+  setupNarrativeSnippets();
+
+  // --- Narrative Panel Toggle ---
+  document.querySelectorAll(".narrative-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const panel = document.getElementById(btn.dataset.target);
+      if (panel) {
+        const isHidden = panel.classList.toggle("hidden");
+        btn.textContent = isHidden
+          ? "Show Narrative Builder (click-to-build)"
+          : "Hide Narrative Builder";
+      }
+    });
+  });
 
   const tabButtons = document.querySelectorAll(".tab-button");
   const formSections = document.querySelectorAll(".form-section");
@@ -641,10 +742,10 @@ document.addEventListener("DOMContentLoaded", () => {
     waiverDate: { id: "waiver-date", type: "value", transform: "formatDate" },
   };
 
-  const formCache = { unified: {}, aoc: {}, dmh: {} };
+  const formCache = { unified: {}, aoc: {}, dmh: {}, ed: {} };
 
   function initFormCache() {
-    ["unified", "aoc", "dmh"].forEach((prefix) => {
+    ["unified", "aoc", "dmh", "ed"].forEach((prefix) => {
       for (const [key, config] of Object.entries(FORM_SCHEMA)) {
         if (config.type === "radio") {
           formCache[prefix][key] = document.querySelectorAll(
@@ -764,6 +865,83 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+  document
+    .getElementById("generate-ed")
+    .addEventListener("click", async () => {
+      showSpinner();
+      try {
+        const rawData = collectFormData("ed");
+        // Fill in defaults for fields not in ED Quick mode
+        const data = Object.assign(
+          {
+            clientRecord: "",
+            fileNo: "",
+            respondentMs: "",
+            respondentStreet: "",
+            respondentCity: "",
+            respondentState: "NC",
+            respondentZip: "",
+            respondentPhone: "",
+            respondentSsn: "",
+            respondentDl: "",
+            respondentDlState: "",
+            respondentLastLocation: "",
+            lrpName: "",
+            lrpRelationship: "",
+            lrpStreet: "",
+            lrpCity: "",
+            lrpState: "",
+            lrpZip: "",
+            lrpPhone: "",
+            petitionerRelationship: "",
+            petitionerStreet: "",
+            petitionerCity: "",
+            petitionerState: "NC",
+            petitionerZip: "",
+            petitionerHomePhone: "",
+            petitionerBusPhone: "",
+            witnessName: "",
+            witnessStreet: "",
+            witnessCity: "",
+            witnessState: "",
+            witnessZip: "",
+            witnessHomePhone: "",
+            witnessBusPhone: "",
+            interpreter: "no",
+            interpreterExplanation: "",
+            medicalProblems: "",
+            outpatientFacilityName: "",
+            outpatientFacilityContact: "",
+            waiverDate: formatDate(""),
+          },
+          rawData,
+        );
+        // Ensure petitionerName falls back to examinerName for ED mode
+        if (!data.petitionerName && data.examinerName) {
+          data.petitionerName = data.examinerName;
+        }
+        const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
+          generateAocPdf(data),
+          generateDmhPdf(data),
+        ]);
+        saveAs(
+          new Blob([aocPdfBytes], { type: "application/pdf" }),
+          "Completed-AOC-SP-300.pdf",
+        );
+        saveAs(
+          new Blob([dmhPdfBytes], { type: "application/pdf" }),
+          "Completed-DMH-5-72-19.pdf",
+        );
+        window.isFormDirty = false;
+        showToast("Both PDFs Generated (ED Quick)!", "success");
+      } catch (error) {
+        console.error("Error generating PDFs:", error);
+        showToast("Error generating PDFs. Check console for details.", "error");
+      } finally {
+        hideSpinner();
+      }
+    });
+
   // --- Local Storage & Initialization ---
   const localSaveInputs = document.querySelectorAll(".local-save");
   const rememberCheckboxes = document.querySelectorAll(
@@ -784,6 +962,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "unified-certification",
     "aoc-certification",
     "dmh-certification",
+    "ed-certification",
   ];
 
   const loadSavedData = () => {
@@ -918,7 +1097,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return age >= 0 ? String(age) : "";
   }
 
-  ["unified", "aoc", "dmh"].forEach((prefix) => {
+  ["unified", "aoc", "dmh", "ed"].forEach((prefix) => {
     const dobInput = document.getElementById(`${prefix}-respondent-dob`);
     const ageInput = document.getElementById(`${prefix}-respondent-age`);
     if (dobInput && ageInput) {
@@ -932,7 +1111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Auto-Check Vital Sign Triggers ---
   function setupVitalSignTriggers() {
-    ["unified", "aoc", "dmh"].forEach((prefix) => {
+    ["unified", "aoc", "dmh", "ed"].forEach((prefix) => {
       const hrInput = document.getElementById(`${prefix}-hr`);
       const rrInput = document.getElementById(`${prefix}-rr`);
       const tempInput = document.getElementById(`${prefix}-temp`);
