@@ -133,20 +133,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("toast-container");
     const toast = document.createElement("div");
 
-    let borderColorClass = "border-blue-500";
-    let textColorClass = "text-blue-700";
+    let borderColor = "#6366f1";
+    let iconSvg = '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
 
     if (type === "success") {
-      borderColorClass = "border-green-500";
-      textColorClass = "text-green-700";
+      borderColor = "#10b981";
+      iconSvg = '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
     } else if (type === "error") {
-      borderColorClass = "border-red-500";
-      textColorClass = "text-red-700";
+      borderColor = "#ef4444";
+      iconSvg = '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
     }
 
-    toast.className = `pointer-events-auto bg-white border-l-4 ${borderColorClass} ${textColorClass} p-4 rounded shadow-lg transform transition-all duration-300 translate-y-0 opacity-100 flex items-center mb-2`;
+    toast.className = `pointer-events-auto p-4 transform transition-all duration-300 translate-y-0 opacity-100 flex items-center mb-2`;
+    toast.style.borderLeftColor = borderColor;
+    toast.style.color = borderColor;
     toast.setAttribute("role", "status");
-    toast.innerHTML = `<span class="font-medium">${message}</span>`;
+    toast.innerHTML = `${iconSvg}<span class="font-medium" style="color: var(--text-primary)">${message}</span>`;
 
     container.appendChild(toast);
 

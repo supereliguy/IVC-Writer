@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NC IVC Form Writer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       // Apply dark mode immediately to prevent flash
       if (localStorage.getItem('theme') === 'dark' ||
@@ -13,16 +16,116 @@
       }
     </script>
     <style>
-      .tab-active {
-        border-bottom-color: #3b82f6;
-        color: #3b82f6;
+      /* ── Design System: CSS Custom Properties ─────────── */
+      :root {
+        --bg-body: #f1f5f9;
+        --bg-card: #ffffff;
+        --bg-card-alt: #f8fafc;
+        --bg-input: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #94a3b8;
+        --text-label: #334155;
+        --border-color: #e2e8f0;
+        --border-focus: #6366f1;
+        --ring-color: rgba(99, 102, 241, 0.25);
+        --accent: #6366f1;
+        --accent-hover: #4f46e5;
+        --accent-light: #eef2ff;
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+        --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04);
+        --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.03);
+        --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.03);
+        --radius: 12px;
+        --radius-lg: 16px;
+        --header-from: #4f46e5;
+        --header-to: #7c3aed;
+        --tab-bg: #f1f5f9;
+        --tab-active-bg: #ffffff;
+        --tab-active-text: #4f46e5;
+        --tab-text: #64748b;
+        --success: #10b981;
+        --success-hover: #059669;
+        --danger: #ef4444;
+        --danger-hover: #dc2626;
+        --snippet-blue-bg: #eef2ff;
+        --snippet-blue-border: #c7d2fe;
+        --snippet-blue-text: #4338ca;
+        --snippet-red-bg: #fef2f2;
+        --snippet-red-border: #fecaca;
+        --snippet-red-text: #b91c1c;
+        --snippet-orange-bg: #fff7ed;
+        --snippet-orange-border: #fed7aa;
+        --snippet-orange-text: #c2410c;
+        --snippet-green-bg: #f0fdf4;
+        --snippet-green-border: #bbf7d0;
+        --snippet-green-text: #15803d;
+        --snippet-purple-bg: #faf5ff;
+        --snippet-purple-border: #e9d5ff;
+        --snippet-purple-text: #7e22ce;
+        --snippet-gray-bg: #f8fafc;
+        --snippet-gray-border: #e2e8f0;
+        --snippet-gray-text: #475569;
       }
 
-      /* ── Dark Theme ────────────────────────────────────── */
-      html { transition: color-scheme 0.3s; }
-      html.dark { color-scheme: dark; }
+      html.dark {
+        color-scheme: dark;
+        --bg-body: #0b1120;
+        --bg-card: #162032;
+        --bg-card-alt: #111b2e;
+        --bg-input: #0d1525;
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-muted: #64748b;
+        --text-label: #94a3b8;
+        --border-color: #1e3048;
+        --border-focus: #818cf8;
+        --ring-color: rgba(129, 140, 248, 0.25);
+        --accent: #818cf8;
+        --accent-hover: #6366f1;
+        --accent-light: rgba(99, 102, 241, 0.1);
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+        --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
+        --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -4px rgba(0,0,0,0.2);
+        --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2);
+        --header-from: #312e81;
+        --header-to: #581c87;
+        --tab-bg: #111b2e;
+        --tab-active-bg: #162032;
+        --tab-active-text: #a5b4fc;
+        --tab-text: #64748b;
+        --snippet-blue-bg: rgba(99,102,241,0.1);
+        --snippet-blue-border: rgba(99,102,241,0.25);
+        --snippet-blue-text: #a5b4fc;
+        --snippet-red-bg: rgba(239,68,68,0.1);
+        --snippet-red-border: rgba(239,68,68,0.25);
+        --snippet-red-text: #fca5a5;
+        --snippet-orange-bg: rgba(249,115,22,0.1);
+        --snippet-orange-border: rgba(249,115,22,0.25);
+        --snippet-orange-text: #fdba74;
+        --snippet-green-bg: rgba(16,185,129,0.1);
+        --snippet-green-border: rgba(16,185,129,0.25);
+        --snippet-green-text: #86efac;
+        --snippet-purple-bg: rgba(168,85,247,0.1);
+        --snippet-purple-border: rgba(168,85,247,0.25);
+        --snippet-purple-text: #d8b4fe;
+        --snippet-gray-bg: rgba(148,163,184,0.08);
+        --snippet-gray-border: rgba(148,163,184,0.2);
+        --snippet-gray-text: #cbd5e1;
+      }
 
-      /* Smooth transition on theme toggle */
+      /* ── Base ──────────────────────────────────────────── */
+      * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+      html { transition: color-scheme 0.3s; scroll-behavior: smooth; }
+
+      body {
+        background: var(--bg-body) !important;
+        color: var(--text-primary) !important;
+        min-height: 100vh;
+      }
+
       .theme-transition,
       .theme-transition *,
       .theme-transition *::before,
@@ -31,107 +134,291 @@
                     border-color 0.3s ease, box-shadow 0.3s ease !important;
       }
 
-      /* Body */
-      .dark body { background-color: #0f172a; }
-
-      /* Main container card */
-      .dark .bg-white { background-color: #1e293b; }
-      .dark .bg-gray-100 { background-color: #0f172a; }
-      .dark .bg-gray-50 { background-color: #1e293b; }
-      .dark .bg-gray-200 { background-color: #334155; }
-
-      /* Header */
-      .dark .bg-blue-600 { background-color: #1e3a5f; }
-      .dark .bg-blue-700 { background-color: #172e4a; }
-
-      /* Text colors */
-      .dark .text-gray-800 { color: #e2e8f0; }
-      .dark .text-gray-700 { color: #cbd5e1; }
-      .dark .text-gray-600 { color: #94a3b8; }
-      .dark .text-gray-500 { color: #64748b; }
-      .dark .text-blue-800 { color: #93c5fd; }
-      .dark .text-red-800 { color: #fca5a5; }
-      .dark .text-orange-800 { color: #fdba74; }
-      .dark .text-green-800 { color: #86efac; }
-      .dark .text-purple-800 { color: #d8b4fe; }
-      .dark .text-yellow-800 { color: #fde68a; }
-
-      /* Borders */
-      .dark .border-gray-300 { border-color: #475569; }
-      .dark .border-gray-200 { border-color: #334155; }
-      .dark .border-blue-300 { border-color: #1e3a5f; }
-      .dark .border-red-300 { border-color: #7f1d1d; }
-      .dark .border-orange-300 { border-color: #7c2d12; }
-      .dark .border-green-300 { border-color: #14532d; }
-      .dark .border-purple-300 { border-color: #581c87; }
-      .dark .border-yellow-500 { border-color: #a16207; }
-
-      /* Form inputs */
-      .dark input, .dark select, .dark textarea {
-        background-color: #0f172a;
-        color: #e2e8f0;
-        border-color: #475569;
-      }
-      .dark input:focus, .dark select:focus, .dark textarea:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 1px #3b82f6;
-      }
-      .dark input::placeholder, .dark textarea::placeholder {
-        color: #64748b;
+      /* ── App Shell ─────────────────────────────────────── */
+      .app-container {
+        background: var(--bg-card) !important;
+        box-shadow: var(--shadow-xl);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
       }
 
-      /* Alert banners */
-      .dark .bg-yellow-100 { background-color: #422006; }
-      .dark .bg-blue-50 { background-color: #0c1929; }
-      .dark .bg-red-50 { background-color: #1a0505; }
-      .dark .bg-orange-50 { background-color: #1a0e05; }
-      .dark .bg-green-50 { background-color: #051a0a; }
-      .dark .bg-purple-50 { background-color: #13051a; }
+      .app-header {
+        background: linear-gradient(135deg, var(--header-from), var(--header-to)) !important;
+        padding: 1.75rem 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .app-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 60%;
+        height: 200%;
+        background: radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .app-header h1 { font-weight: 700; letter-spacing: -0.03em; }
+      .app-header p { opacity: 0.8; }
 
-      /* Buttons */
-      .dark .bg-red-600 { background-color: #b91c1c; }
-      .dark .bg-red-700 { background-color: #991b1b; }
-      .dark .bg-green-600 { background-color: #15803d; }
-      .dark .bg-green-700 { background-color: #166534; }
+      .privacy-banner {
+        background: var(--accent-light) !important;
+        border: 1px solid rgba(99,102,241,0.15) !important;
+        border-left: 4px solid var(--accent) !important;
+        border-radius: var(--radius) !important;
+        color: var(--accent) !important;
+        font-size: 0.8125rem;
+      }
+      .privacy-banner strong { color: var(--accent) !important; }
 
-      /* Tab active state in dark mode */
-      .dark .tab-active {
-        border-bottom-color: #60a5fa;
-        color: #60a5fa;
+      /* ── Tab Navigation ────────────────────────────────── */
+      .tab-nav {
+        background: var(--tab-bg);
+        padding: 5px;
+        border-radius: var(--radius);
+        display: flex;
+        gap: 3px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .tab-nav::-webkit-scrollbar { display: none; }
+
+      .tab-button {
+        flex: 1;
+        padding: 0.625rem 1rem !important;
+        border-radius: 8px !important;
+        border: none !important;
+        font-size: 0.8125rem !important;
+        font-weight: 500 !important;
+        color: var(--tab-text) !important;
+        background: transparent !important;
+        transition: all 0.2s ease !important;
+        white-space: nowrap;
+        cursor: pointer;
+        margin-bottom: 0 !important;
+        text-align: center;
+      }
+      .tab-button:hover {
+        color: var(--text-primary) !important;
+        background: rgba(99,102,241,0.06) !important;
+      }
+      .tab-button.tab-active {
+        background: var(--tab-active-bg) !important;
+        color: var(--tab-active-text) !important;
+        box-shadow: var(--shadow-sm) !important;
+        font-weight: 600 !important;
       }
 
-      /* Shadow adjustments */
-      .dark .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.4), 0 8px 10px -6px rgba(0,0,0,0.3); }
-      .dark .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3); }
+      /* ── Fieldset / Cards ──────────────────────────────── */
+      fieldset {
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: var(--radius) !important;
+        padding: 1.25rem !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      fieldset:hover {
+        border-color: rgba(99,102,241,0.2) !important;
+        box-shadow: var(--shadow-sm) !important;
+      }
+      fieldset legend {
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        color: var(--accent) !important;
+        padding: 0 0.5rem !important;
+        letter-spacing: -0.01em;
+      }
 
-      /* Scrollbar */
-      .dark ::-webkit-scrollbar { width: 8px; }
-      .dark ::-webkit-scrollbar-track { background: #1e293b; }
-      .dark ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-      .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+      .form-section h2 {
+        color: var(--text-primary) !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.025em;
+        border-color: var(--border-color) !important;
+      }
+      .form-section h3 {
+        color: var(--text-secondary) !important;
+        font-weight: 600 !important;
+        border-color: var(--border-color) !important;
+      }
 
-      /* Theme toggle button */
+      /* ── Labels ────────────────────────────────────────── */
+      label {
+        color: var(--text-label) !important;
+        font-weight: 500 !important;
+        font-size: 0.8125rem !important;
+      }
+
+      /* ── Form Controls ─────────────────────────────────── */
+      input[type="text"],
+      input[type="tel"],
+      input[type="date"],
+      input[type="time"],
+      select,
+      textarea {
+        background: var(--bg-input) !important;
+        color: var(--text-primary) !important;
+        border: 1.5px solid var(--border-color) !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        outline: none !important;
+      }
+      input[type="text"]:focus,
+      input[type="tel"]:focus,
+      input[type="date"]:focus,
+      input[type="time"]:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--border-focus) !important;
+        box-shadow: 0 0 0 3px var(--ring-color) !important;
+      }
+      input::placeholder, textarea::placeholder {
+        color: var(--text-muted) !important;
+      }
+
+      input[type="checkbox"],
+      input[type="radio"] {
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+
+      /* ── Buttons ───────────────────────────────────────── */
+      .generate-btn {
+        background: linear-gradient(135deg, var(--success), #059669) !important;
+        border: none !important;
+        border-radius: var(--radius) !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 4px 14px rgba(16,185,129,0.3) !important;
+      }
+      .generate-btn:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 20px rgba(16,185,129,0.4) !important;
+        filter: brightness(1.05);
+      }
+      .generate-btn:active { transform: translateY(0) !important; }
+
+      #generate-ed {
+        background: linear-gradient(135deg, var(--danger), #dc2626) !important;
+        box-shadow: 0 4px 14px rgba(239,68,68,0.3) !important;
+      }
+      #generate-ed:hover {
+        box-shadow: 0 6px 20px rgba(239,68,68,0.4) !important;
+      }
+
+      /* ── Narrative Snippets ────────────────────────────── */
+      .narrative-snippet {
+        border-radius: 9999px !important;
+        font-weight: 500 !important;
+        transition: all 0.15s ease !important;
+        cursor: pointer;
+        font-size: 0.75rem !important;
+      }
+      .narrative-snippet:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* Snippet color overrides via CSS custom properties */
+      .narrative-snippet.border-blue-300 {
+        background: var(--snippet-blue-bg) !important;
+        border-color: var(--snippet-blue-border) !important;
+        color: var(--snippet-blue-text) !important;
+      }
+      .narrative-snippet.border-red-300 {
+        background: var(--snippet-red-bg) !important;
+        border-color: var(--snippet-red-border) !important;
+        color: var(--snippet-red-text) !important;
+      }
+      .narrative-snippet.border-orange-300 {
+        background: var(--snippet-orange-bg) !important;
+        border-color: var(--snippet-orange-border) !important;
+        color: var(--snippet-orange-text) !important;
+      }
+      .narrative-snippet.border-green-300 {
+        background: var(--snippet-green-bg) !important;
+        border-color: var(--snippet-green-border) !important;
+        color: var(--snippet-green-text) !important;
+      }
+      .narrative-snippet.border-purple-300 {
+        background: var(--snippet-purple-bg) !important;
+        border-color: var(--snippet-purple-border) !important;
+        color: var(--snippet-purple-text) !important;
+      }
+      .narrative-snippet.border-gray-300 {
+        background: var(--snippet-gray-bg) !important;
+        border-color: var(--snippet-gray-border) !important;
+        color: var(--snippet-gray-text) !important;
+      }
+
+      /* Narrative panel */
+      [id$="-narrative-panel"] {
+        background: var(--bg-card-alt) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: var(--radius) !important;
+      }
+      [id$="-narrative-panel"] h4 {
+        color: var(--text-muted) !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* ── Utility Buttons ───────────────────────────────── */
+      .narrative-toggle {
+        color: var(--accent) !important;
+        font-weight: 500 !important;
+        text-decoration: none !important;
+        transition: color 0.15s ease !important;
+        font-size: 0.8125rem !important;
+      }
+      .narrative-toggle:hover { color: var(--accent-hover) !important; }
+
+      button[data-action="copy-address"] {
+        color: var(--accent) !important;
+        font-weight: 500 !important;
+        transition: all 0.15s ease !important;
+        border-radius: 6px !important;
+      }
+      button[data-action="copy-address"]:hover {
+        background: var(--accent-light) !important;
+      }
+      button[data-action="fill-unknown"] {
+        background: var(--accent-light) !important;
+        color: var(--accent) !important;
+        font-weight: 500 !important;
+        border-radius: 6px !important;
+        transition: all 0.15s ease !important;
+      }
+      button[data-action="fill-unknown"]:hover {
+        background: var(--accent) !important;
+        color: white !important;
+      }
+
+      /* ── Theme Toggle ──────────────────────────────────── */
       .theme-toggle {
         position: relative;
         width: 56px;
         height: 28px;
         border-radius: 14px;
-        background: #cbd5e1;
-        border: none;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255,255,255,0.2);
         cursor: pointer;
         transition: background-color 0.3s ease;
         flex-shrink: 0;
       }
-      .theme-toggle:hover { background: #94a3b8; }
-      .dark .theme-toggle { background: #475569; }
-      .dark .theme-toggle:hover { background: #64748b; }
+      .theme-toggle:hover { background: rgba(255,255,255,0.3); }
 
       .theme-toggle .toggle-knob {
         position: absolute;
         top: 3px;
         left: 3px;
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         background: white;
         box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -139,45 +426,83 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        font-size: 12px;
       }
       .dark .theme-toggle .toggle-knob {
         transform: translateX(28px);
         background: #1e293b;
       }
 
-      /* Ring color for buttons */
-      .dark .bg-gray-100.text-gray-600 { background-color: #334155; color: #94a3b8; }
-      .dark .bg-gray-100.text-gray-600:hover { background-color: #475569; color: #e2e8f0; }
+      /* ── Tailwind Color Overrides (theme-aware) ────────── */
+      .bg-gray-100 { background: var(--bg-body) !important; }
+      .bg-gray-50 { background: var(--bg-card-alt) !important; }
+      .bg-white { background: var(--bg-card) !important; }
+      .bg-gray-200 { background: var(--border-color) !important; }
+      .text-gray-800 { color: var(--text-primary) !important; }
+      .text-gray-700 { color: var(--text-secondary) !important; }
+      .text-gray-600 { color: var(--text-secondary) !important; }
+      .text-gray-500 { color: var(--text-muted) !important; }
+      .border-gray-300 { border-color: var(--border-color) !important; }
+      .border-gray-200 { border-color: var(--border-color) !important; }
+      .shadow-xl { box-shadow: var(--shadow-xl) !important; }
+      .shadow-sm { box-shadow: var(--shadow-sm) !important; }
 
-      /* Pill / badge colors */
-      .dark .bg-blue-200 { background-color: #1e3a5f; }
-      .dark .bg-red-200 { background-color: #450a0a; }
-      .dark .bg-orange-200 { background-color: #431407; }
-      .dark .bg-green-200 { background-color: #052e16; }
-      .dark .bg-purple-200 { background-color: #2e1065; }
+      /* ── Spinner ───────────────────────────────────────── */
+      #loading-spinner {
+        backdrop-filter: blur(4px);
+        background: rgba(15,23,42,0.6) !important;
+      }
 
-      /* Selection */
-      .dark ::selection {
-        background: #3b82f6;
-        color: white;
+      /* ── Toast ─────────────────────────────────────────── */
+      #toast-container > div {
+        background: var(--bg-card) !important;
+        border-radius: var(--radius) !important;
+        box-shadow: var(--shadow-lg) !important;
+        color: var(--text-primary) !important;
+      }
+
+      /* ── Scrollbar ─────────────────────────────────────── */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+      /* ── Selection ─────────────────────────────────────── */
+      ::selection { background: var(--accent); color: white; }
+
+      /* ── Animation ─────────────────────────────────────── */
+      .form-section:not(.hidden) { animation: fadeIn 0.2s ease-out; }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── ED Quick Tab Label ────────────────────────────── */
+      #tab-btn-ed { color: var(--danger) !important; font-weight: 600 !important; }
+      #tab-btn-ed.tab-active { color: var(--danger) !important; }
+
+      /* ── Responsive ────────────────────────────────────── */
+      @media (max-width: 768px) {
+        .tab-nav { padding: 4px; gap: 2px; }
+        .tab-button { font-size: 0.6875rem !important; padding: 0.5rem 0.5rem !important; }
+        fieldset { padding: 1rem !important; }
+        .app-header { padding: 1.25rem 1rem; }
+        .app-header h1 { font-size: 1.375rem; }
       }
     </style>
   </head>
-  <body class="bg-gray-100 font-sans p-4 lg:p-8">
+  <body class="bg-gray-100 p-4 lg:p-8">
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 font-medium"
       >Skip to Main Content</a
     >
-    <div
-      class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden"
-    >
-      <header class="bg-blue-600 text-white p-6">
-        <div class="flex items-center justify-between">
+    <div class="max-w-4xl mx-auto app-container">
+      <header class="app-header text-white">
+        <div class="flex items-center justify-between relative z-10">
           <div>
-            <h1 class="text-3xl font-bold">NC IVC Form Writer</h1>
-            <p class="mt-1 text-blue-100">
+            <h1 class="text-2xl lg:text-3xl font-bold text-white">NC IVC Form Writer</h1>
+            <p class="mt-1 text-sm text-indigo-200">
               Client-Side HIPAA-Compliant Form Generator
             </p>
           </div>
@@ -196,15 +521,13 @@
         </div>
       </header>
 
-      <div
-        class="p-4 m-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800"
-      >
-        <strong class="font-bold">Privacy First:</strong> All data is processed
-        **in your browser**. No information is ever sent to a server.
+      <div class="privacy-banner p-3 m-4 flex items-center gap-2">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+        <span><strong class="font-semibold">Privacy First:</strong> All data is processed in your browser. No information is ever sent to a server.</span>
       </div>
 
       <nav
-        class="flex border-b border-gray-200 px-4 lg:px-6"
+        class="tab-nav mx-4 lg:mx-6"
         role="tablist"
         aria-label="Form Sections"
       >
@@ -214,7 +537,7 @@
           aria-selected="true"
           aria-controls="form-unified"
           tabindex="0"
-          class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px tab-active focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="tab-button tab-active focus:outline-none"
           data-form="unified"
         >
           Unified Form
@@ -225,10 +548,10 @@
           aria-selected="false"
           aria-controls="form-aoc"
           tabindex="-1"
-          class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="tab-button focus:outline-none"
           data-form="aoc"
         >
-          AOC-SP-300 (Petition)
+          AOC-SP-300
         </button>
         <button
           id="tab-btn-dmh"
@@ -236,10 +559,10 @@
           aria-selected="false"
           aria-controls="form-dmh"
           tabindex="-1"
-          class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="tab-button focus:outline-none"
           data-form="dmh"
         >
-          DMH-5-72-19 (First Exam)
+          DMH-5-72-19
         </button>
         <button
           id="tab-btn-ed"
@@ -247,10 +570,10 @@
           aria-selected="false"
           aria-controls="form-ed"
           tabindex="-1"
-          class="tab-button py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent -mb-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="tab-button focus:outline-none"
           data-form="ed"
         >
-          <span class="text-red-600 font-bold">ED Quick</span>
+          ED Quick
         </button>
       </nav>
 
@@ -4647,13 +4970,13 @@
 
       <div
         id="loading-spinner"
-        class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
+        class="hidden fixed inset-0 flex items-center justify-center z-50"
       >
         <div class="flex flex-col items-center">
           <div
-            class="w-16 h-16 border-4 border-white border-t-blue-500 rounded-full animate-spin"
+            class="w-14 h-14 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin"
           ></div>
-          <span class="mt-4 text-white text-lg font-medium"
+          <span class="mt-4 text-white text-base font-medium tracking-tight"
             >Generating PDF...</span
           >
         </div>
