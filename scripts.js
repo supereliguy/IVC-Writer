@@ -134,14 +134,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const toast = document.createElement("div");
 
     let borderColor = "#6366f1";
-    let iconSvg = '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+    let iconSvg =
+      '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
 
     if (type === "success") {
       borderColor = "#10b981";
-      iconSvg = '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+      iconSvg =
+        '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
     } else if (type === "error") {
       borderColor = "#ef4444";
-      iconSvg = '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+      iconSvg =
+        '<svg class="w-5 h-5 mr-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
     }
 
     toast.className = `pointer-events-auto p-4 transform transition-all duration-300 translate-y-0 opacity-100 flex items-center mb-2`;
@@ -297,28 +300,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const miCheckbox = document.getElementById(`${prefix}-check-mi`);
     const miSelf = document.getElementById(`${prefix}-check-mi-danger-self`);
-    const miOthers = document.getElementById(`${prefix}-check-mi-danger-others`);
+    const miOthers = document.getElementById(
+      `${prefix}-check-mi-danger-others`,
+    );
     const saCheckbox = document.getElementById(`${prefix}-check-sa`);
     const saSelf = document.getElementById(`${prefix}-check-sa-danger-self`);
-    const saOthers = document.getElementById(`${prefix}-check-sa-danger-others`);
+    const saOthers = document.getElementById(
+      `${prefix}-check-sa-danger-others`,
+    );
 
     if (miCheckbox) {
-      miCheckbox.checked = /mental illness|depression|bipolar|schizophreni|schizoaffective|ptsd|anxiety|psycho|psychiatric/.test(text);
+      miCheckbox.checked =
+        /mental illness|depression|bipolar|schizophreni|schizoaffective|ptsd|anxiety|psycho|psychiatric/.test(
+          text,
+        );
     }
     if (miSelf) {
-      miSelf.checked = /suicid|self-harm|harm to the patient|unable to care for self|cannot contract for safety|overdose/.test(text);
+      miSelf.checked =
+        /suicid|self-harm|harm to the patient|unable to care for self|cannot contract for safety|overdose/.test(
+          text,
+        );
     }
     if (miOthers) {
-      miOthers.checked = /homicid|harm to others|aggressive|threatening|destruction of property|risk of serious harm to others/.test(text);
+      miOthers.checked =
+        /homicid|harm to others|aggressive|threatening|destruction of property|risk of serious harm to others/.test(
+          text,
+        );
     }
     if (saCheckbox) {
-      saCheckbox.checked = /substance abuse|active use of|polysubstance|dual diagnosis/.test(text);
+      saCheckbox.checked =
+        /substance abuse|active use of|polysubstance|dual diagnosis/.test(text);
     }
     if (saSelf) {
-      saSelf.checked = saCheckbox && saCheckbox.checked && /suicid|harm to the patient|overdose|unable to care for self/.test(text);
+      saSelf.checked =
+        saCheckbox &&
+        saCheckbox.checked &&
+        /suicid|harm to the patient|overdose|unable to care for self/.test(
+          text,
+        );
     }
     if (saOthers) {
-      saOthers.checked = saCheckbox && saCheckbox.checked && /homicid|harm to others|aggressive|destruction of property/.test(text);
+      saOthers.checked =
+        saCheckbox &&
+        saCheckbox.checked &&
+        /homicid|harm to others|aggressive|destruction of property/.test(text);
     }
   }
 
@@ -867,82 +892,80 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  document
-    .getElementById("generate-ed")
-    .addEventListener("click", async () => {
-      showSpinner();
-      try {
-        const rawData = collectFormData("ed");
-        // Fill in defaults for fields not in ED Quick mode
-        const data = Object.assign(
-          {
-            clientRecord: "",
-            fileNo: "",
-            respondentMs: "",
-            respondentStreet: "",
-            respondentCity: "",
-            respondentState: "NC",
-            respondentZip: "",
-            respondentPhone: "",
-            respondentSsn: "",
-            respondentDl: "",
-            respondentDlState: "",
-            respondentLastLocation: "",
-            lrpName: "",
-            lrpRelationship: "",
-            lrpStreet: "",
-            lrpCity: "",
-            lrpState: "",
-            lrpZip: "",
-            lrpPhone: "",
-            petitionerRelationship: "",
-            petitionerStreet: "",
-            petitionerCity: "",
-            petitionerState: "NC",
-            petitionerZip: "",
-            petitionerHomePhone: "",
-            petitionerBusPhone: "",
-            witnessName: "",
-            witnessStreet: "",
-            witnessCity: "",
-            witnessState: "",
-            witnessZip: "",
-            witnessHomePhone: "",
-            witnessBusPhone: "",
-            interpreter: "no",
-            interpreterExplanation: "",
-            medicalProblems: "",
-            outpatientFacilityName: "",
-            outpatientFacilityContact: "",
-            waiverDate: formatDate(""),
-          },
-          rawData,
-        );
-        // Ensure petitionerName falls back to examinerName for ED mode
-        if (!data.petitionerName && data.examinerName) {
-          data.petitionerName = data.examinerName;
-        }
-        const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
-          generateAocPdf(data),
-          generateDmhPdf(data),
-        ]);
-        saveAs(
-          new Blob([aocPdfBytes], { type: "application/pdf" }),
-          "Completed-AOC-SP-300.pdf",
-        );
-        saveAs(
-          new Blob([dmhPdfBytes], { type: "application/pdf" }),
-          "Completed-DMH-5-72-19.pdf",
-        );
-        window.isFormDirty = false;
-        showToast("Both PDFs Generated (ED Quick)!", "success");
-      } catch (error) {
-        console.error("Error generating PDFs:", error);
-        showToast("Error generating PDFs. Check console for details.", "error");
-      } finally {
-        hideSpinner();
+  document.getElementById("generate-ed").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const rawData = collectFormData("ed");
+      // Fill in defaults for fields not in ED Quick mode
+      const data = Object.assign(
+        {
+          clientRecord: "",
+          fileNo: "",
+          respondentMs: "",
+          respondentStreet: "",
+          respondentCity: "",
+          respondentState: "NC",
+          respondentZip: "",
+          respondentPhone: "",
+          respondentSsn: "",
+          respondentDl: "",
+          respondentDlState: "",
+          respondentLastLocation: "",
+          lrpName: "",
+          lrpRelationship: "",
+          lrpStreet: "",
+          lrpCity: "",
+          lrpState: "",
+          lrpZip: "",
+          lrpPhone: "",
+          petitionerRelationship: "",
+          petitionerStreet: "",
+          petitionerCity: "",
+          petitionerState: "NC",
+          petitionerZip: "",
+          petitionerHomePhone: "",
+          petitionerBusPhone: "",
+          witnessName: "",
+          witnessStreet: "",
+          witnessCity: "",
+          witnessState: "",
+          witnessZip: "",
+          witnessHomePhone: "",
+          witnessBusPhone: "",
+          interpreter: "no",
+          interpreterExplanation: "",
+          medicalProblems: "",
+          outpatientFacilityName: "",
+          outpatientFacilityContact: "",
+          waiverDate: formatDate(""),
+        },
+        rawData,
+      );
+      // Ensure petitionerName falls back to examinerName for ED mode
+      if (!data.petitionerName && data.examinerName) {
+        data.petitionerName = data.examinerName;
       }
-    });
+      const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
+        generateAocPdf(data),
+        generateDmhPdf(data),
+      ]);
+      saveAs(
+        new Blob([aocPdfBytes], { type: "application/pdf" }),
+        "Completed-AOC-SP-300.pdf",
+      );
+      saveAs(
+        new Blob([dmhPdfBytes], { type: "application/pdf" }),
+        "Completed-DMH-5-72-19.pdf",
+      );
+      window.isFormDirty = false;
+      showToast("Both PDFs Generated (ED Quick)!", "success");
+    } catch (error) {
+      console.error("Error generating PDFs:", error);
+      showToast("Error generating PDFs. Check console for details.", "error");
+    } finally {
+      hideSpinner();
+    }
+  });
 
   // --- Local Storage & Initialization ---
   const localSaveInputs = document.querySelectorAll(".local-save");
