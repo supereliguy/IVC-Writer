@@ -5,10 +5,162 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NC IVC Form Writer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Apply dark mode immediately to prevent flash
+      if (localStorage.getItem('theme') === 'dark' ||
+          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <style>
       .tab-active {
         border-bottom-color: #3b82f6;
         color: #3b82f6;
+      }
+
+      /* ── Dark Theme ────────────────────────────────────── */
+      html { transition: color-scheme 0.3s; }
+      html.dark { color-scheme: dark; }
+
+      /* Smooth transition on theme toggle */
+      .theme-transition,
+      .theme-transition *,
+      .theme-transition *::before,
+      .theme-transition *::after {
+        transition: background-color 0.3s ease, color 0.3s ease,
+                    border-color 0.3s ease, box-shadow 0.3s ease !important;
+      }
+
+      /* Body */
+      .dark body { background-color: #0f172a; }
+
+      /* Main container card */
+      .dark .bg-white { background-color: #1e293b; }
+      .dark .bg-gray-100 { background-color: #0f172a; }
+      .dark .bg-gray-50 { background-color: #1e293b; }
+      .dark .bg-gray-200 { background-color: #334155; }
+
+      /* Header */
+      .dark .bg-blue-600 { background-color: #1e3a5f; }
+      .dark .bg-blue-700 { background-color: #172e4a; }
+
+      /* Text colors */
+      .dark .text-gray-800 { color: #e2e8f0; }
+      .dark .text-gray-700 { color: #cbd5e1; }
+      .dark .text-gray-600 { color: #94a3b8; }
+      .dark .text-gray-500 { color: #64748b; }
+      .dark .text-blue-800 { color: #93c5fd; }
+      .dark .text-red-800 { color: #fca5a5; }
+      .dark .text-orange-800 { color: #fdba74; }
+      .dark .text-green-800 { color: #86efac; }
+      .dark .text-purple-800 { color: #d8b4fe; }
+      .dark .text-yellow-800 { color: #fde68a; }
+
+      /* Borders */
+      .dark .border-gray-300 { border-color: #475569; }
+      .dark .border-gray-200 { border-color: #334155; }
+      .dark .border-blue-300 { border-color: #1e3a5f; }
+      .dark .border-red-300 { border-color: #7f1d1d; }
+      .dark .border-orange-300 { border-color: #7c2d12; }
+      .dark .border-green-300 { border-color: #14532d; }
+      .dark .border-purple-300 { border-color: #581c87; }
+      .dark .border-yellow-500 { border-color: #a16207; }
+
+      /* Form inputs */
+      .dark input, .dark select, .dark textarea {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      .dark input:focus, .dark select:focus, .dark textarea:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 1px #3b82f6;
+      }
+      .dark input::placeholder, .dark textarea::placeholder {
+        color: #64748b;
+      }
+
+      /* Alert banners */
+      .dark .bg-yellow-100 { background-color: #422006; }
+      .dark .bg-blue-50 { background-color: #0c1929; }
+      .dark .bg-red-50 { background-color: #1a0505; }
+      .dark .bg-orange-50 { background-color: #1a0e05; }
+      .dark .bg-green-50 { background-color: #051a0a; }
+      .dark .bg-purple-50 { background-color: #13051a; }
+
+      /* Buttons */
+      .dark .bg-red-600 { background-color: #b91c1c; }
+      .dark .bg-red-700 { background-color: #991b1b; }
+      .dark .bg-green-600 { background-color: #15803d; }
+      .dark .bg-green-700 { background-color: #166534; }
+
+      /* Tab active state in dark mode */
+      .dark .tab-active {
+        border-bottom-color: #60a5fa;
+        color: #60a5fa;
+      }
+
+      /* Shadow adjustments */
+      .dark .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.4), 0 8px 10px -6px rgba(0,0,0,0.3); }
+      .dark .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3); }
+
+      /* Scrollbar */
+      .dark ::-webkit-scrollbar { width: 8px; }
+      .dark ::-webkit-scrollbar-track { background: #1e293b; }
+      .dark ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+      .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+      /* Theme toggle button */
+      .theme-toggle {
+        position: relative;
+        width: 56px;
+        height: 28px;
+        border-radius: 14px;
+        background: #cbd5e1;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        flex-shrink: 0;
+      }
+      .theme-toggle:hover { background: #94a3b8; }
+      .dark .theme-toggle { background: #475569; }
+      .dark .theme-toggle:hover { background: #64748b; }
+
+      .theme-toggle .toggle-knob {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        transition: transform 0.3s cubic-bezier(0.68, -0.2, 0.27, 1.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+      }
+      .dark .theme-toggle .toggle-knob {
+        transform: translateX(28px);
+        background: #1e293b;
+      }
+
+      /* Ring color for buttons */
+      .dark .bg-gray-100.text-gray-600 { background-color: #334155; color: #94a3b8; }
+      .dark .bg-gray-100.text-gray-600:hover { background-color: #475569; color: #e2e8f0; }
+
+      /* Pill / badge colors */
+      .dark .bg-blue-200 { background-color: #1e3a5f; }
+      .dark .bg-red-200 { background-color: #450a0a; }
+      .dark .bg-orange-200 { background-color: #431407; }
+      .dark .bg-green-200 { background-color: #052e16; }
+      .dark .bg-purple-200 { background-color: #2e1065; }
+
+      /* Selection */
+      .dark ::selection {
+        background: #3b82f6;
+        color: white;
       }
     </style>
   </head>
@@ -22,10 +174,26 @@
       class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden"
     >
       <header class="bg-blue-600 text-white p-6">
-        <h1 class="text-3xl font-bold">NC IVC Form Writer</h1>
-        <p class="mt-1 text-blue-100">
-          Client-Side HIPAA-Compliant Form Generator
-        </p>
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold">NC IVC Form Writer</h1>
+            <p class="mt-1 text-blue-100">
+              Client-Side HIPAA-Compliant Form Generator
+            </p>
+          </div>
+          <button
+            id="theme-toggle"
+            type="button"
+            class="theme-toggle"
+            aria-label="Toggle dark mode"
+            title="Toggle dark mode"
+          >
+            <span class="toggle-knob">
+              <span class="sun-icon">&#9728;</span>
+              <span class="moon-icon" style="display:none">&#9790;</span>
+            </span>
+          </button>
+        </div>
       </header>
 
       <div
