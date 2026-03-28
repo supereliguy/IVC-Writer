@@ -1343,4 +1343,31 @@ document.addEventListener("DOMContentLoaded", () => {
       e.returnValue = "";
     }
   });
+
+  // --- Dark Theme Toggle ---
+  const themeToggle = document.getElementById("theme-toggle");
+  const sunIcon = themeToggle.querySelector(".sun-icon");
+  const moonIcon = themeToggle.querySelector(".moon-icon");
+
+  function updateToggleIcons() {
+    const isDark = document.documentElement.classList.contains("dark");
+    sunIcon.style.display = isDark ? "none" : "inline";
+    moonIcon.style.display = isDark ? "inline" : "none";
+  }
+
+  updateToggleIcons();
+
+  themeToggle.addEventListener("click", () => {
+    document.documentElement.classList.add("theme-transition");
+    document.documentElement.classList.toggle("dark");
+
+    const isDark = document.documentElement.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    updateToggleIcons();
+
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      document.documentElement.classList.remove("theme-transition");
+    }, 350);
+  });
 });
