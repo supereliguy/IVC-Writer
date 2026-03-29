@@ -1500,6 +1500,16 @@ document.addEventListener("DOMContentLoaded", () => {
     showSpinner();
     try {
       const rawData = collectFormData("ed");
+      // Compose facilityInfo from separate ED facility fields
+      const fName = (document.getElementById("ed-facility-name") || {}).value || "";
+      const fAddr = (document.getElementById("ed-facility-address") || {}).value || "";
+      const fCity = (document.getElementById("ed-facility-city") || {}).value || "";
+      const fState = (document.getElementById("ed-facility-state") || {}).value || "";
+      const fZip = (document.getElementById("ed-facility-zip") || {}).value || "";
+      const fPhone = (document.getElementById("ed-facility-phone") || {}).value || "";
+      const cityStateZip = [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
+      const facilityParts = [fName, fAddr, cityStateZip, fPhone].filter(Boolean);
+      rawData.facilityInfo = facilityParts.join(", ");
       const data = Object.assign(
         {
           clientRecord: "", fileNo: "", respondentMs: "", respondentStreet: "",
@@ -1586,15 +1596,85 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    // Helper: parse facility info string into separate ED fields
+    function fillEdFacilityFields(info) {
+      // Format: "Name, Address, City State Zip, Phone" or "Name, City State, Phone"
+      const parts = info.split(",").map((s) => s.trim());
+      const nameEl = document.getElementById("ed-facility-name");
+      const addrEl = document.getElementById("ed-facility-address");
+      const cityEl = document.getElementById("ed-facility-city");
+      const stateEl = document.getElementById("ed-facility-state");
+      const zipEl = document.getElementById("ed-facility-zip");
+      const phoneEl = document.getElementById("ed-facility-phone");
+      if (!nameEl) return;
+      nameEl.value = parts[0] || "";
+      // Last part is likely phone if it contains digits
+      const lastPart = parts.length > 1 ? parts[parts.length - 1] : "";
+      const hasPhone = /\d/.test(lastPart);
+      if (hasPhone && phoneEl) phoneEl.value = lastPart;
+      // Middle parts: try to parse city/state/zip from second-to-last
+      const midParts = parts.slice(1, hasPhone ? -1 : undefined);
+      if (midParts.length >= 2) {
+        // First mid part is address, rest is city/state/zip
+        if (addrEl) addrEl.value = midParts[0];
+        const csz = midParts.slice(1).join(", ");
+        parseCityStateZip(csz, cityEl, stateEl, zipEl);
+      } else if (midParts.length === 1) {
+        // Could be "City State" or an address
+        if (addrEl) addrEl.value = "";
+        parseCityStateZip(midParts[0], cityEl, stateEl, zipEl);
+      } else {
+        if (addrEl) addrEl.value = "";
+        if (cityEl) cityEl.value = "";
+        if (stateEl) stateEl.value = "";
+        if (zipEl) zipEl.value = "";
+        if (phoneEl && !hasPhone) phoneEl.value = "";
+      }
+      [nameEl, addrEl, cityEl, stateEl, zipEl, phoneEl].forEach((el) => {
+        if (el) el.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    }
+
+    function parseCityStateZip(str, cityEl, stateEl, zipEl) {
+      // Try to match patterns like "City NC 28401" or "City NC" or "City"
+      const match = str.match(/^(.+?)\s+([A-Z]{2})(?:\s+(\d{5}(?:-\d{4})?))?$/i);
+      if (match) {
+        if (cityEl) cityEl.value = match[1].trim();
+        if (stateEl) stateEl.value = match[2].toUpperCase();
+        if (zipEl) zipEl.value = match[3] || "";
+      } else {
+        if (cityEl) cityEl.value = str;
+        if (stateEl) stateEl.value = "";
+        if (zipEl) zipEl.value = "";
+      }
+    }
+
+    // Helper: collect ED facility fields into a single info string
+    function collectEdFacilityInfo() {
+      const fName = (document.getElementById("ed-facility-name") || {}).value || "";
+      const fAddr = (document.getElementById("ed-facility-address") || {}).value || "";
+      const fCity = (document.getElementById("ed-facility-city") || {}).value || "";
+      const fState = (document.getElementById("ed-facility-state") || {}).value || "";
+      const fZip = (document.getElementById("ed-facility-zip") || {}).value || "";
+      const fPhone = (document.getElementById("ed-facility-phone") || {}).value || "";
+      const cityStateZip = [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
+      return [fName, fAddr, cityStateZip, fPhone].filter(Boolean).join(", ");
+    }
+
     // When a profile is selected, fill the input
     document.querySelectorAll(".facility-profile-select").forEach((select) => {
       select.addEventListener("change", () => {
         const profiles = getProfiles();
         const idx = parseInt(select.value);
-        const target = document.getElementById(select.dataset.target);
-        if (target && !isNaN(idx) && profiles[idx]) {
-          target.value = profiles[idx].info;
-          target.dispatchEvent(new Event("change", { bubbles: true }));
+        if (isNaN(idx) || !profiles[idx]) return;
+        if (select.dataset.target === "ed-facility-fields") {
+          fillEdFacilityFields(profiles[idx].info);
+        } else {
+          const target = document.getElementById(select.dataset.target);
+          if (target) {
+            target.value = profiles[idx].info;
+            target.dispatchEvent(new Event("change", { bubbles: true }));
+          }
         }
         // Show/hide delete button
         const delBtn = select.closest("div").querySelector(".facility-delete-btn");
@@ -1605,8 +1685,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Save button: prompt for name, save profile
     document.querySelectorAll(".facility-save-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const target = document.getElementById(btn.dataset.target);
-        if (!target || !target.value.trim()) {
+        let infoValue;
+        if (btn.dataset.target === "ed-facility-fields") {
+          infoValue = collectEdFacilityInfo();
+        } else {
+          const target = document.getElementById(btn.dataset.target);
+          infoValue = target ? target.value.trim() : "";
+        }
+        if (!infoValue) {
           showToast("Enter facility info first", "error");
           return;
         }
@@ -1617,9 +1703,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const existing = profiles.findIndex((p) => p.name.toLowerCase() === name.trim().toLowerCase());
         if (existing >= 0) {
           if (!confirm(`Profile "${profiles[existing].name}" already exists. Overwrite?`)) return;
-          profiles[existing].info = target.value.trim();
+          profiles[existing].info = infoValue;
         } else {
-          profiles.push({ name: name.trim(), info: target.value.trim() });
+          profiles.push({ name: name.trim(), info: infoValue });
         }
         saveProfiles(profiles);
         refreshAllDropdowns();
