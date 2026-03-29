@@ -822,150 +822,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return data;
   }
 
-  document
-    .getElementById("generate-both")
-    .addEventListener("click", async () => {
-      showSpinner();
-      try {
-        const data = collectFormData("unified");
-        const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
-          generateAocPdf(data),
-          generateDmhPdf(data),
-        ]);
-        saveAs(
-          new Blob([aocPdfBytes], { type: "application/pdf" }),
-          "Completed-AOC-SP-300.pdf",
-        );
-        saveAs(
-          new Blob([dmhPdfBytes], { type: "application/pdf" }),
-          "Completed-DMH-5-72-19.pdf",
-        );
-        window.isFormDirty = false;
-        showToast("Both PDFs Generated Successfully!", "success");
-      } catch (error) {
-        console.error("Error generating PDFs:", error);
-        showToast("Error generating PDFs. Check console for details.", "error");
-      } finally {
-        hideSpinner();
-      }
-    });
-
-  document
-    .getElementById("generate-aoc")
-    .addEventListener("click", async () => {
-      showSpinner();
-      try {
-        const data = collectFormData("aoc");
-        const aocPdfBytes = await generateAocPdf(data);
-        saveAs(
-          new Blob([aocPdfBytes], { type: "application/pdf" }),
-          "Completed-AOC-SP-300.pdf",
-        );
-        window.isFormDirty = false;
-        showToast("AOC PDF Generated Successfully!", "success");
-      } catch (error) {
-        console.error("Error generating PDF:", error);
-        showToast("Error generating PDF. Check console for details.", "error");
-      } finally {
-        hideSpinner();
-      }
-    });
-
-  document
-    .getElementById("generate-dmh")
-    .addEventListener("click", async () => {
-      showSpinner();
-      try {
-        const data = collectFormData("dmh");
-        const dmhPdfBytes = await generateDmhPdf(data);
-        saveAs(
-          new Blob([dmhPdfBytes], { type: "application/pdf" }),
-          "Completed-DMH-5-72-19.pdf",
-        );
-        window.isFormDirty = false;
-        showToast("DMH PDF Generated Successfully!", "success");
-      } catch (error) {
-        console.error("Error generating PDF:", error);
-        showToast("Error generating PDF. Check console for details.", "error");
-      } finally {
-        hideSpinner();
-      }
-    });
-
-  document.getElementById("generate-ed").addEventListener("click", async () => {
-    showSpinner();
-    try {
-      const rawData = collectFormData("ed");
-      // Fill in defaults for fields not in ED Quick mode
-      const data = Object.assign(
-        {
-          clientRecord: "",
-          fileNo: "",
-          respondentMs: "",
-          respondentStreet: "",
-          respondentCity: "",
-          respondentState: "NC",
-          respondentZip: "",
-          respondentPhone: "",
-          respondentSsn: "",
-          respondentDl: "",
-          respondentDlState: "",
-          respondentLastLocation: "",
-          lrpName: "",
-          lrpRelationship: "",
-          lrpStreet: "",
-          lrpCity: "",
-          lrpState: "",
-          lrpZip: "",
-          lrpPhone: "",
-          petitionerRelationship: "",
-          petitionerStreet: "",
-          petitionerCity: "",
-          petitionerState: "NC",
-          petitionerZip: "",
-          petitionerHomePhone: "",
-          petitionerBusPhone: "",
-          witnessName: "",
-          witnessStreet: "",
-          witnessCity: "",
-          witnessState: "",
-          witnessZip: "",
-          witnessHomePhone: "",
-          witnessBusPhone: "",
-          interpreter: "no",
-          interpreterExplanation: "",
-          medicalProblems: "",
-          outpatientFacilityName: "",
-          outpatientFacilityContact: "",
-          waiverDate: formatDate(""),
-        },
-        rawData,
-      );
-      // Ensure petitionerName falls back to examinerName for ED mode
-      if (!data.petitionerName && data.examinerName) {
-        data.petitionerName = data.examinerName;
-      }
-      const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
-        generateAocPdf(data),
-        generateDmhPdf(data),
-      ]);
-      saveAs(
-        new Blob([aocPdfBytes], { type: "application/pdf" }),
-        "Completed-AOC-SP-300.pdf",
-      );
-      saveAs(
-        new Blob([dmhPdfBytes], { type: "application/pdf" }),
-        "Completed-DMH-5-72-19.pdf",
-      );
-      window.isFormDirty = false;
-      showToast("Both PDFs Generated (ED Quick)!", "success");
-    } catch (error) {
-      console.error("Error generating PDFs:", error);
-      showToast("Error generating PDFs. Check console for details.", "error");
-    } finally {
-      hideSpinner();
-    }
-  });
+  // Generate button handlers are set up later with validation
 
   // --- Local Storage & Initialization ---
   const localSaveInputs = document.querySelectorAll(".local-save");
@@ -1048,8 +905,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   localSaveInputs.forEach((input) => {
+    const eventType = input.tagName === "SELECT" ? "change" : "input";
     input.addEventListener(
-      "input",
+      eventType,
       debounce(() => {
         if (localStorage.getItem("rememberMe") === "true") {
           localStorage.setItem(input.id, input.value);
@@ -1185,7 +1043,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (bpInput && triggerBp) {
         bpInput.addEventListener("input", () => {
-          const match = bpInput.value.match(/(\d+)\s*\/\s*(\d+)/);
+          // Support formats: 120/80, 120 80, 120-80
+          const match = bpInput.value.match(/(\d+)\s*[\/\-\s]\s*(\d+)/);
           if (match) {
             const systolic = parseInt(match[1], 10);
             const diastolic = parseInt(match[2], 10);
@@ -1194,6 +1053,13 @@ document.addEventListener("DOMContentLoaded", () => {
               systolic <= 100 ||
               diastolic >= 100 ||
               diastolic <= 60;
+          }
+        });
+        // Normalize BP format on blur
+        bpInput.addEventListener("blur", () => {
+          const match = bpInput.value.match(/(\d+)\s*[\/\-\s]\s*(\d+)/);
+          if (match) {
+            bpInput.value = `${match[1]}/${match[2]}`;
           }
         });
       }
@@ -1367,6 +1233,286 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       e.returnValue = "";
     }
+  });
+
+  // --- Populate DL State Dropdowns ---
+  const usStates = [
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+    "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+    "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+    "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+    "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC",
+  ];
+  const dlStateDropdowns = document.querySelectorAll(
+    '[id$="-respondent-dl-state"]',
+  );
+  const stateFragment = document.createDocumentFragment();
+  usStates.forEach((st) => {
+    const option = document.createElement("option");
+    option.value = st;
+    option.textContent = st;
+    stateFragment.appendChild(option);
+  });
+  dlStateDropdowns.forEach((dropdown) =>
+    dropdown.appendChild(stateFragment.cloneNode(true)),
+  );
+
+  // --- New Patient (Clear Form) ---
+  document.querySelectorAll(".new-patient-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const formId = `form-${btn.dataset.form}`;
+      const section = document.getElementById(formId);
+      if (!section) return;
+
+      // Collect IDs of remembered fields to preserve
+      const rememberedIds = new Set();
+      if (localStorage.getItem("rememberMe") === "true") {
+        section.querySelectorAll(".local-save").forEach((el) => {
+          rememberedIds.add(el.id);
+        });
+      }
+
+      // Clear text/tel/date/time inputs
+      section
+        .querySelectorAll('input[type="text"], input[type="tel"], input[type="date"], input[type="time"]')
+        .forEach((input) => {
+          if (!rememberedIds.has(input.id)) input.value = "";
+        });
+
+      // Clear textareas
+      section.querySelectorAll("textarea").forEach((textarea) => {
+        if (!rememberedIds.has(textarea.id)) {
+          textarea.value = "";
+          textarea.style.height = "auto";
+        }
+      });
+
+      // Reset selects (except remembered ones)
+      section.querySelectorAll("select").forEach((select) => {
+        if (!rememberedIds.has(select.id)) select.selectedIndex = 0;
+      });
+
+      // Uncheck checkboxes (except remember-me)
+      section
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach((cb) => {
+          if (!cb.id.endsWith("-remember-me")) cb.checked = false;
+        });
+
+      // Reset radio buttons (except remembered certification)
+      const rememberedRadios = new Set(savedRadioGroupNames);
+      section.querySelectorAll('input[type="radio"]').forEach((radio) => {
+        if (localStorage.getItem("rememberMe") === "true" && rememberedRadios.has(radio.name)) return;
+        radio.checked = false;
+      });
+
+      // Reset snippet button states
+      section.querySelectorAll(".narrative-snippet").forEach((s) => {
+        s.classList.remove("ring-2", "ring-offset-1");
+        s.style.opacity = "1";
+      });
+
+      // Re-apply defaults
+      setDefaultDateTime();
+      section
+        .querySelectorAll(
+          '[id$="-respondent-state"], [id$="-respondent-dl-state"], [id$="-lrp-state"], [id$="-petitioner-state"], [id$="-witness-state"]',
+        )
+        .forEach((input) => {
+          if (!rememberedIds.has(input.id) && !input.value) input.value = "NC";
+        });
+
+      window.isFormDirty = false;
+      showToast("Form cleared for new patient", "success");
+    });
+  });
+
+  // --- Keyboard Shortcuts ---
+  document.addEventListener("keydown", (e) => {
+    // Ctrl+Enter or Cmd+Enter: Generate PDFs for the active tab
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      const activeTab = document.querySelector(".tab-button.tab-active");
+      if (!activeTab) return;
+      const form = activeTab.dataset.form;
+      const buttonMap = {
+        unified: "generate-both",
+        aoc: "generate-aoc",
+        dmh: "generate-dmh",
+        ed: "generate-ed",
+      };
+      const btn = document.getElementById(buttonMap[form]);
+      if (btn) btn.click();
+    }
+  });
+
+  // --- Form Validation Before Generation ---
+  function validateFormData(data, formType) {
+    const warnings = [];
+
+    if (!data.respondentName) warnings.push("Respondent name is empty");
+    if (!data.respondentDob || !data.respondentDob.full)
+      warnings.push("Respondent DOB is empty");
+    if (!data.findings) warnings.push("Findings/narrative is empty");
+    if (!data.disposition) warnings.push("Disposition is not selected");
+    if (!data.county) warnings.push("County is not selected");
+
+    if (formType !== "ed") {
+      if (!data.petitionerName)
+        warnings.push("Petitioner name is empty");
+    }
+
+    return warnings;
+  }
+
+  // --- Generate Button Handlers (with validation) ---
+  document.getElementById("generate-both").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const data = collectFormData("unified");
+      const warnings = validateFormData(data, "unified");
+      if (warnings.length > 0) {
+        hideSpinner();
+        const proceed = confirm(
+          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDFs anyway?`,
+        );
+        if (!proceed) return;
+        showSpinner();
+      }
+      const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
+        generateAocPdf(data),
+        generateDmhPdf(data),
+      ]);
+      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
+      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      window.isFormDirty = false;
+      showToast("Both PDFs Generated Successfully!", "success");
+    } catch (error) {
+      console.error("Error generating PDFs:", error);
+      showToast("Error generating PDFs. Check console for details.", "error");
+    } finally {
+      hideSpinner();
+    }
+  });
+
+  document.getElementById("generate-aoc").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const data = collectFormData("aoc");
+      const warnings = validateFormData(data, "aoc");
+      if (warnings.length > 0) {
+        hideSpinner();
+        const proceed = confirm(
+          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDF anyway?`,
+        );
+        if (!proceed) return;
+        showSpinner();
+      }
+      const aocPdfBytes = await generateAocPdf(data);
+      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
+      window.isFormDirty = false;
+      showToast("AOC PDF Generated Successfully!", "success");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      showToast("Error generating PDF. Check console for details.", "error");
+    } finally {
+      hideSpinner();
+    }
+  });
+
+  document.getElementById("generate-dmh").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const data = collectFormData("dmh");
+      const warnings = validateFormData(data, "dmh");
+      if (warnings.length > 0) {
+        hideSpinner();
+        const proceed = confirm(
+          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDF anyway?`,
+        );
+        if (!proceed) return;
+        showSpinner();
+      }
+      const dmhPdfBytes = await generateDmhPdf(data);
+      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      window.isFormDirty = false;
+      showToast("DMH PDF Generated Successfully!", "success");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      showToast("Error generating PDF. Check console for details.", "error");
+    } finally {
+      hideSpinner();
+    }
+  });
+
+  document.getElementById("generate-ed").addEventListener("click", async () => {
+    showSpinner();
+    try {
+      const rawData = collectFormData("ed");
+      const data = Object.assign(
+        {
+          clientRecord: "", fileNo: "", respondentMs: "", respondentStreet: "",
+          respondentCity: "", respondentState: "NC", respondentZip: "",
+          respondentPhone: "", respondentSsn: "", respondentDl: "",
+          respondentDlState: "", respondentLastLocation: "",
+          lrpName: "", lrpRelationship: "", lrpStreet: "", lrpCity: "",
+          lrpState: "", lrpZip: "", lrpPhone: "",
+          petitionerRelationship: "", petitionerStreet: "", petitionerCity: "",
+          petitionerState: "NC", petitionerZip: "", petitionerHomePhone: "",
+          petitionerBusPhone: "", witnessName: "", witnessStreet: "",
+          witnessCity: "", witnessState: "", witnessZip: "",
+          witnessHomePhone: "", witnessBusPhone: "",
+          interpreter: "no", interpreterExplanation: "", medicalProblems: "",
+          outpatientFacilityName: "", outpatientFacilityContact: "",
+          waiverDate: formatDate(""),
+        },
+        rawData,
+      );
+      if (!data.petitionerName && data.examinerName) {
+        data.petitionerName = data.examinerName;
+      }
+
+      const warnings = validateFormData(data, "ed");
+      if (warnings.length > 0) {
+        hideSpinner();
+        const proceed = confirm(
+          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDFs anyway?`,
+        );
+        if (!proceed) return;
+        showSpinner();
+      }
+
+      const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
+        generateAocPdf(data),
+        generateDmhPdf(data),
+      ]);
+      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
+      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
+      window.isFormDirty = false;
+      showToast("Both PDFs Generated (ED Quick)!", "success");
+    } catch (error) {
+      console.error("Error generating PDFs:", error);
+      showToast("Error generating PDFs. Check console for details.", "error");
+    } finally {
+      hideSpinner();
+    }
+  });
+
+  // --- Zip Code Validation ---
+  document.querySelectorAll('[id$="-respondent-zip"], [id$="-lrp-zip"], [id$="-petitioner-zip"], [id$="-witness-zip"]').forEach((input) => {
+    input.addEventListener("blur", () => {
+      const val = input.value.trim();
+      if (!val || val === "Unknown") return;
+      const digits = val.replace(/[^\d]/g, "");
+      if (digits.length === 5) {
+        input.value = digits;
+      } else if (digits.length === 9) {
+        input.value = `${digits.slice(0, 5)}-${digits.slice(5)}`;
+      } else if (digits.length > 0) {
+        input.style.borderColor = "var(--danger)";
+        setTimeout(() => { input.style.borderColor = ""; }, 2000);
+      }
+    });
   });
 
   // --- Dark Theme Toggle ---

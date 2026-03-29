@@ -347,6 +347,19 @@
         transform: translateY(0) !important;
       }
 
+      .new-patient-btn {
+        background: var(--bg-card) !important;
+        border: 1.5px solid var(--border-color) !important;
+        border-radius: var(--radius) !important;
+        color: var(--text-secondary) !important;
+        transition: all 0.2s ease !important;
+      }
+      .new-patient-btn:hover {
+        border-color: var(--danger) !important;
+        color: var(--danger) !important;
+        background: rgba(239, 68, 68, 0.05) !important;
+      }
+
       #generate-ed {
         background: linear-gradient(135deg, var(--danger), #dc2626) !important;
         box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3) !important;
@@ -696,7 +709,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="unified-county" class="block text-sm">County</label>
-                <select id="unified-county" class="mt-1 block w-full"></select>
+                <select id="unified-county" class="local-save mt-1 block w-full"></select>
               </div>
               <div>
                 <label for="unified-client-record" class="block text-sm"
@@ -878,11 +891,10 @@
               <div>
                 <label for="unified-respondent-dl-state" class="block text-sm"
                   >DL State</label
-                ><input
-                  type="text"
+                ><select
                   id="unified-respondent-dl-state"
                   class="mt-1 block w-full"
-                />
+                ><option value=""></option></select>
               </div>
               <div class="md:col-span-3">
                 <label
@@ -1000,6 +1012,7 @@
                 ><input
                   type="text"
                   id="unified-petitioner-relationship"
+                  list="datalist-relationship"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -1535,6 +1548,7 @@
               ><input
                 type="text"
                 id="unified-impression"
+                list="datalist-diagnosis"
                 class="mt-1 block w-full"
               />
             </div>
@@ -2063,12 +2077,20 @@
             </div>
           </fieldset>
 
-          <div class="pt-4">
+          <div class="pt-4 flex gap-3">
             <button
               id="generate-both"
-              class="generate-btn w-full flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
+              class="generate-btn flex-1 flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
             >
               Generate Both PDFs
+            </button>
+            <button
+              type="button"
+              class="new-patient-btn flex justify-center items-center py-3 px-4 text-sm font-medium focus:outline-none"
+              data-form="unified"
+              title="Clear all fields for a new patient"
+            >
+              New Patient
             </button>
           </div>
         </section>
@@ -2088,7 +2110,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="aoc-county" class="block text-sm">County</label>
-                <select id="aoc-county" class="mt-1 block w-full"></select>
+                <select id="aoc-county" class="local-save mt-1 block w-full"></select>
               </div>
               <div>
                 <label for="aoc-client-record" class="block text-sm"
@@ -2259,11 +2281,10 @@
               <div>
                 <label for="aoc-respondent-dl-state" class="block text-sm"
                   >DL State</label
-                ><input
-                  type="text"
+                ><select
                   id="aoc-respondent-dl-state"
                   class="mt-1 block w-full"
-                />
+                ><option value=""></option></select>
               </div>
               <div class="md:col-span-3">
                 <label for="aoc-respondent-last-location" class="block text-sm"
@@ -2375,6 +2396,7 @@
                 ><input
                   type="text"
                   id="aoc-petitioner-relationship"
+                  list="datalist-relationship"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -2785,6 +2807,7 @@
               ><input
                 type="text"
                 id="aoc-impression"
+                list="datalist-diagnosis"
                 class="mt-1 block w-full"
               />
             </div>
@@ -3302,12 +3325,20 @@
             </div>
           </fieldset>
 
-          <div class="pt-4">
+          <div class="pt-4 flex gap-3">
             <button
               id="generate-aoc"
-              class="generate-btn w-full flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
+              class="generate-btn flex-1 flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
             >
               Generate AOC-SP-300 PDF
+            </button>
+            <button
+              type="button"
+              class="new-patient-btn flex justify-center items-center py-3 px-4 text-sm font-medium focus:outline-none"
+              data-form="aoc"
+              title="Clear all fields for a new patient"
+            >
+              New Patient
             </button>
           </div>
         </section>
@@ -3326,7 +3357,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="dmh-county" class="block text-sm">County</label>
-                <select id="dmh-county" class="mt-1 block w-full"></select>
+                <select id="dmh-county" class="local-save mt-1 block w-full"></select>
               </div>
               <div>
                 <label for="dmh-client-record" class="block text-sm"
@@ -3497,11 +3528,10 @@
               <div>
                 <label for="dmh-respondent-dl-state" class="block text-sm"
                   >DL State</label
-                ><input
-                  type="text"
+                ><select
                   id="dmh-respondent-dl-state"
                   class="mt-1 block w-full"
-                />
+                ><option value=""></option></select>
               </div>
               <div class="md:col-span-3">
                 <label for="dmh-respondent-last-location" class="block text-sm"
@@ -3613,6 +3643,7 @@
                 ><input
                   type="text"
                   id="dmh-petitioner-relationship"
+                  list="datalist-relationship"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -4023,6 +4054,7 @@
               ><input
                 type="text"
                 id="dmh-impression"
+                list="datalist-diagnosis"
                 class="mt-1 block w-full"
               />
             </div>
@@ -4540,12 +4572,20 @@
             </div>
           </fieldset>
 
-          <div class="pt-4">
+          <div class="pt-4 flex gap-3">
             <button
               id="generate-dmh"
-              class="generate-btn w-full flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
+              class="generate-btn flex-1 flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
             >
               Generate DMH-5-72-19 PDF
+            </button>
+            <button
+              type="button"
+              class="new-patient-btn flex justify-center items-center py-3 px-4 text-sm font-medium focus:outline-none"
+              data-form="dmh"
+              title="Clear all fields for a new patient"
+            >
+              New Patient
             </button>
           </div>
         </section>
@@ -4576,7 +4616,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="ed-county" class="block text-sm">County</label>
-                <select id="ed-county" class="mt-1 block w-full"></select>
+                <select id="ed-county" class="local-save mt-1 block w-full"></select>
               </div>
               <div>
                 <label for="ed-exam-date" class="block text-sm"
@@ -5039,27 +5079,9 @@
               <input
                 type="text"
                 id="ed-impression"
-                list="ed-impression-list"
+                list="datalist-diagnosis"
                 class="mt-1 block w-full"
               />
-              <datalist id="ed-impression-list">
-                <option value="Major Depressive Disorder"></option>
-                <option value="Bipolar I Disorder, manic episode"></option>
-                <option
-                  value="Bipolar II Disorder, depressive episode"
-                ></option>
-                <option value="Schizophrenia"></option>
-                <option value="Schizoaffective Disorder"></option>
-                <option value="Brief Psychotic Disorder"></option>
-                <option value="Generalized Anxiety Disorder"></option>
-                <option value="PTSD"></option>
-                <option value="Substance Use Disorder - Alcohol"></option>
-                <option value="Substance Use Disorder - Opioid"></option>
-                <option value="Substance Use Disorder - Stimulant"></option>
-                <option value="Substance Use Disorder - Polysubstance"></option>
-                <option value="Suicidal Ideation"></option>
-                <option value="Psychosis NOS"></option>
-              </datalist>
             </div>
           </fieldset>
 
@@ -5550,15 +5572,69 @@
             </div>
           </fieldset>
 
-          <div class="pt-4">
+          <div class="pt-4 flex gap-3">
             <button
               id="generate-ed"
-              class="generate-btn w-full flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
+              class="generate-btn flex-1 flex justify-center py-3 px-4 text-lg font-medium text-white focus:outline-none"
             >
               Generate Both PDFs (ED Quick)
             </button>
+            <button
+              type="button"
+              class="new-patient-btn flex justify-center items-center py-3 px-4 text-sm font-medium focus:outline-none"
+              data-form="ed"
+              title="Clear all fields for a new patient"
+            >
+              New Patient
+            </button>
           </div>
         </section>
+
+        <!-- Shared Datalists for Autocomplete -->
+        <datalist id="datalist-diagnosis">
+          <option value="Schizophrenia">
+          <option value="Schizoaffective Disorder">
+          <option value="Bipolar Disorder">
+          <option value="Major Depressive Disorder">
+          <option value="Psychosis NOS">
+          <option value="Brief Psychotic Disorder">
+          <option value="PTSD">
+          <option value="Generalized Anxiety Disorder">
+          <option value="Substance Use Disorder">
+          <option value="Alcohol Use Disorder">
+          <option value="Delusional Disorder">
+          <option value="Borderline Personality Disorder">
+          <option value="Autism Spectrum Disorder">
+          <option value="Intellectual Disability">
+          <option value="Dementia">
+        </datalist>
+        <datalist id="datalist-allergies">
+          <option value="NKDA">
+          <option value="Penicillin">
+          <option value="Sulfa">
+          <option value="Codeine">
+          <option value="Morphine">
+          <option value="Aspirin">
+          <option value="NSAIDs">
+          <option value="Latex">
+          <option value="Iodine">
+          <option value="Shellfish">
+          <option value="None known">
+        </datalist>
+        <datalist id="datalist-relationship">
+          <option value="Physician">
+          <option value="Psychiatrist">
+          <option value="Psychologist">
+          <option value="Social Worker">
+          <option value="Nurse Practitioner">
+          <option value="Physician Assistant">
+          <option value="Law Enforcement">
+          <option value="Parent">
+          <option value="Spouse">
+          <option value="Sibling">
+          <option value="Guardian">
+          <option value="Other">
+        </datalist>
       </main>
 
       <div

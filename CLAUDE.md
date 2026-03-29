@@ -45,26 +45,30 @@ npx prettier --write .
 - Phone number auto-formatting ((XXX) XXX-XXXX)
 - Date/time fields default to current date/time
 - "Copy from Respondent" address buttons on LRP, Petitioner, and Witness sections
-- localStorage persistence for petitioner info, examiner, facility, certification, notary
+- localStorage persistence for petitioner info, examiner, facility, certification, notary, county
 - Parallel PDF generation via Promise.all for unified form
+- County auto-fill from localStorage (saved with Remember Me)
+- Smart BP parsing: accepts `120/80`, `120 80`, `120-80` formats, normalizes on blur
+- Datalist autocomplete for Impression/Diagnosis and Petitioner Relationship fields
+- "New Patient" button clears form while preserving remembered fields
+- Keyboard shortcut: Ctrl+Enter (Cmd+Enter on Mac) generates PDFs for active tab
+- Form validation warns on empty critical fields before PDF generation
+- DL State field is a dropdown of US state abbreviations
+- Zip code auto-formatting (XXXXX or XXXXX-XXXX) with validation on blur
 
 ## Future Optimization Ideas
 
 ### High Impact - Minimize User Input
 
-1. **County auto-fill from localStorage**: Save and restore the selected county dropdown since examiners typically work in one county. Add it to the `local-save` system or the saved radio groups pattern.
+1. ~~**County auto-fill from localStorage**~~ ✓ Implemented
 
 2. **Saved facility profiles**: Allow users to save multiple facility profiles (name, address, phone) in localStorage and select from a dropdown. Useful for examiners who work at multiple facilities but want one-click selection.
 
 3. **Respondent name parsing**: When the user types a full name, auto-split into first/last if the PDF fields ever require it. Currently the PDF uses a single name field so this isn't needed yet.
 
-4. **Datalist autocomplete for common values**: Add `<datalist>` elements for frequently entered values like:
-   - Impression/Diagnosis (common psychiatric diagnoses: "Schizophrenia", "Bipolar Disorder", "Major Depressive Disorder", etc.)
-   - Medications (common psychiatric medications)
-   - Allergies ("NKDA", "Penicillin", etc.)
-   - Petitioner relationship ("Physician", "Psychiatrist", "Social Worker", "Law Enforcement", etc.)
+4. ~~**Datalist autocomplete for common values**~~ ✓ Implemented (diagnosis, relationship)
 
-5. **Smart BP parsing**: Currently BP trigger checks for `systolic/diastolic` format. Could also accept formats like `120 80` or `120-80` and normalize to `120/80`.
+5. ~~**Smart BP parsing**~~ ✓ Implemented
 
 6. **Exam location from localStorage**: The exam location field already has `local-save` but a dropdown of recently used locations could speed up entry when an examiner works across multiple sites.
 
@@ -72,15 +76,15 @@ npx prettier --write .
 
 ### Medium Impact - UX Improvements
 
-8. **Form validation before generation**: Warn on empty critical fields (respondent name, DOB, findings, disposition) before generating PDFs. Currently generates silently with blank fields.
+8. ~~**Form validation before generation**~~ ✓ Implemented
 
 9. **Tab-sync for shared fields**: When using the AOC-only or DMH-only tabs, provide an option to sync data from the Unified tab or between tabs. Currently each tab is independent.
 
-10. **Clear form button**: Add a "Clear All" or "New Patient" button that resets all fields except remembered ones. Currently requires page refresh.
+10. ~~**Clear form button**~~ ✓ Implemented as "New Patient" button
 
 11. **PDF preview**: Show a preview of the generated PDF in-browser before downloading, so users can verify before saving.
 
-12. **Keyboard shortcuts**: Add shortcuts like Ctrl+Enter to generate PDFs, or Ctrl+S to save current data.
+12. ~~**Keyboard shortcuts**~~ ✓ Implemented (Ctrl+Enter to generate)
 
 ### Lower Impact - Technical
 
@@ -88,6 +92,6 @@ npx prettier --write .
 
 14. **Service Worker for offline use**: Add a service worker to cache the app shell and PDF templates for fully offline operation.
 
-15. **Respondent DL state dropdown**: Convert the free-text DL state field to a dropdown of US state abbreviations for consistency.
+15. ~~**Respondent DL state dropdown**~~ ✓ Implemented
 
-16. **Zip code validation**: Validate zip codes are 5 or 9 digits (XXXXX or XXXXX-XXXX format).
+16. ~~**Zip code validation**~~ ✓ Implemented
