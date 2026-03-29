@@ -62,7 +62,7 @@ npx prettier --write .
 
 1. ~~**County auto-fill from localStorage**~~ ✓ Implemented
 
-2. **Saved facility profiles**: Allow users to save multiple facility profiles (name, address, phone) in localStorage and select from a dropdown. Useful for examiners who work at multiple facilities but want one-click selection.
+2. ~~**Saved facility profiles**~~ ✓ Implemented (dropdown + save/delete on all facility fields)
 
 3. **Respondent name parsing**: When the user types a full name, auto-split into first/last if the PDF fields ever require it. Currently the PDF uses a single name field so this isn't needed yet.
 

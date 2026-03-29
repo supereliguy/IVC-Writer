@@ -992,6 +992,51 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // --- ED Quick Patient Banner ---
+  (function setupEdPatientBanner() {
+    const banner = document.getElementById("ed-patient-banner");
+    const bannerName = document.getElementById("ed-patient-banner-name");
+    const bannerDob = document.getElementById("ed-patient-banner-dob");
+    const bannerAge = document.getElementById("ed-patient-banner-age");
+    const bannerSex = document.getElementById("ed-patient-banner-sex");
+    if (!banner) return;
+
+    const nameInput = document.getElementById("ed-respondent-name");
+    const dobInput = document.getElementById("ed-respondent-dob");
+    const ageInput = document.getElementById("ed-respondent-age");
+    const sexInput = document.getElementById("ed-respondent-sex");
+
+    function updateBanner() {
+      const name = nameInput ? nameInput.value.trim() : "";
+      const dob = dobInput ? dobInput.value : "";
+      const age = ageInput ? ageInput.value.trim() : "";
+      const sex = sexInput ? sexInput.value : "";
+
+      const hasAny = name || dob || age || sex;
+      banner.classList.toggle("hidden", !hasAny);
+
+      bannerName.textContent = name || "—";
+      bannerDob.textContent = dob ? new Date(dob + "T00:00:00").toLocaleDateString() : "—";
+      bannerAge.textContent = age || "—";
+      bannerSex.textContent = sex || "—";
+    }
+
+    [nameInput, dobInput, ageInput, sexInput].forEach((el) => {
+      if (el) {
+        el.addEventListener("input", updateBanner);
+        el.addEventListener("change", updateBanner);
+      }
+    });
+
+    // Update on New Patient clear
+    const observer = new MutationObserver(updateBanner);
+    if (nameInput) observer.observe(nameInput, { attributes: true, attributeFilter: ["value"] });
+
+    // Also listen for form resets
+    const edForm = document.getElementById("form-ed");
+    if (edForm) edForm.addEventListener("reset", () => setTimeout(updateBanner, 0));
+  })();
+
   // --- Auto-Check Vital Sign Triggers ---
   function setupVitalSignTriggers() {
     ["unified", "aoc", "dmh", "ed"].forEach((prefix) => {
@@ -1324,6 +1369,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.isFormDirty = false;
       showToast("Form cleared for new patient", "success");
+
+      // Update ED patient banner after clearing
+      if (btn.dataset.form === "ed") {
+        const nameEl = document.getElementById("ed-respondent-name");
+        if (nameEl) nameEl.dispatchEvent(new Event("input", { bubbles: true }));
+      }
     });
   });
 
@@ -1497,6 +1548,104 @@ document.addEventListener("DOMContentLoaded", () => {
       hideSpinner();
     }
   });
+
+  // --- Saved Facility Profiles ---
+  (function setupFacilityProfiles() {
+    const STORAGE_KEY = "facilityProfiles";
+
+    function getProfiles() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch { return []; }
+    }
+
+    function saveProfiles(profiles) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+    }
+
+    function refreshAllDropdowns() {
+      const profiles = getProfiles();
+      document.querySelectorAll(".facility-profile-select").forEach((select) => {
+        const current = select.value;
+        select.innerHTML = '<option value="">Saved Profiles...</option>';
+        profiles.forEach((p, i) => {
+          const opt = document.createElement("option");
+          opt.value = String(i);
+          opt.textContent = p.name;
+          select.appendChild(opt);
+        });
+        // Restore selection if still valid
+        if (current && parseInt(current) < profiles.length) {
+          select.value = current;
+        }
+      });
+      // Update delete button visibility
+      document.querySelectorAll(".facility-delete-btn").forEach((btn) => {
+        const select = btn.closest("div").querySelector(".facility-profile-select");
+        btn.classList.toggle("hidden", !select || !select.value);
+      });
+    }
+
+    // When a profile is selected, fill the input
+    document.querySelectorAll(".facility-profile-select").forEach((select) => {
+      select.addEventListener("change", () => {
+        const profiles = getProfiles();
+        const idx = parseInt(select.value);
+        const target = document.getElementById(select.dataset.target);
+        if (target && !isNaN(idx) && profiles[idx]) {
+          target.value = profiles[idx].info;
+          target.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        // Show/hide delete button
+        const delBtn = select.closest("div").querySelector(".facility-delete-btn");
+        if (delBtn) delBtn.classList.toggle("hidden", !select.value);
+      });
+    });
+
+    // Save button: prompt for name, save profile
+    document.querySelectorAll(".facility-save-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = document.getElementById(btn.dataset.target);
+        if (!target || !target.value.trim()) {
+          showToast("Enter facility info first", "error");
+          return;
+        }
+        const name = prompt("Profile name (e.g. hospital name):");
+        if (!name || !name.trim()) return;
+        const profiles = getProfiles();
+        // Check for duplicate name
+        const existing = profiles.findIndex((p) => p.name.toLowerCase() === name.trim().toLowerCase());
+        if (existing >= 0) {
+          if (!confirm(`Profile "${profiles[existing].name}" already exists. Overwrite?`)) return;
+          profiles[existing].info = target.value.trim();
+        } else {
+          profiles.push({ name: name.trim(), info: target.value.trim() });
+        }
+        saveProfiles(profiles);
+        refreshAllDropdowns();
+        showToast(`Facility profile "${name.trim()}" saved`, "success");
+      });
+    });
+
+    // Delete button: remove selected profile
+    document.querySelectorAll(".facility-delete-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const select = btn.closest("div").querySelector(".facility-profile-select");
+        if (!select || !select.value) return;
+        const profiles = getProfiles();
+        const idx = parseInt(select.value);
+        if (isNaN(idx) || !profiles[idx]) return;
+        if (!confirm(`Delete profile "${profiles[idx].name}"?`)) return;
+        profiles.splice(idx, 1);
+        saveProfiles(profiles);
+        refreshAllDropdowns();
+        showToast("Profile deleted", "success");
+      });
+    });
+
+    // Initial load
+    refreshAllDropdowns();
+  })();
 
   // --- Zip Code Validation ---
   document.querySelectorAll('[id$="-respondent-zip"], [id$="-lrp-zip"], [id$="-petitioner-zip"], [id$="-witness-zip"]').forEach((input) => {
