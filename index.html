@@ -1984,11 +1984,19 @@
             <div class="mt-4">
               <label for="unified-facility-info" class="block text-sm"
                 >Facility Name, Address, and Phone</label
-              ><input
-                type="text"
-                id="unified-facility-info"
-                class="local-save mt-1 block w-full"
-              />
+              >
+              <div class="flex gap-2 mt-1">
+                <select class="facility-profile-select text-sm flex-shrink-0" data-target="unified-facility-info" style="max-width: 200px;">
+                  <option value="">Saved Profiles...</option>
+                </select>
+                <input
+                  type="text"
+                  id="unified-facility-info"
+                  class="local-save block w-full"
+                />
+                <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="unified-facility-info" title="Save current facility as a profile">Save</button>
+                <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="unified-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+              </div>
             </div>
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -3230,11 +3238,19 @@
             <div class="mt-4">
               <label for="aoc-facility-info" class="block text-sm"
                 >Facility Name, Address, and Phone</label
-              ><input
-                type="text"
-                id="aoc-facility-info"
-                class="local-save mt-1 block w-full"
-              />
+              >
+              <div class="flex gap-2 mt-1">
+                <select class="facility-profile-select text-sm flex-shrink-0" data-target="aoc-facility-info" style="max-width: 200px;">
+                  <option value="">Saved Profiles...</option>
+                </select>
+                <input
+                  type="text"
+                  id="aoc-facility-info"
+                  class="local-save block w-full"
+                />
+                <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="aoc-facility-info" title="Save current facility as a profile">Save</button>
+                <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="aoc-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+              </div>
             </div>
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -4477,11 +4493,19 @@
             <div class="mt-4">
               <label for="dmh-facility-info" class="block text-sm"
                 >Facility Name, Address, and Phone</label
-              ><input
-                type="text"
-                id="dmh-facility-info"
-                class="local-save mt-1 block w-full"
-              />
+              >
+              <div class="flex gap-2 mt-1">
+                <select class="facility-profile-select text-sm flex-shrink-0" data-target="dmh-facility-info" style="max-width: 200px;">
+                  <option value="">Saved Profiles...</option>
+                </select>
+                <input
+                  type="text"
+                  id="dmh-facility-info"
+                  class="local-save block w-full"
+                />
+                <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="dmh-facility-info" title="Save current facility as a profile">Save</button>
+                <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="dmh-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+              </div>
             </div>
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -4608,6 +4632,25 @@
             <strong>Streamlined for Emergency Departments.</strong> Only the
             minimum legally required fields per NCGS 122C-261/263. Generates
             both PDFs with non-essential fields left blank.
+          </div>
+
+          <!-- Sticky Patient Banner -->
+          <div
+            id="ed-patient-banner"
+            class="sticky top-0 z-30 px-4 py-2 rounded-lg border border-blue-300 text-sm font-medium hidden"
+            style="background: rgba(59, 130, 246, 0.08); color: var(--fg); backdrop-filter: blur(8px);"
+          >
+            <span class="font-semibold">Patient:</span>
+            <span id="ed-patient-banner-name" class="ml-1">—</span>
+            <span class="mx-2 text-gray-400">|</span>
+            <span class="font-semibold">DOB:</span>
+            <span id="ed-patient-banner-dob" class="ml-1">—</span>
+            <span class="mx-2 text-gray-400">|</span>
+            <span class="font-semibold">Age:</span>
+            <span id="ed-patient-banner-age" class="ml-1">—</span>
+            <span class="mx-2 text-gray-400">|</span>
+            <span class="font-semibold">Sex:</span>
+            <span id="ed-patient-banner-sex" class="ml-1">—</span>
           </div>
 
           <!-- General -->
@@ -5467,11 +5510,18 @@
                 <label for="ed-facility-info" class="block text-sm"
                   >Facility (Name, City State, Phone)</label
                 >
-                <input
-                  type="text"
-                  id="ed-facility-info"
-                  class="local-save mt-1 block w-full"
-                />
+                <div class="flex gap-2 mt-1">
+                  <select class="facility-profile-select text-sm flex-shrink-0" data-target="ed-facility-info" style="max-width: 200px;">
+                    <option value="">Saved Profiles...</option>
+                  </select>
+                  <input
+                    type="text"
+                    id="ed-facility-info"
+                    class="local-save block w-full"
+                  />
+                  <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="ed-facility-info" title="Save current facility as a profile">Save</button>
+                  <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="ed-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+                </div>
               </div>
               <div>
                 <label for="ed-petitioner-name" class="block text-sm"
