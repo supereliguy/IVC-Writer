@@ -2129,6 +2129,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Escape" && !previewOverlay.classList.contains("hidden")) closePdfPreview();
   });
 
+  // --- About Panel Toggle ---
+  const aboutBtn = document.getElementById("about-btn");
+  const aboutPanel = document.getElementById("about-panel");
+  aboutBtn.addEventListener("click", () => {
+    aboutPanel.classList.toggle("hidden");
+  });
+  document.addEventListener("click", (e) => {
+    if (!aboutPanel.classList.contains("hidden") && !aboutPanel.contains(e.target) && e.target !== aboutBtn) {
+      aboutPanel.classList.add("hidden");
+    }
+  });
+
   // --- Dark Theme Toggle ---
   const themeToggle = document.getElementById("theme-toggle");
   const sunIcon = themeToggle.querySelector(".sun-icon");
