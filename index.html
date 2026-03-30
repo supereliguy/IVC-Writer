@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NC IVC Form Writer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="vendor/tailwind.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -358,6 +358,92 @@
         border-color: var(--danger) !important;
         color: var(--danger) !important;
         background: rgba(239, 68, 68, 0.05) !important;
+      }
+
+      .sync-btn {
+        background: var(--bg-card) !important;
+        border: 1.5px solid var(--accent) !important;
+        border-radius: var(--radius) !important;
+        color: var(--accent) !important;
+        transition: all 0.2s ease !important;
+      }
+      .sync-btn:hover {
+        background: var(--accent-light) !important;
+        color: var(--accent-hover) !important;
+        border-color: var(--accent-hover) !important;
+      }
+
+      /* ── PDF Preview Modal ──────────────────────────────── */
+      .pdf-preview-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+      }
+      .pdf-preview-modal {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-xl);
+        width: 90vw;
+        max-width: 900px;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .pdf-preview-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .pdf-preview-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .pdf-preview-body {
+        flex: 1;
+        overflow: hidden;
+      }
+      .pdf-preview-body iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .pdf-preview-footer {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-color);
+      }
+      .pdf-preview-footer button {
+        padding: 8px 20px;
+        border-radius: var(--radius);
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .pdf-preview-download {
+        background: linear-gradient(135deg, var(--success), #059669) !important;
+        color: white !important;
+        border: none !important;
+      }
+      .pdf-preview-download:hover { filter: brightness(1.05); }
+      .pdf-preview-close {
+        background: var(--bg-card) !important;
+        border: 1.5px solid var(--border-color) !important;
+        color: var(--text-secondary) !important;
+      }
+      .pdf-preview-close:hover {
+        border-color: var(--text-muted) !important;
       }
 
       #generate-ed {
@@ -2122,7 +2208,18 @@
           tabindex="0"
           class="form-section space-y-4 hidden"
         >
-          <h2 class="text-2xl border-b pb-2">AOC-SP-300 Data Entry</h2>
+          <div class="flex items-center justify-between border-b pb-2">
+            <h2 class="text-2xl">AOC-SP-300 Data Entry</h2>
+            <button
+              type="button"
+              id="sync-aoc-from-unified"
+              class="sync-btn flex items-center gap-1.5 py-1.5 px-3 text-sm font-medium focus:outline-none"
+              title="Copy all field values from the Unified tab"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Sync from Unified
+            </button>
+          </div>
 
           <!-- General / Header -->
           <fieldset>
@@ -3387,7 +3484,18 @@
           tabindex="0"
           class="form-section space-y-4 hidden"
         >
-          <h2 class="text-2xl border-b pb-2">DMH-5-72-19 Data Entry</h2>
+          <div class="flex items-center justify-between border-b pb-2">
+            <h2 class="text-2xl">DMH-5-72-19 Data Entry</h2>
+            <button
+              type="button"
+              id="sync-dmh-from-unified"
+              class="sync-btn flex items-center gap-1.5 py-1.5 px-3 text-sm font-medium focus:outline-none"
+              title="Copy all field values from the Unified tab"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Sync from Unified
+            </button>
+          </div>
 
           <!-- General / Header -->
           <fieldset>
@@ -5748,6 +5856,24 @@
         </datalist>
       </main>
 
+      <!-- PDF Preview Modal -->
+      <div id="pdf-preview-overlay" class="pdf-preview-overlay hidden">
+        <div class="pdf-preview-modal">
+          <div class="pdf-preview-header">
+            <h3 id="pdf-preview-title">PDF Preview</h3>
+            <button type="button" id="pdf-preview-close-x" class="pdf-preview-close" style="padding:4px 8px;" title="Close preview">&times;</button>
+          </div>
+          <div class="pdf-preview-body">
+            <iframe id="pdf-preview-iframe" title="PDF Preview"></iframe>
+          </div>
+          <div class="pdf-preview-footer">
+            <button type="button" id="pdf-preview-close-btn" class="pdf-preview-close">Close</button>
+            <button type="button" id="pdf-preview-download-btn" class="pdf-preview-download">Download</button>
+            <button type="button" id="pdf-preview-next-btn" class="pdf-preview-download" style="display:none;">Next PDF</button>
+          </div>
+        </div>
+      </div>
+
       <div
         id="loading-spinner"
         class="hidden fixed inset-0 flex items-center justify-center z-50"
@@ -5766,8 +5892,13 @@
       id="toast-container"
       class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"
     ></div>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+    <script src="vendor/pdf-lib.min.js"></script>
+    <script src="vendor/FileSaver.min.js"></script>
     <script src="scripts.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    </script>
   </body>
 </html>
