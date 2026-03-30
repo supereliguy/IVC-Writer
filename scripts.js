@@ -1750,6 +1750,274 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // --- Exam Location Recent Locations Datalist ---
+  (function setupExamLocationDatalist() {
+    const STORAGE_KEY = "recentExamLocations";
+    const MAX_LOCATIONS = 10;
+    const datalist = document.getElementById("exam-location-list");
+    if (!datalist) return;
+
+    function getLocations() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocation(location) {
+      const trimmed = location.trim();
+      if (!trimmed) return;
+      let locations = getLocations();
+      // Remove duplicates (case-insensitive)
+      locations = locations.filter(
+        (l) => l.toLowerCase() !== trimmed.toLowerCase(),
+      );
+      // Add to front (most recent first)
+      locations.unshift(trimmed);
+      // Cap at max
+      if (locations.length > MAX_LOCATIONS) locations.length = MAX_LOCATIONS;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(locations));
+      refreshDatalist();
+    }
+
+    function refreshDatalist() {
+      datalist.innerHTML = "";
+      getLocations().forEach((loc) => {
+        const option = document.createElement("option");
+        option.value = loc;
+        datalist.appendChild(option);
+      });
+    }
+
+    // Save location on blur for all exam-location inputs
+    document
+      .querySelectorAll(
+        "#unified-exam-location, #aoc-exam-location, #dmh-exam-location, #ed-exam-location",
+      )
+      .forEach((input) => {
+        input.addEventListener("blur", () => {
+          if (input.value.trim()) saveLocation(input.value);
+        });
+      });
+
+    // Initial load
+    refreshDatalist();
+  })();
+
+  // --- Paste from Facesheet ---
+  (function setupPasteFromFacesheet() {
+    function parseFacesheet(text) {
+      const result = {};
+      const lines = text
+        .split(/\n/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+      const full = lines.join(" ");
+
+      // Name: try "Last, First" or "First Last" pattern from first non-empty line
+      // or labeled "Name: ..." / "Patient: ..."
+      const nameLabel = text.match(
+        /(?:patient|name|resident)\s*[:]\s*(.+)/i,
+      );
+      if (nameLabel) {
+        result.name = nameLabel[1].split(/\t|\s{2,}/)[0].trim();
+      } else if (lines.length > 0) {
+        // First line is likely the name if it looks like "LAST, FIRST" or "First Last"
+        const firstLine = lines[0];
+        if (/^[A-Za-z'-]+,\s*[A-Za-z'-]+/.test(firstLine)) {
+          result.name = firstLine.split(/\t|\s{2,}/)[0].trim();
+        }
+      }
+
+      // DOB: MM/DD/YYYY or MM-DD-YYYY or YYYY-MM-DD
+      const dobMatch = full.match(
+        /(?:DOB|Date of Birth|Birth\s*Date)\s*[:.]?\s*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/i,
+      );
+      if (dobMatch) {
+        result.dob = parseDateToISO(dobMatch[1]);
+      } else {
+        const isoMatch = full.match(
+          /(?:DOB|Date of Birth)\s*[:.]?\s*(\d{4}-\d{2}-\d{2})/i,
+        );
+        if (isoMatch) result.dob = isoMatch[1];
+      }
+
+      // SSN
+      const ssnMatch = full.match(
+        /(?:SSN|SS#|Social)\s*[:.]?\s*(\d{3}[\s-]?\d{2}[\s-]?\d{4})/i,
+      );
+      if (ssnMatch) {
+        const digits = ssnMatch[1].replace(/\D/g, "");
+        result.ssn = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+      }
+
+      // Sex/Gender
+      const sexMatch = full.match(
+        /(?:Sex|Gender)\s*[:.]?\s*(Male|Female|M|F)\b/i,
+      );
+      if (sexMatch) {
+        const s = sexMatch[1].toUpperCase();
+        result.sex = s === "M" ? "Male" : s === "F" ? "Female" : sexMatch[1];
+      }
+
+      // Race
+      const raceMatch = full.match(
+        /(?:Race|Ethnicity)\s*[:.]?\s*(White|Black|Hispanic|Asian|Native American|Pacific Islander|Other)/i,
+      );
+      if (raceMatch) result.race = raceMatch[1];
+
+      // Marital Status
+      const msMatch = full.match(
+        /(?:Marital Status|MS)\s*[:.]?\s*(Single|Married|Divorced|Widowed|Separated)/i,
+      );
+      if (msMatch) result.ms = msMatch[1];
+
+      // Address: look for street pattern
+      const addrMatch = full.match(
+        /(?:Address|Addr)\s*[:.]?\s*(\d+\s+[A-Za-z0-9 .#]+(?:St|Street|Ave|Avenue|Blvd|Boulevard|Dr|Drive|Rd|Road|Ln|Lane|Way|Ct|Court|Cir|Circle|Pl|Place)[.,]?)/i,
+      );
+      if (addrMatch) result.street = addrMatch[1].trim();
+
+      // City, State, Zip
+      const cszMatch = full.match(
+        /([A-Za-z .]+),?\s+([A-Z]{2})\s+(\d{5}(?:-\d{4})?)/,
+      );
+      if (cszMatch) {
+        result.city = cszMatch[1].trim();
+        result.state = cszMatch[2];
+        result.zip = cszMatch[3];
+      }
+
+      // Phone
+      const phoneMatch = full.match(
+        /(?:Phone|Ph|Tel|Telephone)\s*[:.]?\s*\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/i,
+      );
+      if (phoneMatch) {
+        const digits = phoneMatch[0].replace(/\D/g, "").slice(-10);
+        result.phone = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+      }
+
+      // DL
+      const dlMatch = full.match(
+        /(?:DL|Driver'?s?\s*License|License)\s*#?\s*[:.]?\s*([A-Za-z0-9]+)/i,
+      );
+      if (dlMatch) result.dl = dlMatch[1];
+
+      return result;
+    }
+
+    function parseDateToISO(dateStr) {
+      // Convert MM/DD/YYYY or MM-DD-YYYY to YYYY-MM-DD
+      const parts = dateStr.split(/[\/\-]/);
+      if (parts.length !== 3) return "";
+      let [a, b, c] = parts;
+      if (a.length === 4) return `${a}-${b.padStart(2, "0")}-${c.padStart(2, "0")}`;
+      if (c.length === 2) c = (parseInt(c) > 50 ? "19" : "20") + c;
+      return `${c}-${a.padStart(2, "0")}-${b.padStart(2, "0")}`;
+    }
+
+    function applyParsedData(prefix, data) {
+      let count = 0;
+      const setVal = (suffix, val) => {
+        if (!val) return;
+        const el = document.getElementById(`${prefix}-${suffix}`);
+        if (!el) return;
+        el.value = val;
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+        el.dispatchEvent(new Event("change", { bubbles: true }));
+        count++;
+      };
+
+      if (data.name) setVal("respondent-name", data.name);
+      if (data.dob) setVal("respondent-dob", data.dob);
+      if (data.ssn) setVal("respondent-ssn", data.ssn);
+      if (data.street) setVal("respondent-street", data.street);
+      if (data.city) setVal("respondent-city", data.city);
+      if (data.state) setVal("respondent-state", data.state);
+      if (data.zip) setVal("respondent-zip", data.zip);
+      if (data.phone) setVal("respondent-phone", data.phone);
+      if (data.dl) setVal("respondent-dl", data.dl);
+
+      // Select fields
+      if (data.sex) {
+        const el = document.getElementById(`${prefix}-respondent-sex`);
+        if (el) {
+          for (const opt of el.options) {
+            if (opt.value.toLowerCase() === data.sex.toLowerCase()) {
+              el.value = opt.value;
+              el.dispatchEvent(new Event("change", { bubbles: true }));
+              count++;
+              break;
+            }
+          }
+        }
+      }
+      if (data.race) {
+        const el = document.getElementById(`${prefix}-respondent-race`);
+        if (el) {
+          for (const opt of el.options) {
+            if (opt.value.toLowerCase() === data.race.toLowerCase()) {
+              el.value = opt.value;
+              el.dispatchEvent(new Event("change", { bubbles: true }));
+              count++;
+              break;
+            }
+          }
+        }
+      }
+      if (data.ms) {
+        const el = document.getElementById(`${prefix}-respondent-ms`);
+        if (el) {
+          for (const opt of el.options) {
+            if (opt.value.toLowerCase() === data.ms.toLowerCase()) {
+              el.value = opt.value;
+              el.dispatchEvent(new Event("change", { bubbles: true }));
+              count++;
+              break;
+            }
+          }
+        }
+      }
+
+      return count;
+    }
+
+    document.querySelectorAll(".paste-facesheet-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        let text = "";
+        try {
+          text = await navigator.clipboard.readText();
+        } catch {
+          text = prompt("Paste facesheet text here:");
+        }
+        if (!text || !text.trim()) {
+          showToast("No text found in clipboard", "error");
+          return;
+        }
+
+        const prefix = btn.dataset.prefix;
+        const parsed = parseFacesheet(text);
+        const fieldCount = Object.keys(parsed).length;
+
+        if (fieldCount === 0) {
+          showToast(
+            "Could not parse any fields from the pasted text",
+            "error",
+          );
+          return;
+        }
+
+        const filled = applyParsedData(prefix, parsed);
+        window.isFormDirty = true;
+        showToast(
+          `Parsed ${filled} field${filled !== 1 ? "s" : ""} from facesheet`,
+          "success",
+        );
+      });
+    });
+  })();
+
   // --- Dark Theme Toggle ---
   const themeToggle = document.getElementById("theme-toggle");
   const sunIcon = themeToggle.querySelector(".sun-icon");

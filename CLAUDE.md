@@ -55,6 +55,8 @@ npx prettier --write .
 - Form validation warns on empty critical fields before PDF generation
 - DL State field is a dropdown of US state abbreviations
 - Zip code auto-formatting (XXXXX or XXXXX-XXXX) with validation on blur
+- Exam location datalist with recent locations from localStorage (auto-saves on blur, up to 10 recent)
+- "Paste from Facesheet" button parses clipboard text to fill respondent fields (name, DOB, SSN, address, sex, race, etc.)
 
 ## Future Optimization Ideas
 
@@ -70,9 +72,9 @@ npx prettier --write .
 
 5. ~~**Smart BP parsing**~~ ✓ Implemented
 
-6. **Exam location from localStorage**: The exam location field already has `local-save` but a dropdown of recently used locations could speed up entry when an examiner works across multiple sites.
+6. ~~**Exam location from localStorage**~~ ✓ Implemented (datalist with up to 10 recent locations, auto-saved on blur)
 
-7. **Quick-fill respondent from clipboard**: A "Paste from facesheet" button that parses structured text (name, DOB, SSN, address) from a copied patient facesheet. Would require careful regex parsing but could fill 10+ fields in one action.
+7. ~~**Quick-fill respondent from clipboard**~~ ✓ Implemented ("Paste from Facesheet" button reads clipboard, regex-parses name/DOB/SSN/sex/race/address/phone/DL)
 
 ### Medium Impact - UX Improvements
 
