@@ -446,14 +446,16 @@
       button[data-action="copy-address"]:hover {
         background: var(--accent-light) !important;
       }
-      button[data-action="fill-unknown"] {
+      button[data-action="fill-unknown"],
+      .paste-facesheet-btn {
         background: var(--accent-light) !important;
         color: var(--accent) !important;
         font-weight: 500 !important;
         border-radius: 6px !important;
         transition: all 0.15s ease !important;
       }
-      button[data-action="fill-unknown"]:hover {
+      button[data-action="fill-unknown"]:hover,
+      .paste-facesheet-btn:hover {
         background: var(--accent) !important;
         color: white !important;
       }
@@ -740,14 +742,23 @@
 
             <div class="flex items-center justify-between border-b pb-1 mb-4">
               <h3 class="text-lg">Respondent (Patient)</h3>
-              <button
-                type="button"
-                class="text-xs px-2 py-1 focus:outline-none"
-                data-action="fill-unknown"
-                data-prefix="unified"
-              >
-                Fill Unknown
-              </button>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="paste-facesheet-btn text-xs px-2 py-1 focus:outline-none"
+                  data-prefix="unified"
+                >
+                  Paste from Facesheet
+                </button>
+                <button
+                  type="button"
+                  class="text-xs px-2 py-1 focus:outline-none"
+                  data-action="fill-unknown"
+                  data-prefix="unified"
+                >
+                  Fill Unknown
+                </button>
+              </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div class="md:col-span-2">
@@ -1266,6 +1277,7 @@
                 ><input
                   type="text"
                   id="unified-exam-location"
+                  list="exam-location-list"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -2143,14 +2155,23 @@
 
             <div class="flex items-center justify-between border-b pb-1 mb-4">
               <h3 class="text-lg">Respondent (Patient)</h3>
-              <button
-                type="button"
-                class="text-xs px-2 py-1 focus:outline-none"
-                data-action="fill-unknown"
-                data-prefix="aoc"
-              >
-                Fill Unknown
-              </button>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="paste-facesheet-btn text-xs px-2 py-1 focus:outline-none"
+                  data-prefix="aoc"
+                >
+                  Paste from Facesheet
+                </button>
+                <button
+                  type="button"
+                  class="text-xs px-2 py-1 focus:outline-none"
+                  data-action="fill-unknown"
+                  data-prefix="aoc"
+                >
+                  Fill Unknown
+                </button>
+              </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div class="md:col-span-2">
@@ -2648,6 +2669,7 @@
                 ><input
                   type="text"
                   id="aoc-exam-location"
+                  list="exam-location-list"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -3398,14 +3420,23 @@
 
             <div class="flex items-center justify-between border-b pb-1 mb-4">
               <h3 class="text-lg">Respondent (Patient)</h3>
-              <button
-                type="button"
-                class="text-xs px-2 py-1 focus:outline-none"
-                data-action="fill-unknown"
-                data-prefix="dmh"
-              >
-                Fill Unknown
-              </button>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="paste-facesheet-btn text-xs px-2 py-1 focus:outline-none"
+                  data-prefix="dmh"
+                >
+                  Paste from Facesheet
+                </button>
+                <button
+                  type="button"
+                  class="text-xs px-2 py-1 focus:outline-none"
+                  data-action="fill-unknown"
+                  data-prefix="dmh"
+                >
+                  Fill Unknown
+                </button>
+              </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div class="md:col-span-2">
@@ -3903,6 +3934,7 @@
                 ><input
                   type="text"
                   id="dmh-exam-location"
+                  list="exam-location-list"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -4686,7 +4718,15 @@
 
           <!-- Patient (minimal) -->
           <fieldset>
-            <legend>Patient</legend>
+            <legend class="flex items-center justify-between w-full">Patient
+              <button
+                type="button"
+                class="paste-facesheet-btn text-xs px-2 py-1 focus:outline-none"
+                data-prefix="ed"
+              >
+                Paste from Facesheet
+              </button>
+            </legend>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div class="md:col-span-2">
                 <label for="ed-respondent-name" class="block text-sm"
@@ -5503,6 +5543,7 @@
                 <input
                   type="text"
                   id="ed-exam-location"
+                  list="exam-location-list"
                   class="local-save mt-1 block w-full"
                 />
               </div>
@@ -5690,6 +5731,7 @@
           <option value="Shellfish">
           <option value="None known">
         </datalist>
+        <datalist id="exam-location-list"></datalist>
         <datalist id="datalist-relationship">
           <option value="Physician">
           <option value="Psychiatrist">
