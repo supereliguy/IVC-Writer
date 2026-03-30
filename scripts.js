@@ -2081,11 +2081,11 @@ document.addEventListener("DOMContentLoaded", () => {
     previewIframe.src = currentPreviewUrl;
     previewNextBtn.style.display = previewQueue.length > 0 ? "" : "none";
     previewDownloadBtn.style.display = "";
-    previewOverlay.classList.remove("hidden");
+    previewOverlay.classList.add("active");
   }
 
   function closePdfPreview() {
-    previewOverlay.classList.add("hidden");
+    previewOverlay.classList.remove("active");
     previewIframe.src = "";
     if (currentPreviewUrl) { URL.revokeObjectURL(currentPreviewUrl); currentPreviewUrl = null; }
     previewQueue = [];
@@ -2126,7 +2126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === previewOverlay) closePdfPreview();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !previewOverlay.classList.contains("hidden")) closePdfPreview();
+    if (e.key === "Escape" && previewOverlay.classList.contains("active")) closePdfPreview();
   });
 
   // --- About Panel Toggle ---
