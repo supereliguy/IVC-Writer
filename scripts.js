@@ -810,6 +810,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (config.type === "checked") {
         val = el.checked;
       } else if (config.type === "radio") {
+        val = "";
         for (const radio of el) {
           if (radio.checked) {
             val = radio.value;
@@ -2140,11 +2141,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- About Panel Toggle ---
   const aboutBtn = document.getElementById("about-btn");
   const aboutPanel = document.getElementById("about-panel");
-  aboutBtn.addEventListener("click", () => {
+  aboutBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
     aboutPanel.classList.toggle("hidden");
   });
   document.addEventListener("click", (e) => {
-    if (!aboutPanel.classList.contains("hidden") && !aboutPanel.contains(e.target) && e.target !== aboutBtn) {
+    if (!aboutPanel.classList.contains("hidden") && !aboutPanel.contains(e.target) && !aboutBtn.contains(e.target)) {
       aboutPanel.classList.add("hidden");
     }
   });
