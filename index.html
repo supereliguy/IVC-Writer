@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NC IVC Form Writer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="vendor/tailwind.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -360,6 +360,138 @@
         background: rgba(239, 68, 68, 0.05) !important;
       }
 
+      .sync-btn {
+        background: var(--bg-card) !important;
+        border: 1.5px solid var(--accent) !important;
+        border-radius: var(--radius) !important;
+        color: var(--accent) !important;
+        transition: all 0.2s ease !important;
+      }
+      .sync-btn:hover {
+        background: var(--accent-light) !important;
+        color: var(--accent-hover) !important;
+        border-color: var(--accent-hover) !important;
+      }
+
+      /* ── PDF Preview Modal ──────────────────────────────── */
+      .pdf-preview-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+      }
+      .pdf-preview-modal {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-xl);
+        width: 90vw;
+        max-width: 900px;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .pdf-preview-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .pdf-preview-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .pdf-preview-body {
+        flex: 1;
+        overflow: hidden;
+      }
+      .pdf-preview-body iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .pdf-preview-footer {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-color);
+      }
+      .pdf-preview-footer button {
+        padding: 8px 20px;
+        border-radius: var(--radius);
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .pdf-preview-download {
+        background: linear-gradient(135deg, var(--success), #059669) !important;
+        color: white !important;
+        border: none !important;
+      }
+      .pdf-preview-download:hover { filter: brightness(1.05); }
+      .pdf-preview-close {
+        background: var(--bg-card) !important;
+        border: 1.5px solid var(--border-color) !important;
+        color: var(--text-secondary) !important;
+      }
+      .pdf-preview-close:hover {
+        border-color: var(--text-muted) !important;
+      }
+
+      /* ── About Button & Panel ───────────────────────────── */
+      .about-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+        border-radius: var(--radius);
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+        padding: 6px 14px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .about-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+      .about-panel {
+        position: relative;
+        z-index: 40;
+        display: flex;
+        justify-content: center;
+      }
+      .about-panel-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-xl);
+        padding: 20px 24px;
+        margin: 0 16px;
+        max-width: 540px;
+        width: 100%;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        line-height: 1.6;
+      }
+      .about-panel-content h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+      }
+      .about-panel-content p {
+        margin-bottom: 6px;
+      }
+
       #generate-ed {
         background: linear-gradient(135deg, var(--danger), #dc2626) !important;
         box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3) !important;
@@ -601,23 +733,47 @@
               NC IVC Form Writer
             </h1>
             <p class="mt-1 text-sm text-indigo-200">
-              Client-Side HIPAA-Compliant Form Generator
+              Client-Side Form Generator
             </p>
           </div>
-          <button
-            id="theme-toggle"
-            type="button"
-            class="theme-toggle"
-            aria-label="Toggle dark mode"
-            title="Toggle dark mode"
-          >
-            <span class="toggle-knob">
-              <span class="sun-icon">&#9728;</span>
-              <span class="moon-icon" style="display: none">&#9790;</span>
-            </span>
-          </button>
+          <div class="flex items-center gap-3">
+            <button
+              id="about-btn"
+              type="button"
+              class="about-btn"
+              aria-label="About this tool"
+              title="About this tool"
+            >About</button>
+            <button
+              id="theme-toggle"
+              type="button"
+              class="theme-toggle"
+              aria-label="Toggle dark mode"
+              title="Toggle dark mode"
+            >
+              <span class="toggle-knob">
+                <span class="sun-icon">&#9728;</span>
+                <span class="moon-icon" style="display: none">&#9790;</span>
+              </span>
+            </button>
+          </div>
         </div>
       </header>
+
+      <!-- About Panel -->
+      <div id="about-panel" class="about-panel hidden">
+        <div class="about-panel-content">
+          <h3>About</h3>
+          <p>This tool generates NC involuntary commitment forms (AOC-SP-300 &amp; DMH-5-72-19) for psychiatric evaluation.</p>
+          <p>All processing happens in your browser. No patient information is stored on or transmitted to any server.</p>
+          <p>County, transport method, and destination selections may be saved in your browser's local storage for convenience. No data leaves your device.</p>
+          <p>This tool is an aid for form completion and does not replace careful manual review. Users are responsible for verifying accuracy and completeness of all generated documents.</p>
+          <p>Use of this tool does not constitute medical or legal advice.</p>
+          <p style="margin-top:8px;">
+            <a href="https://github.com/supereliguy/ivc-writer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Open source</a> &middot; Licensed under GPL-3.0
+          </p>
+        </div>
+      </div>
 
       <div class="privacy-banner p-3 m-4 flex items-center gap-2">
         <svg
@@ -2122,7 +2278,18 @@
           tabindex="0"
           class="form-section space-y-4 hidden"
         >
-          <h2 class="text-2xl border-b pb-2">AOC-SP-300 Data Entry</h2>
+          <div class="flex items-center justify-between border-b pb-2">
+            <h2 class="text-2xl">AOC-SP-300 Data Entry</h2>
+            <button
+              type="button"
+              id="sync-aoc-from-unified"
+              class="sync-btn flex items-center gap-1.5 py-1.5 px-3 text-sm font-medium focus:outline-none"
+              title="Copy all field values from the Unified tab"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Sync from Unified
+            </button>
+          </div>
 
           <!-- General / Header -->
           <fieldset>
@@ -3387,7 +3554,18 @@
           tabindex="0"
           class="form-section space-y-4 hidden"
         >
-          <h2 class="text-2xl border-b pb-2">DMH-5-72-19 Data Entry</h2>
+          <div class="flex items-center justify-between border-b pb-2">
+            <h2 class="text-2xl">DMH-5-72-19 Data Entry</h2>
+            <button
+              type="button"
+              id="sync-dmh-from-unified"
+              class="sync-btn flex items-center gap-1.5 py-1.5 px-3 text-sm font-medium focus:outline-none"
+              title="Copy all field values from the Unified tab"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Sync from Unified
+            </button>
+          </div>
 
           <!-- General / Header -->
           <fieldset>
@@ -4662,7 +4840,7 @@
             style="background: rgba(239, 68, 68, 0.06); color: var(--danger)"
           >
             <strong>Streamlined for Emergency Departments.</strong> Only the
-            minimum legally required fields per NCGS 122C-261/263. Generates
+            minimum required fields per NCGS 122C-261/263. Generates
             both PDFs with non-essential fields left blank.
           </div>
 
@@ -4716,9 +4894,9 @@
             </div>
           </fieldset>
 
-          <!-- Patient (minimal) -->
+          <!-- Respondent (Patient) (minimal) -->
           <fieldset>
-            <legend class="flex items-center justify-between w-full">Patient
+            <legend class="flex items-center justify-between w-full">Respondent (Patient)
               <button
                 type="button"
                 class="paste-facesheet-btn text-xs px-2 py-1 focus:outline-none"
@@ -5748,6 +5926,24 @@
         </datalist>
       </main>
 
+      <!-- PDF Preview Modal -->
+      <div id="pdf-preview-overlay" class="pdf-preview-overlay hidden">
+        <div class="pdf-preview-modal">
+          <div class="pdf-preview-header">
+            <h3 id="pdf-preview-title">PDF Preview</h3>
+            <button type="button" id="pdf-preview-close-x" class="pdf-preview-close" style="padding:4px 8px;" title="Close preview">&times;</button>
+          </div>
+          <div class="pdf-preview-body">
+            <iframe id="pdf-preview-iframe" title="PDF Preview"></iframe>
+          </div>
+          <div class="pdf-preview-footer">
+            <button type="button" id="pdf-preview-close-btn" class="pdf-preview-close">Close</button>
+            <button type="button" id="pdf-preview-download-btn" class="pdf-preview-download">Download</button>
+            <button type="button" id="pdf-preview-next-btn" class="pdf-preview-download" style="display:none;">Next PDF</button>
+          </div>
+        </div>
+      </div>
+
       <div
         id="loading-spinner"
         class="hidden fixed inset-0 flex items-center justify-center z-50"
@@ -5766,8 +5962,13 @@
       id="toast-container"
       class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"
     ></div>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+    <script src="vendor/pdf-lib.min.js"></script>
+    <script src="vendor/FileSaver.min.js"></script>
     <script src="scripts.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    </script>
   </body>
 </html>

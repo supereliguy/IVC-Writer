@@ -1434,9 +1434,9 @@ document.addEventListener("DOMContentLoaded", () => {
         generateAocPdf(data),
         generateDmhPdf(data),
       ]);
-      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
-      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
       window.isFormDirty = false;
+      previewQueue = [{ bytes: dmhPdfBytes, filename: "Completed-DMH-5-72-19.pdf", title: "DMH-5-72-19 Preview" }];
+      showPdfPreview(aocPdfBytes, "Completed-AOC-SP-300.pdf", "AOC-SP-300 Preview");
       showToast("Both PDFs Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDFs:", error);
@@ -1460,8 +1460,9 @@ document.addEventListener("DOMContentLoaded", () => {
         showSpinner();
       }
       const aocPdfBytes = await generateAocPdf(data);
-      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
       window.isFormDirty = false;
+      previewQueue = [];
+      showPdfPreview(aocPdfBytes, "Completed-AOC-SP-300.pdf", "AOC-SP-300 Preview");
       showToast("AOC PDF Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -1485,8 +1486,9 @@ document.addEventListener("DOMContentLoaded", () => {
         showSpinner();
       }
       const dmhPdfBytes = await generateDmhPdf(data);
-      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
       window.isFormDirty = false;
+      previewQueue = [];
+      showPdfPreview(dmhPdfBytes, "Completed-DMH-5-72-19.pdf", "DMH-5-72-19 Preview");
       showToast("DMH PDF Generated Successfully!", "success");
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -1547,9 +1549,9 @@ document.addEventListener("DOMContentLoaded", () => {
         generateAocPdf(data),
         generateDmhPdf(data),
       ]);
-      saveAs(new Blob([aocPdfBytes], { type: "application/pdf" }), "Completed-AOC-SP-300.pdf");
-      saveAs(new Blob([dmhPdfBytes], { type: "application/pdf" }), "Completed-DMH-5-72-19.pdf");
       window.isFormDirty = false;
+      previewQueue = [{ bytes: dmhPdfBytes, filename: "Completed-DMH-5-72-19.pdf", title: "DMH-5-72-19 Preview" }];
+      showPdfPreview(aocPdfBytes, "Completed-AOC-SP-300.pdf", "AOC-SP-300 Preview");
       showToast("Both PDFs Generated (ED Quick)!", "success");
     } catch (error) {
       console.error("Error generating PDFs:", error);
@@ -2017,6 +2019,127 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   })();
+
+  // --- Tab Sync: Copy fields from Unified to AOC/DMH ---
+  function syncFromUnified(targetPrefix) {
+    const sourceCache = formCache.unified;
+    const targetCache = formCache[targetPrefix];
+    let synced = 0;
+
+    for (const [key, config] of Object.entries(FORM_SCHEMA)) {
+      const src = sourceCache[key];
+      const tgt = targetCache[key];
+      if (!src || !tgt) continue;
+
+      if (config.type === "radio") {
+        for (const radio of src) {
+          if (radio.checked) {
+            const match = tgt[Array.from(src).indexOf(radio)];
+            if (match) { match.checked = true; synced++; }
+            break;
+          }
+        }
+      } else if (config.type === "checked") {
+        if (tgt.checked !== src.checked) { tgt.checked = src.checked; synced++; }
+      } else {
+        if (src.value && src.value !== tgt.value) { tgt.value = src.value; synced++; }
+      }
+    }
+
+    // Trigger change events for auto-calculation fields
+    const dobEl = targetCache.respondentDob;
+    if (dobEl && dobEl.value) dobEl.dispatchEvent(new Event("change", { bubbles: true }));
+    const bpEl = targetCache.bp;
+    if (bpEl && bpEl.value) bpEl.dispatchEvent(new Event("blur", { bubbles: true }));
+
+    window.isFormDirty = true;
+    showToast(`Synced ${synced} field${synced !== 1 ? "s" : ""} from Unified tab`, "success");
+  }
+
+  document.getElementById("sync-aoc-from-unified").addEventListener("click", () => syncFromUnified("aoc"));
+  document.getElementById("sync-dmh-from-unified").addEventListener("click", () => syncFromUnified("dmh"));
+
+  // --- PDF Preview ---
+  const previewOverlay = document.getElementById("pdf-preview-overlay");
+  const previewIframe = document.getElementById("pdf-preview-iframe");
+  const previewTitle = document.getElementById("pdf-preview-title");
+  const previewDownloadBtn = document.getElementById("pdf-preview-download-btn");
+  const previewNextBtn = document.getElementById("pdf-preview-next-btn");
+  const previewCloseBtn = document.getElementById("pdf-preview-close-btn");
+  const previewCloseX = document.getElementById("pdf-preview-close-x");
+
+  let previewQueue = []; // [{bytes, filename, title}]
+  let currentPreview = null;
+  let currentPreviewUrl = null;
+
+  function showPdfPreview(bytes, filename, title) {
+    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    currentPreviewUrl = URL.createObjectURL(blob);
+    currentPreview = { bytes, filename, blob };
+    previewTitle.textContent = title || filename;
+    previewIframe.src = currentPreviewUrl;
+    previewNextBtn.style.display = previewQueue.length > 0 ? "" : "none";
+    previewDownloadBtn.style.display = "";
+    previewOverlay.classList.remove("hidden");
+  }
+
+  function closePdfPreview() {
+    previewOverlay.classList.add("hidden");
+    previewIframe.src = "";
+    if (currentPreviewUrl) { URL.revokeObjectURL(currentPreviewUrl); currentPreviewUrl = null; }
+    previewQueue = [];
+    currentPreview = null;
+  }
+
+  function downloadCurrentPreview() {
+    if (currentPreview) {
+      saveAs(currentPreview.blob, currentPreview.filename);
+    }
+  }
+
+  function showNextPreview() {
+    if (currentPreview) {
+      saveAs(currentPreview.blob, currentPreview.filename);
+    }
+    if (previewQueue.length > 0) {
+      const next = previewQueue.shift();
+      showPdfPreview(next.bytes, next.filename, next.title);
+    } else {
+      closePdfPreview();
+    }
+  }
+
+  previewCloseBtn.addEventListener("click", closePdfPreview);
+  previewCloseX.addEventListener("click", closePdfPreview);
+  previewDownloadBtn.addEventListener("click", () => {
+    downloadCurrentPreview();
+    if (previewQueue.length > 0) {
+      const next = previewQueue.shift();
+      showPdfPreview(next.bytes, next.filename, next.title);
+    } else {
+      closePdfPreview();
+    }
+  });
+  previewNextBtn.addEventListener("click", showNextPreview);
+  previewOverlay.addEventListener("click", (e) => {
+    if (e.target === previewOverlay) closePdfPreview();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !previewOverlay.classList.contains("hidden")) closePdfPreview();
+  });
+
+  // --- About Panel Toggle ---
+  const aboutBtn = document.getElementById("about-btn");
+  const aboutPanel = document.getElementById("about-panel");
+  aboutBtn.addEventListener("click", () => {
+    aboutPanel.classList.toggle("hidden");
+  });
+  document.addEventListener("click", (e) => {
+    if (!aboutPanel.classList.contains("hidden") && !aboutPanel.contains(e.target) && e.target !== aboutBtn) {
+      aboutPanel.classList.add("hidden");
+    }
+  });
 
   // --- Dark Theme Toggle ---
   const themeToggle = document.getElementById("theme-toggle");

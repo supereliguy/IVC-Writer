@@ -7,9 +7,9 @@ Client-side HIPAA-compliant web app for generating NC involuntary commitment for
 ## Tech Stack
 
 - Vanilla JavaScript (no framework)
-- Tailwind CSS v3 (CDN)
-- pdf-lib v1.17.1 (PDF generation)
-- FileSaver.js v2.0.0 (download)
+- Tailwind CSS v3 (locally bundled)
+- pdf-lib v1.17.1 (PDF generation, locally bundled)
+- FileSaver.js v2.0.5 (download, locally bundled)
 
 ## Architecture
 
@@ -21,9 +21,16 @@ Client-side HIPAA-compliant web app for generating NC involuntary commitment for
 
 ## Key Design Decisions
 
-- **Privacy first**: 100% client-side, no analytics, no external calls beyond CDN assets
+- **Privacy first**: 100% client-side, no analytics, all dependencies bundled locally (Google Fonts is the only external call)
 - **localStorage for "Remember Me"**: Saves petitioner info, examiner/facility details, certification type, and notary info
 - **Three parallel form sections**: Unified (generates both PDFs), AOC-only, DMH-only - each with prefixed IDs (`unified-`, `aoc-`, `dmh-`)
+
+## Architecture
+
+- `vendor/` - Locally bundled dependencies (tailwind.css, pdf-lib.min.js, FileSaver.min.js)
+- `sw.js` - Service worker for offline caching
+- `tailwind.config.js` - Tailwind CSS build configuration
+- `src/input.css` - Tailwind CSS input file
 
 ## Development Commands
 
@@ -33,6 +40,12 @@ node -c scripts.js
 
 # Format code
 npx prettier --write .
+
+# Rebuild vendor assets (after npm install)
+npm run build
+
+# Rebuild Tailwind CSS only (after HTML/class changes)
+npm run build:css
 ```
 
 ## Current Auto-Fill Features (Implemented)
@@ -57,6 +70,10 @@ npx prettier --write .
 - Zip code auto-formatting (XXXXX or XXXXX-XXXX) with validation on blur
 - Exam location datalist with recent locations from localStorage (auto-saves on blur, up to 10 recent)
 - "Paste from Facesheet" button parses clipboard text to fill respondent fields (name, DOB, SSN, address, sex, race, etc.)
+- Tab-sync: "Sync from Unified" button on AOC-only and DMH-only tabs copies all field values from the Unified tab
+- PDF preview: In-browser preview modal shows generated PDF before downloading, with Download/Close/Next buttons
+- Bundled dependencies: Tailwind CSS, pdf-lib, and FileSaver.js served from local vendor/ directory
+- Service Worker: Caches app shell and PDF templates for fully offline operation
 
 ## Future Optimization Ideas
 
@@ -80,19 +97,19 @@ npx prettier --write .
 
 8. ~~**Form validation before generation**~~ ✓ Implemented
 
-9. **Tab-sync for shared fields**: When using the AOC-only or DMH-only tabs, provide an option to sync data from the Unified tab or between tabs. Currently each tab is independent.
+9. ~~**Tab-sync for shared fields**~~ ✓ Implemented ("Sync from Unified" button on AOC and DMH tabs copies all fields)
 
 10. ~~**Clear form button**~~ ✓ Implemented as "New Patient" button
 
-11. **PDF preview**: Show a preview of the generated PDF in-browser before downloading, so users can verify before saving.
+11. ~~**PDF preview**~~ ✓ Implemented (in-browser preview modal with Download/Close/Next PDF buttons)
 
 12. ~~**Keyboard shortcuts**~~ ✓ Implemented (Ctrl+Enter to generate)
 
 ### Lower Impact - Technical
 
-13. **Bundle CDN dependencies**: Currently loads Tailwind, pdf-lib, and FileSaver from CDNs. Bundling locally would improve offline capability and load reliability.
+13. ~~**Bundle CDN dependencies**~~ ✓ Implemented (Tailwind, pdf-lib, FileSaver bundled in vendor/ directory with npm build script)
 
-14. **Service Worker for offline use**: Add a service worker to cache the app shell and PDF templates for fully offline operation.
+14. ~~**Service Worker for offline use**~~ ✓ Implemented (sw.js caches app shell and PDF templates, network-first for HTML, cache-first for assets)
 
 15. ~~**Respondent DL state dropdown**~~ ✓ Implemented
 
