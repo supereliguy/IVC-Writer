@@ -796,7 +796,13 @@ document.addEventListener("DOMContentLoaded", () => {
     for (const [key, config] of Object.entries(FORM_SCHEMA)) {
       const el = cache[key];
       if (!el) {
-        data[key] = null;
+        if (config.transform === "formatDate") {
+          data[key] = formatDate("");
+        } else if (config.type === "checked") {
+          data[key] = false;
+        } else {
+          data[key] = "";
+        }
         continue;
       }
 
@@ -811,7 +817,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
       } else {
-        val = el.value;
+        val = el.value || "";
       }
 
       if (config.transform === "formatDate") {
@@ -1512,8 +1518,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const cityStateZip = [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
       const facilityParts = [fName, fAddr, cityStateZip, fPhone].filter(Boolean);
       rawData.facilityInfo = facilityParts.join(", ");
-      const data = Object.assign(
-        {
+      const defaults = {
           clientRecord: "", fileNo: "", respondentMs: "", respondentStreet: "",
           respondentCity: "", respondentState: "NC", respondentZip: "",
           respondentPhone: "", respondentSsn: "", respondentDl: "",
@@ -1528,9 +1533,12 @@ document.addEventListener("DOMContentLoaded", () => {
           interpreter: "no", interpreterExplanation: "", medicalProblems: "",
           outpatientFacilityName: "", outpatientFacilityContact: "",
           waiverDate: formatDate(""),
-        },
-        rawData,
-      );
+      };
+      // Merge rawData into defaults, skipping null/undefined values
+      const data = Object.assign({}, defaults);
+      for (const [k, v] of Object.entries(rawData)) {
+        if (v != null) data[k] = v;
+      }
       if (!data.petitionerName && data.examinerName) {
         data.petitionerName = data.examinerName;
       }
