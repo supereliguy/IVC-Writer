@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Yancey",
   ];
   const countyDropdowns = document.querySelectorAll(
-    "#unified-county, #aoc-county, #dmh-county, #ed-county",
+    "#unified-county, #aoc-county, #dmh-county, #ed-county, #unified-notary-county, #aoc-notary-county, #dmh-notary-county, #ed-notary-county",
   );
   const fragment = document.createDocumentFragment();
   ncCounties.forEach((county) => {
@@ -186,30 +186,46 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelectorAll('input[name="unified-disposition"]')
     .forEach((radio) => {
-      radio.addEventListener("change", () =>
+      radio.addEventListener("change", () => {
         document
           .getElementById("outpatient-fields")
-          .classList.toggle("hidden", radio.value !== "outpatient"),
-      );
+          .classList.toggle("hidden", radio.value !== "outpatient");
+        document
+          .getElementById("inpatient-days-fields")
+          .classList.toggle("hidden", radio.value !== "inpatient");
+      });
     });
   document
     .querySelectorAll('input[name="aoc-disposition"]')
     .forEach((radio) => {
-      radio.addEventListener("change", () =>
+      radio.addEventListener("change", () => {
         document
           .getElementById("aoc-outpatient-fields")
-          .classList.toggle("hidden", radio.value !== "outpatient"),
-      );
+          .classList.toggle("hidden", radio.value !== "outpatient");
+        document
+          .getElementById("aoc-inpatient-days-fields")
+          .classList.toggle("hidden", radio.value !== "inpatient");
+      });
     });
   document
     .querySelectorAll('input[name="dmh-disposition"]')
     .forEach((radio) => {
-      radio.addEventListener("change", () =>
+      radio.addEventListener("change", () => {
         document
           .getElementById("dmh-outpatient-fields")
-          .classList.toggle("hidden", radio.value !== "outpatient"),
-      );
+          .classList.toggle("hidden", radio.value !== "outpatient");
+        document
+          .getElementById("dmh-inpatient-days-fields")
+          .classList.toggle("hidden", radio.value !== "inpatient");
+      });
     });
+  document.querySelectorAll('input[name="ed-disposition"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      document
+        .getElementById("ed-inpatient-days-fields")
+        .classList.toggle("hidden", radio.value !== "inpatient");
+    });
+  });
 
   document
     .querySelectorAll('input[name="unified-interpreter"]')
@@ -617,8 +633,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data.triggerPregnancy)
       form.getCheckBox("Known or suspected pregnancy").check();
 
-    if (data.disposition === "inpatient")
+    if (data.disposition === "inpatient") {
       form.getCheckBox("Inpatient Commitment for").check();
+      if (data.commitmentDays)
+        form
+          .getTextField(
+            "days respondent must have a mental illness and dangerous to self or others",
+          )
+          .setText(data.commitmentDays);
+    }
     if (data.disposition === "outpatient") {
       form
         .getCheckBox(
@@ -752,6 +775,7 @@ document.addEventListener("DOMContentLoaded", () => {
     triggerAsthma: { id: "trigger-asthma", type: "checked" },
     triggerPregnancy: { id: "trigger-pregnancy", type: "checked" },
     disposition: { id: "disposition", type: "radio" },
+    commitmentDays: { id: "commitment-days", type: "value" },
     outpatientFacilityName: { id: "outpatient-facility-name", type: "value" },
     outpatientFacilityContact: {
       id: "outpatient-facility-contact",
@@ -1023,7 +1047,9 @@ document.addEventListener("DOMContentLoaded", () => {
       banner.classList.toggle("hidden", !hasAny);
 
       bannerName.textContent = name || "—";
-      bannerDob.textContent = dob ? new Date(dob + "T00:00:00").toLocaleDateString() : "—";
+      bannerDob.textContent = dob
+        ? new Date(dob + "T00:00:00").toLocaleDateString()
+        : "—";
       bannerAge.textContent = age || "—";
       bannerSex.textContent = sex || "—";
     }
@@ -1037,11 +1063,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update on New Patient clear
     const observer = new MutationObserver(updateBanner);
-    if (nameInput) observer.observe(nameInput, { attributes: true, attributeFilter: ["value"] });
+    if (nameInput)
+      observer.observe(nameInput, {
+        attributes: true,
+        attributeFilter: ["value"],
+      });
 
     // Also listen for form resets
     const edForm = document.getElementById("form-ed");
-    if (edForm) edForm.addEventListener("reset", () => setTimeout(updateBanner, 0));
+    if (edForm)
+      edForm.addEventListener("reset", () => setTimeout(updateBanner, 0));
   })();
 
   // --- Auto-Check Vital Sign Triggers ---
@@ -1289,11 +1320,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Populate DL State Dropdowns ---
   const usStates = [
-    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-    "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-    "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-    "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-    "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC",
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CO",
+    "CT",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MN",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
+    "WY",
+    "DC",
   ];
   const dlStateDropdowns = document.querySelectorAll(
     '[id$="-respondent-dl-state"]',
@@ -1326,7 +1403,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear text/tel/date/time inputs
       section
-        .querySelectorAll('input[type="text"], input[type="tel"], input[type="date"], input[type="time"]')
+        .querySelectorAll(
+          'input[type="text"], input[type="tel"], input[type="date"], input[type="time"]',
+        )
         .forEach((input) => {
           if (!rememberedIds.has(input.id)) input.value = "";
         });
@@ -1345,16 +1424,18 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Uncheck checkboxes (except remember-me)
-      section
-        .querySelectorAll('input[type="checkbox"]')
-        .forEach((cb) => {
-          if (!cb.id.endsWith("-remember-me")) cb.checked = false;
-        });
+      section.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+        if (!cb.id.endsWith("-remember-me")) cb.checked = false;
+      });
 
       // Reset radio buttons (except remembered certification)
       const rememberedRadios = new Set(savedRadioGroupNames);
       section.querySelectorAll('input[type="radio"]').forEach((radio) => {
-        if (localStorage.getItem("rememberMe") === "true" && rememberedRadios.has(radio.name)) return;
+        if (
+          localStorage.getItem("rememberMe") === "true" &&
+          rememberedRadios.has(radio.name)
+        )
+          return;
         radio.checked = false;
       });
 
@@ -1416,124 +1497,181 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!data.county) warnings.push("County is not selected");
 
     if (formType !== "ed") {
-      if (!data.petitionerName)
-        warnings.push("Petitioner name is empty");
+      if (!data.petitionerName) warnings.push("Petitioner name is empty");
     }
 
     return warnings;
   }
 
   // --- Generate Button Handlers (with validation) ---
-  document.getElementById("generate-both").addEventListener("click", async () => {
-    showSpinner();
-    try {
-      const data = collectFormData("unified");
-      const warnings = validateFormData(data, "unified");
-      if (warnings.length > 0) {
-        hideSpinner();
-        const proceed = confirm(
-          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDFs anyway?`,
+  document
+    .getElementById("generate-both")
+    .addEventListener("click", async () => {
+      showSpinner();
+      try {
+        const data = collectFormData("unified");
+        const warnings = validateFormData(data, "unified");
+        if (warnings.length > 0) {
+          hideSpinner();
+          const proceed = confirm(
+            `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDFs anyway?`,
+          );
+          if (!proceed) return;
+          showSpinner();
+        }
+        const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
+          generateAocPdf(data),
+          generateDmhPdf(data),
+        ]);
+        window.isFormDirty = false;
+        previewQueue = [
+          {
+            bytes: dmhPdfBytes,
+            filename: "Completed-DMH-5-72-19.pdf",
+            title: "DMH-5-72-19 Preview",
+          },
+        ];
+        showPdfPreview(
+          aocPdfBytes,
+          "Completed-AOC-SP-300.pdf",
+          "AOC-SP-300 Preview",
         );
-        if (!proceed) return;
-        showSpinner();
+        showToast("Both PDFs Generated Successfully!", "success");
+      } catch (error) {
+        console.error("Error generating PDFs:", error);
+        showToast("Error generating PDFs. Check console for details.", "error");
+      } finally {
+        hideSpinner();
       }
-      const [aocPdfBytes, dmhPdfBytes] = await Promise.all([
-        generateAocPdf(data),
-        generateDmhPdf(data),
-      ]);
-      window.isFormDirty = false;
-      previewQueue = [{ bytes: dmhPdfBytes, filename: "Completed-DMH-5-72-19.pdf", title: "DMH-5-72-19 Preview" }];
-      showPdfPreview(aocPdfBytes, "Completed-AOC-SP-300.pdf", "AOC-SP-300 Preview");
-      showToast("Both PDFs Generated Successfully!", "success");
-    } catch (error) {
-      console.error("Error generating PDFs:", error);
-      showToast("Error generating PDFs. Check console for details.", "error");
-    } finally {
-      hideSpinner();
-    }
-  });
+    });
 
-  document.getElementById("generate-aoc").addEventListener("click", async () => {
-    showSpinner();
-    try {
-      const data = collectFormData("aoc");
-      const warnings = validateFormData(data, "aoc");
-      if (warnings.length > 0) {
-        hideSpinner();
-        const proceed = confirm(
-          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDF anyway?`,
+  document
+    .getElementById("generate-aoc")
+    .addEventListener("click", async () => {
+      showSpinner();
+      try {
+        const data = collectFormData("aoc");
+        const warnings = validateFormData(data, "aoc");
+        if (warnings.length > 0) {
+          hideSpinner();
+          const proceed = confirm(
+            `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDF anyway?`,
+          );
+          if (!proceed) return;
+          showSpinner();
+        }
+        const aocPdfBytes = await generateAocPdf(data);
+        window.isFormDirty = false;
+        previewQueue = [];
+        showPdfPreview(
+          aocPdfBytes,
+          "Completed-AOC-SP-300.pdf",
+          "AOC-SP-300 Preview",
         );
-        if (!proceed) return;
-        showSpinner();
+        showToast("AOC PDF Generated Successfully!", "success");
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        showToast("Error generating PDF. Check console for details.", "error");
+      } finally {
+        hideSpinner();
       }
-      const aocPdfBytes = await generateAocPdf(data);
-      window.isFormDirty = false;
-      previewQueue = [];
-      showPdfPreview(aocPdfBytes, "Completed-AOC-SP-300.pdf", "AOC-SP-300 Preview");
-      showToast("AOC PDF Generated Successfully!", "success");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      showToast("Error generating PDF. Check console for details.", "error");
-    } finally {
-      hideSpinner();
-    }
-  });
+    });
 
-  document.getElementById("generate-dmh").addEventListener("click", async () => {
-    showSpinner();
-    try {
-      const data = collectFormData("dmh");
-      const warnings = validateFormData(data, "dmh");
-      if (warnings.length > 0) {
-        hideSpinner();
-        const proceed = confirm(
-          `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDF anyway?`,
+  document
+    .getElementById("generate-dmh")
+    .addEventListener("click", async () => {
+      showSpinner();
+      try {
+        const data = collectFormData("dmh");
+        const warnings = validateFormData(data, "dmh");
+        if (warnings.length > 0) {
+          hideSpinner();
+          const proceed = confirm(
+            `Warning: The following fields are empty:\n\n• ${warnings.join("\n• ")}\n\nGenerate PDF anyway?`,
+          );
+          if (!proceed) return;
+          showSpinner();
+        }
+        const dmhPdfBytes = await generateDmhPdf(data);
+        window.isFormDirty = false;
+        previewQueue = [];
+        showPdfPreview(
+          dmhPdfBytes,
+          "Completed-DMH-5-72-19.pdf",
+          "DMH-5-72-19 Preview",
         );
-        if (!proceed) return;
-        showSpinner();
+        showToast("DMH PDF Generated Successfully!", "success");
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        showToast("Error generating PDF. Check console for details.", "error");
+      } finally {
+        hideSpinner();
       }
-      const dmhPdfBytes = await generateDmhPdf(data);
-      window.isFormDirty = false;
-      previewQueue = [];
-      showPdfPreview(dmhPdfBytes, "Completed-DMH-5-72-19.pdf", "DMH-5-72-19 Preview");
-      showToast("DMH PDF Generated Successfully!", "success");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      showToast("Error generating PDF. Check console for details.", "error");
-    } finally {
-      hideSpinner();
-    }
-  });
+    });
 
   document.getElementById("generate-ed").addEventListener("click", async () => {
     showSpinner();
     try {
       const rawData = collectFormData("ed");
       // Compose facilityInfo from separate ED facility fields
-      const fName = (document.getElementById("ed-facility-name") || {}).value || "";
-      const fAddr = (document.getElementById("ed-facility-address") || {}).value || "";
-      const fCity = (document.getElementById("ed-facility-city") || {}).value || "";
-      const fState = (document.getElementById("ed-facility-state") || {}).value || "";
-      const fZip = (document.getElementById("ed-facility-zip") || {}).value || "";
-      const fPhone = (document.getElementById("ed-facility-phone") || {}).value || "";
-      const cityStateZip = [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
-      const facilityParts = [fName, fAddr, cityStateZip, fPhone].filter(Boolean);
+      const fName =
+        (document.getElementById("ed-facility-name") || {}).value || "";
+      const fAddr =
+        (document.getElementById("ed-facility-address") || {}).value || "";
+      const fCity =
+        (document.getElementById("ed-facility-city") || {}).value || "";
+      const fState =
+        (document.getElementById("ed-facility-state") || {}).value || "";
+      const fZip =
+        (document.getElementById("ed-facility-zip") || {}).value || "";
+      const fPhone =
+        (document.getElementById("ed-facility-phone") || {}).value || "";
+      const cityStateZip =
+        [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
+      const facilityParts = [fName, fAddr, cityStateZip, fPhone].filter(
+        Boolean,
+      );
       rawData.facilityInfo = facilityParts.join(", ");
       const defaults = {
-          clientRecord: "", fileNo: "", respondentMs: "", respondentStreet: "",
-          respondentCity: "", respondentState: "NC", respondentZip: "",
-          respondentPhone: "", respondentSsn: "", respondentDl: "",
-          respondentDlState: "", respondentLastLocation: "",
-          lrpName: "", lrpRelationship: "", lrpStreet: "", lrpCity: "",
-          lrpState: "", lrpZip: "", lrpPhone: "",
-          petitionerRelationship: "", petitionerStreet: "", petitionerCity: "",
-          petitionerState: "NC", petitionerZip: "", petitionerHomePhone: "",
-          petitionerBusPhone: "", witnessName: "", witnessStreet: "",
-          witnessCity: "", witnessState: "", witnessZip: "",
-          witnessHomePhone: "", witnessBusPhone: "",
-          interpreter: "no", interpreterExplanation: "", medicalProblems: "",
-          outpatientFacilityName: "", outpatientFacilityContact: "",
-          waiverDate: formatDate(""),
+        clientRecord: "",
+        fileNo: "",
+        respondentMs: "",
+        respondentStreet: "",
+        respondentCity: "",
+        respondentState: "NC",
+        respondentZip: "",
+        respondentPhone: "",
+        respondentSsn: "",
+        respondentDl: "",
+        respondentDlState: "",
+        respondentLastLocation: "",
+        lrpName: "",
+        lrpRelationship: "",
+        lrpStreet: "",
+        lrpCity: "",
+        lrpState: "",
+        lrpZip: "",
+        lrpPhone: "",
+        petitionerRelationship: "",
+        petitionerStreet: "",
+        petitionerCity: "",
+        petitionerState: "NC",
+        petitionerZip: "",
+        petitionerHomePhone: "",
+        petitionerBusPhone: "",
+        witnessName: "",
+        witnessStreet: "",
+        witnessCity: "",
+        witnessState: "",
+        witnessZip: "",
+        witnessHomePhone: "",
+        witnessBusPhone: "",
+        interpreter: "no",
+        interpreterExplanation: "",
+        medicalProblems: "",
+        outpatientFacilityName: "",
+        outpatientFacilityContact: "",
+        waiverDate: formatDate(""),
       };
       // Merge rawData into defaults, skipping null/undefined values
       const data = Object.assign({}, defaults);
@@ -1559,8 +1697,18 @@ document.addEventListener("DOMContentLoaded", () => {
         generateDmhPdf(data),
       ]);
       window.isFormDirty = false;
-      previewQueue = [{ bytes: dmhPdfBytes, filename: "Completed-DMH-5-72-19.pdf", title: "DMH-5-72-19 Preview" }];
-      showPdfPreview(aocPdfBytes, "Completed-AOC-SP-300.pdf", "AOC-SP-300 Preview");
+      previewQueue = [
+        {
+          bytes: dmhPdfBytes,
+          filename: "Completed-DMH-5-72-19.pdf",
+          title: "DMH-5-72-19 Preview",
+        },
+      ];
+      showPdfPreview(
+        aocPdfBytes,
+        "Completed-AOC-SP-300.pdf",
+        "AOC-SP-300 Preview",
+      );
       showToast("Both PDFs Generated (ED Quick)!", "success");
     } catch (error) {
       console.error("Error generating PDFs:", error);
@@ -1577,7 +1725,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function getProfiles() {
       try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch { return []; }
+      } catch {
+        return [];
+      }
     }
 
     function saveProfiles(profiles) {
@@ -1586,23 +1736,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function refreshAllDropdowns() {
       const profiles = getProfiles();
-      document.querySelectorAll(".facility-profile-select").forEach((select) => {
-        const current = select.value;
-        select.innerHTML = '<option value="">Saved Profiles...</option>';
-        profiles.forEach((p, i) => {
-          const opt = document.createElement("option");
-          opt.value = String(i);
-          opt.textContent = p.name;
-          select.appendChild(opt);
+      document
+        .querySelectorAll(".facility-profile-select")
+        .forEach((select) => {
+          const current = select.value;
+          select.innerHTML = '<option value="">Saved Profiles...</option>';
+          profiles.forEach((p, i) => {
+            const opt = document.createElement("option");
+            opt.value = String(i);
+            opt.textContent = p.name;
+            select.appendChild(opt);
+          });
+          // Restore selection if still valid
+          if (current && parseInt(current) < profiles.length) {
+            select.value = current;
+          }
         });
-        // Restore selection if still valid
-        if (current && parseInt(current) < profiles.length) {
-          select.value = current;
-        }
-      });
       // Update delete button visibility
       document.querySelectorAll(".facility-delete-btn").forEach((btn) => {
-        const select = btn.closest("div").querySelector(".facility-profile-select");
+        const select = btn
+          .closest("div")
+          .querySelector(".facility-profile-select");
         btn.classList.toggle("hidden", !select || !select.value);
       });
     }
@@ -1648,7 +1802,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function parseCityStateZip(str, cityEl, stateEl, zipEl) {
       // Try to match patterns like "City NC 28401" or "City NC" or "City"
-      const match = str.match(/^(.+?)\s+([A-Z]{2})(?:\s+(\d{5}(?:-\d{4})?))?$/i);
+      const match = str.match(
+        /^(.+?)\s+([A-Z]{2})(?:\s+(\d{5}(?:-\d{4})?))?$/i,
+      );
       if (match) {
         if (cityEl) cityEl.value = match[1].trim();
         if (stateEl) stateEl.value = match[2].toUpperCase();
@@ -1662,13 +1818,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Helper: collect ED facility fields into a single info string
     function collectEdFacilityInfo() {
-      const fName = (document.getElementById("ed-facility-name") || {}).value || "";
-      const fAddr = (document.getElementById("ed-facility-address") || {}).value || "";
-      const fCity = (document.getElementById("ed-facility-city") || {}).value || "";
-      const fState = (document.getElementById("ed-facility-state") || {}).value || "";
-      const fZip = (document.getElementById("ed-facility-zip") || {}).value || "";
-      const fPhone = (document.getElementById("ed-facility-phone") || {}).value || "";
-      const cityStateZip = [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
+      const fName =
+        (document.getElementById("ed-facility-name") || {}).value || "";
+      const fAddr =
+        (document.getElementById("ed-facility-address") || {}).value || "";
+      const fCity =
+        (document.getElementById("ed-facility-city") || {}).value || "";
+      const fState =
+        (document.getElementById("ed-facility-state") || {}).value || "";
+      const fZip =
+        (document.getElementById("ed-facility-zip") || {}).value || "";
+      const fPhone =
+        (document.getElementById("ed-facility-phone") || {}).value || "";
+      const cityStateZip =
+        [fCity, fState].filter(Boolean).join(" ") + (fZip ? " " + fZip : "");
       return [fName, fAddr, cityStateZip, fPhone].filter(Boolean).join(", ");
     }
 
@@ -1688,7 +1851,9 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
         // Show/hide delete button
-        const delBtn = select.closest("div").querySelector(".facility-delete-btn");
+        const delBtn = select
+          .closest("div")
+          .querySelector(".facility-delete-btn");
         if (delBtn) delBtn.classList.toggle("hidden", !select.value);
       });
     });
@@ -1711,9 +1876,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!name || !name.trim()) return;
         const profiles = getProfiles();
         // Check for duplicate name
-        const existing = profiles.findIndex((p) => p.name.toLowerCase() === name.trim().toLowerCase());
+        const existing = profiles.findIndex(
+          (p) => p.name.toLowerCase() === name.trim().toLowerCase(),
+        );
         if (existing >= 0) {
-          if (!confirm(`Profile "${profiles[existing].name}" already exists. Overwrite?`)) return;
+          if (
+            !confirm(
+              `Profile "${profiles[existing].name}" already exists. Overwrite?`,
+            )
+          )
+            return;
           profiles[existing].info = infoValue;
         } else {
           profiles.push({ name: name.trim(), info: infoValue });
@@ -1727,7 +1899,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Delete button: remove selected profile
     document.querySelectorAll(".facility-delete-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const select = btn.closest("div").querySelector(".facility-profile-select");
+        const select = btn
+          .closest("div")
+          .querySelector(".facility-profile-select");
         if (!select || !select.value) return;
         const profiles = getProfiles();
         const idx = parseInt(select.value);
@@ -1745,21 +1919,27 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   // --- Zip Code Validation ---
-  document.querySelectorAll('[id$="-respondent-zip"], [id$="-lrp-zip"], [id$="-petitioner-zip"], [id$="-witness-zip"]').forEach((input) => {
-    input.addEventListener("blur", () => {
-      const val = input.value.trim();
-      if (!val || val === "Unknown") return;
-      const digits = val.replace(/[^\d]/g, "");
-      if (digits.length === 5) {
-        input.value = digits;
-      } else if (digits.length === 9) {
-        input.value = `${digits.slice(0, 5)}-${digits.slice(5)}`;
-      } else if (digits.length > 0) {
-        input.style.borderColor = "var(--danger)";
-        setTimeout(() => { input.style.borderColor = ""; }, 2000);
-      }
+  document
+    .querySelectorAll(
+      '[id$="-respondent-zip"], [id$="-lrp-zip"], [id$="-petitioner-zip"], [id$="-witness-zip"]',
+    )
+    .forEach((input) => {
+      input.addEventListener("blur", () => {
+        const val = input.value.trim();
+        if (!val || val === "Unknown") return;
+        const digits = val.replace(/[^\d]/g, "");
+        if (digits.length === 5) {
+          input.value = digits;
+        } else if (digits.length === 9) {
+          input.value = `${digits.slice(0, 5)}-${digits.slice(5)}`;
+        } else if (digits.length > 0) {
+          input.style.borderColor = "var(--danger)";
+          setTimeout(() => {
+            input.style.borderColor = "";
+          }, 2000);
+        }
+      });
     });
-  });
 
   // --- Exam Location Recent Locations Datalist ---
   (function setupExamLocationDatalist() {
@@ -1828,9 +2008,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Name: try "Last, First" or "First Last" pattern from first non-empty line
       // or labeled "Name: ..." / "Patient: ..."
-      const nameLabel = text.match(
-        /(?:patient|name|resident)\s*[:]\s*(.+)/i,
-      );
+      const nameLabel = text.match(/(?:patient|name|resident)\s*[:]\s*(.+)/i);
       if (nameLabel) {
         result.name = nameLabel[1].split(/\t|\s{2,}/)[0].trim();
       } else if (lines.length > 0) {
@@ -1923,7 +2101,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const parts = dateStr.split(/[\/\-]/);
       if (parts.length !== 3) return "";
       let [a, b, c] = parts;
-      if (a.length === 4) return `${a}-${b.padStart(2, "0")}-${c.padStart(2, "0")}`;
+      if (a.length === 4)
+        return `${a}-${b.padStart(2, "0")}-${c.padStart(2, "0")}`;
       if (c.length === 2) c = (parseInt(c) > 50 ? "19" : "20") + c;
       return `${c}-${a.padStart(2, "0")}-${b.padStart(2, "0")}`;
     }
@@ -2012,10 +2191,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const fieldCount = Object.keys(parsed).length;
 
         if (fieldCount === 0) {
-          showToast(
-            "Could not parse any fields from the pasted text",
-            "error",
-          );
+          showToast("Could not parse any fields from the pasted text", "error");
           return;
         }
 
@@ -2044,35 +2220,55 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const radio of src) {
           if (radio.checked) {
             const match = tgt[Array.from(src).indexOf(radio)];
-            if (match) { match.checked = true; synced++; }
+            if (match) {
+              match.checked = true;
+              synced++;
+            }
             break;
           }
         }
       } else if (config.type === "checked") {
-        if (tgt.checked !== src.checked) { tgt.checked = src.checked; synced++; }
+        if (tgt.checked !== src.checked) {
+          tgt.checked = src.checked;
+          synced++;
+        }
       } else {
-        if (src.value && src.value !== tgt.value) { tgt.value = src.value; synced++; }
+        if (src.value && src.value !== tgt.value) {
+          tgt.value = src.value;
+          synced++;
+        }
       }
     }
 
     // Trigger change events for auto-calculation fields
     const dobEl = targetCache.respondentDob;
-    if (dobEl && dobEl.value) dobEl.dispatchEvent(new Event("change", { bubbles: true }));
+    if (dobEl && dobEl.value)
+      dobEl.dispatchEvent(new Event("change", { bubbles: true }));
     const bpEl = targetCache.bp;
-    if (bpEl && bpEl.value) bpEl.dispatchEvent(new Event("blur", { bubbles: true }));
+    if (bpEl && bpEl.value)
+      bpEl.dispatchEvent(new Event("blur", { bubbles: true }));
 
     window.isFormDirty = true;
-    showToast(`Synced ${synced} field${synced !== 1 ? "s" : ""} from Unified tab`, "success");
+    showToast(
+      `Synced ${synced} field${synced !== 1 ? "s" : ""} from Unified tab`,
+      "success",
+    );
   }
 
-  document.getElementById("sync-aoc-from-unified").addEventListener("click", () => syncFromUnified("aoc"));
-  document.getElementById("sync-dmh-from-unified").addEventListener("click", () => syncFromUnified("dmh"));
+  document
+    .getElementById("sync-aoc-from-unified")
+    .addEventListener("click", () => syncFromUnified("aoc"));
+  document
+    .getElementById("sync-dmh-from-unified")
+    .addEventListener("click", () => syncFromUnified("dmh"));
 
   // --- PDF Preview ---
   const previewOverlay = document.getElementById("pdf-preview-overlay");
   const previewIframe = document.getElementById("pdf-preview-iframe");
   const previewTitle = document.getElementById("pdf-preview-title");
-  const previewDownloadBtn = document.getElementById("pdf-preview-download-btn");
+  const previewDownloadBtn = document.getElementById(
+    "pdf-preview-download-btn",
+  );
   const previewNextBtn = document.getElementById("pdf-preview-next-btn");
   const previewCloseBtn = document.getElementById("pdf-preview-close-btn");
   const previewCloseX = document.getElementById("pdf-preview-close-x");
@@ -2096,7 +2292,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function closePdfPreview() {
     previewOverlay.classList.remove("active");
     previewIframe.src = "";
-    if (currentPreviewUrl) { URL.revokeObjectURL(currentPreviewUrl); currentPreviewUrl = null; }
+    if (currentPreviewUrl) {
+      URL.revokeObjectURL(currentPreviewUrl);
+      currentPreviewUrl = null;
+    }
     previewQueue = [];
     currentPreview = null;
   }
@@ -2135,7 +2334,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === previewOverlay) closePdfPreview();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && previewOverlay.classList.contains("active")) closePdfPreview();
+    if (e.key === "Escape" && previewOverlay.classList.contains("active"))
+      closePdfPreview();
   });
 
   // --- About Panel Toggle ---
@@ -2146,7 +2346,11 @@ document.addEventListener("DOMContentLoaded", () => {
     aboutPanel.classList.toggle("hidden");
   });
   document.addEventListener("click", (e) => {
-    if (!aboutPanel.classList.contains("hidden") && !aboutPanel.contains(e.target) && !aboutBtn.contains(e.target)) {
+    if (
+      !aboutPanel.classList.contains("hidden") &&
+      !aboutPanel.contains(e.target) &&
+      !aboutBtn.contains(e.target)
+    ) {
       aboutPanel.classList.add("hidden");
     }
   });
