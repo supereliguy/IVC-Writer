@@ -439,7 +439,9 @@
         color: white !important;
         border: none !important;
       }
-      .pdf-preview-download:hover { filter: brightness(1.05); }
+      .pdf-preview-download:hover {
+        filter: brightness(1.05);
+      }
       .pdf-preview-close {
         background: var(--bg-card) !important;
         border: 1.5px solid var(--border-color) !important;
@@ -749,7 +751,9 @@
               class="about-btn"
               aria-label="About this tool"
               title="About this tool"
-            >About</button>
+            >
+              About
+            </button>
             <button
               id="theme-toggle"
               type="button"
@@ -770,13 +774,34 @@
       <div id="about-panel" class="about-panel hidden">
         <div class="about-panel-content">
           <h3>About</h3>
-          <p>This tool generates NC involuntary commitment forms (AOC-SP-300 &amp; DMH-5-72-19) for psychiatric evaluation.</p>
-          <p>All processing happens in your browser. No patient information is stored on or transmitted to any server.</p>
-          <p>County, transport method, and destination selections may be saved in your browser's local storage for convenience. No data leaves your device.</p>
-          <p>This tool is an aid for form completion and does not replace careful manual review. Users are responsible for verifying accuracy and completeness of all generated documents.</p>
+          <p>
+            This tool generates NC involuntary commitment forms (AOC-SP-300
+            &amp; DMH-5-72-19) for psychiatric evaluation.
+          </p>
+          <p>
+            All processing happens in your browser. No patient information is
+            stored on or transmitted to any server.
+          </p>
+          <p>
+            County, transport method, and destination selections may be saved in
+            your browser's local storage for convenience. No data leaves your
+            device.
+          </p>
+          <p>
+            This tool is an aid for form completion and does not replace careful
+            manual review. Users are responsible for verifying accuracy and
+            completeness of all generated documents.
+          </p>
           <p>Use of this tool does not constitute medical or legal advice.</p>
-          <p style="margin-top:8px;">
-            <a href="https://github.com/supereliguy/ivc-writer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Open source</a> &middot; Licensed under GPL-3.0
+          <p style="margin-top: 8px">
+            <a
+              href="https://github.com/supereliguy/ivc-writer"
+              target="_blank"
+              rel="noopener"
+              style="color: var(--accent); text-decoration: underline"
+              >Open source</a
+            >
+            &middot; Licensed under GPL-3.0
           </p>
         </div>
       </div>
@@ -873,7 +898,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="unified-county" class="block text-sm">County</label>
-                <select id="unified-county" class="local-save mt-1 block w-full"></select>
+                <select
+                  id="unified-county"
+                  class="local-save mt-1 block w-full"
+                ></select>
               </div>
               <div>
                 <label for="unified-client-record" class="block text-sm"
@@ -1067,7 +1095,9 @@
                 ><select
                   id="unified-respondent-dl-state"
                   class="mt-1 block w-full"
-                ><option value=""></option></select>
+                >
+                  <option value=""></option>
+                </select>
               </div>
               <div class="md:col-span-3">
                 <label
@@ -2072,6 +2102,17 @@
                   >Recommend Inpatient Commitment</label
                 >
               </div>
+              <div id="inpatient-days-fields" class="hidden ml-8">
+                <label for="unified-commitment-days" class="block text-sm"
+                  >Number of Commitment Days</label
+                ><input
+                  type="number"
+                  id="unified-commitment-days"
+                  min="1"
+                  class="mt-1 block w-24"
+                  placeholder="Days"
+                />
+              </div>
               <div class="flex items-start">
                 <input
                   id="disp-outpatient"
@@ -2160,7 +2201,11 @@
                 >Facility Name, Address, and Phone</label
               >
               <div class="flex gap-2 mt-1">
-                <select class="facility-profile-select text-sm flex-shrink-0" data-target="unified-facility-info" style="max-width: 200px;">
+                <select
+                  class="facility-profile-select text-sm flex-shrink-0"
+                  data-target="unified-facility-info"
+                  style="max-width: 200px"
+                >
                   <option value="">Saved Profiles...</option>
                 </select>
                 <input
@@ -2168,19 +2213,35 @@
                   id="unified-facility-info"
                   class="local-save block w-full"
                 />
-                <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="unified-facility-info" title="Save current facility as a profile">Save</button>
-                <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="unified-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+                <button
+                  type="button"
+                  class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0"
+                  data-target="unified-facility-info"
+                  title="Save current facility as a profile"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden"
+                  data-target="unified-facility-info"
+                  title="Delete selected profile"
+                  style="color: var(--danger)"
+                >
+                  Del
+                </button>
               </div>
             </div>
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label for="unified-notary-county" class="block text-sm"
                   >Notary's County of Commission</label
-                ><input
-                  type="text"
+                ><select
                   id="unified-notary-county"
                   class="local-save mt-1 block w-full"
-                />
+                >
+                  <option value="">Select County...</option>
+                </select>
               </div>
               <div>
                 <label for="unified-notary-expiration" class="block text-sm"
@@ -2292,7 +2353,19 @@
               class="sync-btn flex items-center gap-1.5 py-1.5 px-3 text-sm font-medium focus:outline-none"
               title="Copy all field values from the Unified tab"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
               Sync from Unified
             </button>
           </div>
@@ -2303,7 +2376,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="aoc-county" class="block text-sm">County</label>
-                <select id="aoc-county" class="local-save mt-1 block w-full"></select>
+                <select
+                  id="aoc-county"
+                  class="local-save mt-1 block w-full"
+                ></select>
               </div>
               <div>
                 <label for="aoc-client-record" class="block text-sm"
@@ -2483,10 +2559,9 @@
               <div>
                 <label for="aoc-respondent-dl-state" class="block text-sm"
                   >DL State</label
-                ><select
-                  id="aoc-respondent-dl-state"
-                  class="mt-1 block w-full"
-                ><option value=""></option></select>
+                ><select id="aoc-respondent-dl-state" class="mt-1 block w-full">
+                  <option value=""></option>
+                </select>
               </div>
               <div class="md:col-span-3">
                 <label for="aoc-respondent-last-location" class="block text-sm"
@@ -3347,6 +3422,17 @@
                   >Recommend Inpatient Commitment</label
                 >
               </div>
+              <div id="aoc-inpatient-days-fields" class="hidden ml-8">
+                <label for="aoc-commitment-days" class="block text-sm"
+                  >Number of Commitment Days</label
+                ><input
+                  type="number"
+                  id="aoc-commitment-days"
+                  min="1"
+                  class="mt-1 block w-24"
+                  placeholder="Days"
+                />
+              </div>
               <div class="flex items-start">
                 <input
                   id="aoc-disp-outpatient"
@@ -3435,7 +3521,11 @@
                 >Facility Name, Address, and Phone</label
               >
               <div class="flex gap-2 mt-1">
-                <select class="facility-profile-select text-sm flex-shrink-0" data-target="aoc-facility-info" style="max-width: 200px;">
+                <select
+                  class="facility-profile-select text-sm flex-shrink-0"
+                  data-target="aoc-facility-info"
+                  style="max-width: 200px"
+                >
                   <option value="">Saved Profiles...</option>
                 </select>
                 <input
@@ -3443,19 +3533,35 @@
                   id="aoc-facility-info"
                   class="local-save block w-full"
                 />
-                <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="aoc-facility-info" title="Save current facility as a profile">Save</button>
-                <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="aoc-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+                <button
+                  type="button"
+                  class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0"
+                  data-target="aoc-facility-info"
+                  title="Save current facility as a profile"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden"
+                  data-target="aoc-facility-info"
+                  title="Delete selected profile"
+                  style="color: var(--danger)"
+                >
+                  Del
+                </button>
               </div>
             </div>
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label for="aoc-notary-county" class="block text-sm"
                   >Notary's County of Commission</label
-                ><input
-                  type="text"
+                ><select
                   id="aoc-notary-county"
                   class="local-save mt-1 block w-full"
-                />
+                >
+                  <option value="">Select County...</option>
+                </select>
               </div>
               <div>
                 <label for="aoc-notary-expiration" class="block text-sm"
@@ -3568,7 +3674,19 @@
               class="sync-btn flex items-center gap-1.5 py-1.5 px-3 text-sm font-medium focus:outline-none"
               title="Copy all field values from the Unified tab"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
               Sync from Unified
             </button>
           </div>
@@ -3579,7 +3697,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="dmh-county" class="block text-sm">County</label>
-                <select id="dmh-county" class="local-save mt-1 block w-full"></select>
+                <select
+                  id="dmh-county"
+                  class="local-save mt-1 block w-full"
+                ></select>
               </div>
               <div>
                 <label for="dmh-client-record" class="block text-sm"
@@ -3759,10 +3880,9 @@
               <div>
                 <label for="dmh-respondent-dl-state" class="block text-sm"
                   >DL State</label
-                ><select
-                  id="dmh-respondent-dl-state"
-                  class="mt-1 block w-full"
-                ><option value=""></option></select>
+                ><select id="dmh-respondent-dl-state" class="mt-1 block w-full">
+                  <option value=""></option>
+                </select>
               </div>
               <div class="md:col-span-3">
                 <label for="dmh-respondent-last-location" class="block text-sm"
@@ -4623,6 +4743,17 @@
                   >Recommend Inpatient Commitment</label
                 >
               </div>
+              <div id="dmh-inpatient-days-fields" class="hidden ml-8">
+                <label for="dmh-commitment-days" class="block text-sm"
+                  >Number of Commitment Days</label
+                ><input
+                  type="number"
+                  id="dmh-commitment-days"
+                  min="1"
+                  class="mt-1 block w-24"
+                  placeholder="Days"
+                />
+              </div>
               <div class="flex items-start">
                 <input
                   id="dmh-disp-outpatient"
@@ -4711,7 +4842,11 @@
                 >Facility Name, Address, and Phone</label
               >
               <div class="flex gap-2 mt-1">
-                <select class="facility-profile-select text-sm flex-shrink-0" data-target="dmh-facility-info" style="max-width: 200px;">
+                <select
+                  class="facility-profile-select text-sm flex-shrink-0"
+                  data-target="dmh-facility-info"
+                  style="max-width: 200px"
+                >
                   <option value="">Saved Profiles...</option>
                 </select>
                 <input
@@ -4719,19 +4854,35 @@
                   id="dmh-facility-info"
                   class="local-save block w-full"
                 />
-                <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="dmh-facility-info" title="Save current facility as a profile">Save</button>
-                <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="dmh-facility-info" title="Delete selected profile" style="color: var(--danger);">Del</button>
+                <button
+                  type="button"
+                  class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0"
+                  data-target="dmh-facility-info"
+                  title="Save current facility as a profile"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden"
+                  data-target="dmh-facility-info"
+                  title="Delete selected profile"
+                  style="color: var(--danger)"
+                >
+                  Del
+                </button>
               </div>
             </div>
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label for="dmh-notary-county" class="block text-sm"
                   >Notary's County of Commission</label
-                ><input
-                  type="text"
+                ><select
                   id="dmh-notary-county"
                   class="local-save mt-1 block w-full"
-                />
+                >
+                  <option value="">Select County...</option>
+                </select>
               </div>
               <div>
                 <label for="dmh-notary-expiration" class="block text-sm"
@@ -4846,15 +4997,19 @@
             style="background: rgba(239, 68, 68, 0.06); color: var(--danger)"
           >
             <strong>Streamlined for Emergency Departments.</strong> Only the
-            minimum required fields per NCGS 122C-261/263. Generates
-            both PDFs with non-essential fields left blank.
+            minimum required fields per NCGS 122C-261/263. Generates both PDFs
+            with non-essential fields left blank.
           </div>
 
           <!-- Sticky Patient Banner -->
           <div
             id="ed-patient-banner"
             class="sticky top-0 z-30 px-4 py-2 rounded-lg border border-blue-300 text-sm font-medium hidden"
-            style="background: rgba(59, 130, 246, 0.08); color: var(--fg); backdrop-filter: blur(8px);"
+            style="
+              background: rgba(59, 130, 246, 0.08);
+              color: var(--fg);
+              backdrop-filter: blur(8px);
+            "
           >
             <span class="font-semibold">Patient:</span>
             <span id="ed-patient-banner-name" class="ml-1">—</span>
@@ -4875,7 +5030,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label for="ed-county" class="block text-sm">County</label>
-                <select id="ed-county" class="local-save mt-1 block w-full"></select>
+                <select
+                  id="ed-county"
+                  class="local-save mt-1 block w-full"
+                ></select>
               </div>
               <div>
                 <label for="ed-exam-date" class="block text-sm"
@@ -4902,7 +5060,8 @@
 
           <!-- Respondent (Patient) (minimal) -->
           <fieldset>
-            <legend class="flex items-center justify-between w-full">Respondent (Patient)
+            <legend class="flex items-center justify-between w-full">
+              Respondent (Patient)
               <button
                 type="button"
                 class="paste-facesheet-btn text-xs px-2 py-1 focus:outline-none"
@@ -5681,6 +5840,17 @@
                   >Inpatient Commitment</label
                 >
               </div>
+              <div id="ed-inpatient-days-fields" class="ml-8">
+                <label for="ed-commitment-days" class="block text-sm"
+                  >Number of Commitment Days</label
+                ><input
+                  type="number"
+                  id="ed-commitment-days"
+                  min="1"
+                  class="mt-1 block w-24"
+                  placeholder="Days"
+                />
+              </div>
               <div class="flex items-center">
                 <input
                   type="radio"
@@ -5734,36 +5904,107 @@
               <div class="md:col-span-2">
                 <label class="block text-sm">Facility</label>
                 <div class="flex gap-2 mt-1 mb-2">
-                  <select class="facility-profile-select text-sm flex-shrink-0" data-target="ed-facility-fields" style="max-width: 200px;">
+                  <select
+                    class="facility-profile-select text-sm flex-shrink-0"
+                    data-target="ed-facility-fields"
+                    style="max-width: 200px"
+                  >
                     <option value="">Saved Profiles...</option>
                   </select>
-                  <button type="button" class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0" data-target="ed-facility-fields" title="Save current facility as a profile">Save</button>
-                  <button type="button" class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden" data-target="ed-facility-fields" title="Delete selected profile" style="color: var(--danger);">Del</button>
+                  <button
+                    type="button"
+                    class="facility-save-btn text-sm px-2 py-1 rounded border flex-shrink-0"
+                    data-target="ed-facility-fields"
+                    title="Save current facility as a profile"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    class="facility-delete-btn text-sm px-2 py-1 rounded border flex-shrink-0 hidden"
+                    data-target="ed-facility-fields"
+                    title="Delete selected profile"
+                    style="color: var(--danger)"
+                  >
+                    Del
+                  </button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-6 gap-2">
                   <div class="md:col-span-3">
-                    <label for="ed-facility-name" class="block text-xs text-gray-500">Name</label>
-                    <input type="text" id="ed-facility-name" class="local-save mt-1 block w-full" />
+                    <label
+                      for="ed-facility-name"
+                      class="block text-xs text-gray-500"
+                      >Name</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-facility-name"
+                      class="local-save mt-1 block w-full"
+                    />
                   </div>
                   <div class="md:col-span-3">
-                    <label for="ed-facility-address" class="block text-xs text-gray-500">Address</label>
-                    <input type="text" id="ed-facility-address" class="local-save mt-1 block w-full" />
+                    <label
+                      for="ed-facility-address"
+                      class="block text-xs text-gray-500"
+                      >Address</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-facility-address"
+                      class="local-save mt-1 block w-full"
+                    />
                   </div>
                   <div class="md:col-span-2">
-                    <label for="ed-facility-city" class="block text-xs text-gray-500">City</label>
-                    <input type="text" id="ed-facility-city" class="local-save mt-1 block w-full" />
+                    <label
+                      for="ed-facility-city"
+                      class="block text-xs text-gray-500"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-facility-city"
+                      class="local-save mt-1 block w-full"
+                    />
                   </div>
                   <div>
-                    <label for="ed-facility-state" class="block text-xs text-gray-500">State</label>
-                    <input type="text" id="ed-facility-state" class="local-save mt-1 block w-full" value="NC" maxlength="2" style="text-transform: uppercase;" />
+                    <label
+                      for="ed-facility-state"
+                      class="block text-xs text-gray-500"
+                      >State</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-facility-state"
+                      class="local-save mt-1 block w-full"
+                      value="NC"
+                      maxlength="2"
+                      style="text-transform: uppercase"
+                    />
                   </div>
                   <div>
-                    <label for="ed-facility-zip" class="block text-xs text-gray-500">Zip</label>
-                    <input type="text" id="ed-facility-zip" class="local-save mt-1 block w-full" maxlength="10" />
+                    <label
+                      for="ed-facility-zip"
+                      class="block text-xs text-gray-500"
+                      >Zip</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-facility-zip"
+                      class="local-save mt-1 block w-full"
+                      maxlength="10"
+                    />
                   </div>
                   <div class="md:col-span-2">
-                    <label for="ed-facility-phone" class="block text-xs text-gray-500">Phone</label>
-                    <input type="tel" id="ed-facility-phone" class="local-save mt-1 block w-full" />
+                    <label
+                      for="ed-facility-phone"
+                      class="block text-xs text-gray-500"
+                      >Phone</label
+                    >
+                    <input
+                      type="tel"
+                      id="ed-facility-phone"
+                      class="local-save mt-1 block w-full"
+                    />
                   </div>
                 </div>
               </div>
@@ -5841,11 +6082,12 @@
                 <label for="ed-notary-county" class="block text-sm"
                   >Notary County</label
                 >
-                <input
-                  type="text"
+                <select
                   id="ed-notary-county"
                   class="local-save mt-1 block w-full"
-                />
+                >
+                  <option value="">Select County...</option>
+                </select>
               </div>
               <div>
                 <label for="ed-notary-expiration" class="block text-sm"
@@ -5886,49 +6128,49 @@
 
         <!-- Shared Datalists for Autocomplete -->
         <datalist id="datalist-diagnosis">
-          <option value="Schizophrenia">
-          <option value="Schizoaffective Disorder">
-          <option value="Bipolar Disorder">
-          <option value="Major Depressive Disorder">
-          <option value="Psychosis NOS">
-          <option value="Brief Psychotic Disorder">
-          <option value="PTSD">
-          <option value="Generalized Anxiety Disorder">
-          <option value="Substance Use Disorder">
-          <option value="Alcohol Use Disorder">
-          <option value="Delusional Disorder">
-          <option value="Borderline Personality Disorder">
-          <option value="Autism Spectrum Disorder">
-          <option value="Intellectual Disability">
-          <option value="Dementia">
+          <option value="Schizophrenia"></option>
+          <option value="Schizoaffective Disorder"></option>
+          <option value="Bipolar Disorder"></option>
+          <option value="Major Depressive Disorder"></option>
+          <option value="Psychosis NOS"></option>
+          <option value="Brief Psychotic Disorder"></option>
+          <option value="PTSD"></option>
+          <option value="Generalized Anxiety Disorder"></option>
+          <option value="Substance Use Disorder"></option>
+          <option value="Alcohol Use Disorder"></option>
+          <option value="Delusional Disorder"></option>
+          <option value="Borderline Personality Disorder"></option>
+          <option value="Autism Spectrum Disorder"></option>
+          <option value="Intellectual Disability"></option>
+          <option value="Dementia"></option>
         </datalist>
         <datalist id="datalist-allergies">
-          <option value="NKDA">
-          <option value="Penicillin">
-          <option value="Sulfa">
-          <option value="Codeine">
-          <option value="Morphine">
-          <option value="Aspirin">
-          <option value="NSAIDs">
-          <option value="Latex">
-          <option value="Iodine">
-          <option value="Shellfish">
-          <option value="None known">
+          <option value="NKDA"></option>
+          <option value="Penicillin"></option>
+          <option value="Sulfa"></option>
+          <option value="Codeine"></option>
+          <option value="Morphine"></option>
+          <option value="Aspirin"></option>
+          <option value="NSAIDs"></option>
+          <option value="Latex"></option>
+          <option value="Iodine"></option>
+          <option value="Shellfish"></option>
+          <option value="None known"></option>
         </datalist>
         <datalist id="exam-location-list"></datalist>
         <datalist id="datalist-relationship">
-          <option value="Physician">
-          <option value="Psychiatrist">
-          <option value="Psychologist">
-          <option value="Social Worker">
-          <option value="Nurse Practitioner">
-          <option value="Physician Assistant">
-          <option value="Law Enforcement">
-          <option value="Parent">
-          <option value="Spouse">
-          <option value="Sibling">
-          <option value="Guardian">
-          <option value="Other">
+          <option value="Physician"></option>
+          <option value="Psychiatrist"></option>
+          <option value="Psychologist"></option>
+          <option value="Social Worker"></option>
+          <option value="Nurse Practitioner"></option>
+          <option value="Physician Assistant"></option>
+          <option value="Law Enforcement"></option>
+          <option value="Parent"></option>
+          <option value="Spouse"></option>
+          <option value="Sibling"></option>
+          <option value="Guardian"></option>
+          <option value="Other"></option>
         </datalist>
       </main>
 
@@ -5937,15 +6179,42 @@
         <div class="pdf-preview-modal">
           <div class="pdf-preview-header">
             <h3 id="pdf-preview-title">PDF Preview</h3>
-            <button type="button" id="pdf-preview-close-x" class="pdf-preview-close" style="padding:4px 8px;" title="Close preview">&times;</button>
+            <button
+              type="button"
+              id="pdf-preview-close-x"
+              class="pdf-preview-close"
+              style="padding: 4px 8px"
+              title="Close preview"
+            >
+              &times;
+            </button>
           </div>
           <div class="pdf-preview-body">
             <iframe id="pdf-preview-iframe" title="PDF Preview"></iframe>
           </div>
           <div class="pdf-preview-footer">
-            <button type="button" id="pdf-preview-close-btn" class="pdf-preview-close">Close</button>
-            <button type="button" id="pdf-preview-download-btn" class="pdf-preview-download">Download</button>
-            <button type="button" id="pdf-preview-next-btn" class="pdf-preview-download" style="display:none;">Next PDF</button>
+            <button
+              type="button"
+              id="pdf-preview-close-btn"
+              class="pdf-preview-close"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              id="pdf-preview-download-btn"
+              class="pdf-preview-download"
+            >
+              Download
+            </button>
+            <button
+              type="button"
+              id="pdf-preview-next-btn"
+              class="pdf-preview-download"
+              style="display: none"
+            >
+              Next PDF
+            </button>
           </div>
         </div>
       </div>
