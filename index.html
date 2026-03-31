@@ -5124,6 +5124,137 @@
                 </select>
               </div>
             </div>
+            <!-- Collapsible Additional Patient Info -->
+            <details class="mt-2">
+              <summary
+                class="cursor-pointer text-sm font-medium text-blue-700 hover:text-blue-900"
+              >
+                Additional Patient Info (optional)
+              </summary>
+              <div class="mt-3 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label for="ed-respondent-ms" class="block text-sm"
+                      >Marital Status</label
+                    >
+                    <select
+                      id="ed-respondent-ms"
+                      class="mt-1 block w-full"
+                    >
+                      <option value=""></option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                      <option value="Widowed">Widowed</option>
+                      <option value="Separated">Separated</option>
+                      <option value="Unknown">Unknown</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="ed-respondent-phone" class="block text-sm"
+                      >Phone</label
+                    >
+                    <input
+                      type="tel"
+                      id="ed-respondent-phone"
+                      placeholder="(555) 555-5555"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div class="md:col-span-4">
+                    <label for="ed-respondent-street" class="block text-sm"
+                      >Street Address</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-respondent-street"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                  <div>
+                    <label for="ed-respondent-city" class="block text-sm"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-respondent-city"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                  <div>
+                    <label for="ed-respondent-state" class="block text-sm"
+                      >State</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-respondent-state"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                  <div>
+                    <label for="ed-respondent-zip" class="block text-sm"
+                      >Zip</label
+                    >
+                    <input
+                      type="text"
+                      inputmode="numeric"
+                      id="ed-respondent-zip"
+                      placeholder="12345"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label for="ed-respondent-ssn" class="block text-sm"
+                      >SSN</label
+                    >
+                    <input
+                      type="text"
+                      inputmode="numeric"
+                      id="ed-respondent-ssn"
+                      placeholder="XXX-XX-XXXX"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                  <div>
+                    <label for="ed-respondent-dl" class="block text-sm"
+                      >Driver's License No.</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-respondent-dl"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                  <div>
+                    <label for="ed-respondent-dl-state" class="block text-sm"
+                      >DL State</label
+                    >
+                    <select
+                      id="ed-respondent-dl-state"
+                      class="mt-1 block w-full"
+                    >
+                      <option value=""></option>
+                    </select>
+                  </div>
+                  <div class="md:col-span-3">
+                    <label
+                      for="ed-respondent-last-location"
+                      class="block text-sm"
+                      >Last Known Location</label
+                    >
+                    <input
+                      type="text"
+                      id="ed-respondent-last-location"
+                      class="mt-1 block w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+            </details>
           </fieldset>
 
           <!-- Narrative Builder + Findings -->
@@ -5630,7 +5761,18 @@
                 />
               </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label for="ed-medical-problems" class="block text-sm"
+                  >Medical Problems</label
+                >
+                <input
+                  type="text"
+                  id="ed-medical-problems"
+                  placeholder="DM, HTN, etc."
+                  class="mt-1 block w-full"
+                />
+              </div>
               <div>
                 <label for="ed-allergies" class="block text-sm"
                   >Allergies</label

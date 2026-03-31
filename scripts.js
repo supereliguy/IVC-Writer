@@ -467,6 +467,13 @@ document.addEventListener("DOMContentLoaded", () => {
       form.getCheckBox("CkBox_003").check();
     form.getTextField("Memo_001").setText(data.findings);
 
+    form.getTextField("RelativeName").setText(data.lrpName);
+    form.getTextField("RelativeAddr1").setText(data.lrpStreet);
+    form.getTextField("RelativeCity").setText(data.lrpCity);
+    form.getTextField("RelativeState").setText(data.lrpState);
+    form.getTextField("RelativeZip").setText(data.lrpZip);
+    form.getTextField("RelativeHomePhoneNo").setText(data.lrpPhone);
+
     form.getTextField("OtherPerName").setText(data.witnessName);
     form.getTextField("OthrPersonAddr1").setText(data.witnessStreet);
     form.getTextField("OthrPersonCity").setText(data.witnessCity);
@@ -534,6 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("State_2").setText(data.lrpState);
     form.getTextField("Zip_2").setText(data.lrpZip);
     form.getTextField("Phone_2").setText(data.lrpPhone);
+    form.getTextField("County_3").setText(data.county);
 
     form.getTextField("Petitioner Name").setText(data.petitionerName);
     form.getTextField("Relationship_2").setText(data.petitionerRelationship);
@@ -544,6 +552,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("State_3").setText(data.petitionerState);
     form.getTextField("Zip_3").setText(data.petitionerZip);
     form.getTextField("Phone_3").setText(data.petitionerHomePhone);
+    form.getTextField("County_4").setText(data.county);
 
     form.getTextField("was conducted on").setText(data.examDate.full);
     form.getTextField("at").setText(data.examTime);
@@ -569,6 +578,11 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("Temp").setText(data.temp);
     form.getTextField("undefined_5").setText(data.bp);
 
+    form
+      .getTextField(
+        "Knownreported medical problems diabetes hypertension heart attacks sickle cell anemia asthma etc",
+      )
+      .setText(data.medicalProblems);
     form.getTextField("Knownreported allergies").setText(data.allergies);
     form
       .getTextField("Knownreported current medications please list")
@@ -990,7 +1004,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document
     .querySelectorAll(
-      "#unified-respondent-ssn, #aoc-respondent-ssn, #dmh-respondent-ssn",
+      "#unified-respondent-ssn, #aoc-respondent-ssn, #dmh-respondent-ssn, #ed-respondent-ssn",
     )
     .forEach((input) => {
       input.addEventListener("input", (e) => {
@@ -1635,16 +1649,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const defaults = {
         clientRecord: "",
         fileNo: "",
-        respondentMs: "",
-        respondentStreet: "",
-        respondentCity: "",
-        respondentState: "NC",
-        respondentZip: "",
-        respondentPhone: "",
-        respondentSsn: "",
-        respondentDl: "",
-        respondentDlState: "",
-        respondentLastLocation: "",
         lrpName: "",
         lrpRelationship: "",
         lrpStreet: "",
@@ -1668,7 +1672,6 @@ document.addEventListener("DOMContentLoaded", () => {
         witnessBusPhone: "",
         interpreter: "no",
         interpreterExplanation: "",
-        medicalProblems: "",
         outpatientFacilityName: "",
         outpatientFacilityContact: "",
         waiverDate: formatDate(""),
