@@ -559,7 +559,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("undefined_2").setText(data.examDate.yyyy);
     form.getTextField("at").setText(data.examTime);
     if (data.conductedInPerson) {
-      form.getTextField("Was conducted on 2").setText("X");
+      form.getRadioGroup("Was conducted on 2").select("In person");
     }
     form
       .getTextField("OR")
