@@ -554,9 +554,16 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("Phone_3").setText(data.petitionerHomePhone);
     form.getTextField("County_4").setText(data.county);
 
-    form.getTextField("was conducted on").setText(data.examDate.full);
+    form.getTextField("was conducted on").setText(data.examDate.mm);
+    form.getTextField("undefined").setText(data.examDate.dd);
+    form.getTextField("undefined_2").setText(data.examDate.yyyy);
     form.getTextField("at").setText(data.examTime);
-    form.getTextField("OR").setText(data.examLocation);
+    if (data.conductedInPerson) {
+      form.getTextField("Was conducted on 2").setText("X");
+    }
+    form
+      .getTextField("OR")
+      .setText(data.conductedFacilityName || data.examLocation);
 
     if (data.isMi)
       form.getCheckBox("An individual with a mental illness").check();
@@ -573,6 +580,16 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .setText(data.findings);
     form.getTextField("ImpressionDiagnosis").setText(data.impression);
+
+    // Health screening: fill petitioner name as the physician/PA/NP
+    if (data.petitionerName) {
+      form
+        .getTextField("Printed Name Credentials Date  Time")
+        .setText(data.petitionerName);
+      form
+        .getTextField("Printed Name Credentials Date  Time_3")
+        .setText(data.petitionerName);
+    }
     form.getTextField("HR").setText(data.hr);
     form.getTextField("RR").setText(data.rr);
     form.getTextField("Temp").setText(data.temp);
@@ -689,7 +706,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .check();
 
     const [facilityName, ...addressParts] = data.facilityInfo.split(",");
-    form.getTextField("Print Name of Examiner").setText(data.examinerName);
+    form
+      .getTextField("Print Name of Examiner")
+      .setText(data.petitionerName || data.examinerName);
+
+    // Credential checkboxes on last page
+    if (data.dmhCredential === "MDDO") form.getCheckBox("MDDO").check();
+    if (data.dmhCredential === "PA") form.getCheckBox("PA").check();
+    if (data.dmhCredential === "NP")
+      form.getCheckBox("NP Masterslevel or Higher").check();
     form.getTextField("Address of Facility").setText(facilityName || "");
     form
       .getTextField("City and State")
@@ -1693,6 +1718,24 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!data.petitionerName && data.examinerName) {
         data.petitionerName = data.examinerName;
       }
+      if (!data.examinerName && data.petitionerName) {
+        data.examinerName = data.petitionerName;
+      }
+
+      // AOC last page date: auto-populate waiverDate from examDate
+      if (!data.waiverDate.full && data.examDate.full) {
+        data.waiverDate = data.examDate;
+      }
+
+      // DMH: mark exam as conducted in person, use facility name
+      data.conductedInPerson = true;
+      data.conductedFacilityName = fName;
+
+      // DMH credential checkbox from ED form
+      const credEl = document.querySelector(
+        'input[name="ed-dmh-credential"]:checked',
+      );
+      data.dmhCredential = credEl ? credEl.value : "";
 
       const warnings = validateFormData(data, "ed");
       if (warnings.length > 0) {
