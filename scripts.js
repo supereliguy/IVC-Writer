@@ -1476,6 +1476,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (btn.dataset.form === "ed") {
         const nameEl = document.getElementById("ed-respondent-name");
         if (nameEl) nameEl.dispatchEvent(new Event("input", { bubbles: true }));
+        // Re-enable address/SSN fields and uncheck unknown checkbox
+        const unknownCb = document.getElementById("ed-respondent-addr-unknown");
+        if (unknownCb && unknownCb.checked) {
+          unknownCb.checked = false;
+          const addrContainer = document.getElementById(
+            "ed-respondent-addr-fields",
+          );
+          if (addrContainer) {
+            addrContainer
+              .querySelectorAll("input")
+              .forEach((i) => (i.disabled = false));
+          }
+        }
       }
     });
   });
@@ -1657,10 +1670,6 @@ document.addEventListener("DOMContentLoaded", () => {
         lrpZip: "",
         lrpPhone: "",
         petitionerRelationship: "",
-        petitionerStreet: "",
-        petitionerCity: "",
-        petitionerState: "NC",
-        petitionerZip: "",
         petitionerHomePhone: "",
         petitionerBusPhone: "",
         witnessName: "",
@@ -1919,6 +1928,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial load
     refreshAllDropdowns();
+  })();
+
+  // --- ED: Address/SSN Unknown checkbox ---
+  (function setupEdAddrUnknown() {
+    const cb = document.getElementById("ed-respondent-addr-unknown");
+    const container = document.getElementById("ed-respondent-addr-fields");
+    if (!cb || !container) return;
+    cb.addEventListener("change", () => {
+      const inputs = container.querySelectorAll("input");
+      if (cb.checked) {
+        inputs.forEach((input) => {
+          input.value = "Unknown";
+          input.disabled = true;
+        });
+      } else {
+        inputs.forEach((input) => {
+          input.value = "";
+          input.disabled = false;
+        });
+      }
+    });
+  })();
+
+  // --- ED: Auto-fill petitioner address from facility address ---
+  (function setupEdPetitionerAddrSync() {
+    const fieldMap = [
+      ["ed-facility-address", "ed-petitioner-street"],
+      ["ed-facility-city", "ed-petitioner-city"],
+      ["ed-facility-state", "ed-petitioner-state"],
+      ["ed-facility-zip", "ed-petitioner-zip"],
+    ];
+    function syncFacilityToPetitioner() {
+      fieldMap.forEach(([srcId, destId]) => {
+        const src = document.getElementById(srcId);
+        const dest = document.getElementById(destId);
+        if (src && dest && !dest.value) {
+          dest.value = src.value;
+        }
+      });
+    }
+    // Sync when facility fields change (profile load or manual edit)
+    fieldMap.forEach(([srcId]) => {
+      const el = document.getElementById(srcId);
+      if (el) {
+        el.addEventListener("change", syncFacilityToPetitioner);
+      }
+    });
+    // Also sync on page load after localStorage restore
+    document.addEventListener("DOMContentLoaded", syncFacilityToPetitioner);
+    // Run once now in case facility fields are already populated
+    setTimeout(syncFacilityToPetitioner, 100);
   })();
 
   // --- Zip Code Validation ---
