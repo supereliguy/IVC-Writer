@@ -5124,6 +5124,80 @@
                 </select>
               </div>
             </div>
+            <!-- Address & SSN -->
+            <div class="mt-3">
+              <div class="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id="ed-respondent-addr-unknown"
+                  class="h-4 w-4"
+                />
+                <label
+                  for="ed-respondent-addr-unknown"
+                  class="ml-2 text-sm font-medium text-gray-700"
+                  >Address / SSN Unknown</label
+                >
+              </div>
+              <div
+                id="ed-respondent-addr-fields"
+                class="grid grid-cols-1 md:grid-cols-4 gap-4"
+              >
+                <div class="md:col-span-4">
+                  <label for="ed-respondent-street" class="block text-sm"
+                    >Street Address</label
+                  >
+                  <input
+                    type="text"
+                    id="ed-respondent-street"
+                    class="mt-1 block w-full"
+                  />
+                </div>
+                <div>
+                  <label for="ed-respondent-city" class="block text-sm"
+                    >City</label
+                  >
+                  <input
+                    type="text"
+                    id="ed-respondent-city"
+                    class="mt-1 block w-full"
+                  />
+                </div>
+                <div>
+                  <label for="ed-respondent-state" class="block text-sm"
+                    >State</label
+                  >
+                  <input
+                    type="text"
+                    id="ed-respondent-state"
+                    class="mt-1 block w-full"
+                  />
+                </div>
+                <div>
+                  <label for="ed-respondent-zip" class="block text-sm"
+                    >Zip</label
+                  >
+                  <input
+                    type="text"
+                    inputmode="numeric"
+                    id="ed-respondent-zip"
+                    placeholder="12345"
+                    class="mt-1 block w-full"
+                  />
+                </div>
+                <div>
+                  <label for="ed-respondent-ssn" class="block text-sm"
+                    >SSN</label
+                  >
+                  <input
+                    type="text"
+                    inputmode="numeric"
+                    id="ed-respondent-ssn"
+                    placeholder="XXX-XX-XXXX"
+                    class="mt-1 block w-full"
+                  />
+                </div>
+              </div>
+            </div>
             <!-- Collapsible Additional Patient Info -->
             <details class="mt-2">
               <summary
@@ -5162,63 +5236,7 @@
                     />
                   </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div class="md:col-span-4">
-                    <label for="ed-respondent-street" class="block text-sm"
-                      >Street Address</label
-                    >
-                    <input
-                      type="text"
-                      id="ed-respondent-street"
-                      class="mt-1 block w-full"
-                    />
-                  </div>
-                  <div>
-                    <label for="ed-respondent-city" class="block text-sm"
-                      >City</label
-                    >
-                    <input
-                      type="text"
-                      id="ed-respondent-city"
-                      class="mt-1 block w-full"
-                    />
-                  </div>
-                  <div>
-                    <label for="ed-respondent-state" class="block text-sm"
-                      >State</label
-                    >
-                    <input
-                      type="text"
-                      id="ed-respondent-state"
-                      class="mt-1 block w-full"
-                    />
-                  </div>
-                  <div>
-                    <label for="ed-respondent-zip" class="block text-sm"
-                      >Zip</label
-                    >
-                    <input
-                      type="text"
-                      inputmode="numeric"
-                      id="ed-respondent-zip"
-                      placeholder="12345"
-                      class="mt-1 block w-full"
-                    />
-                  </div>
-                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label for="ed-respondent-ssn" class="block text-sm"
-                      >SSN</label
-                    >
-                    <input
-                      type="text"
-                      inputmode="numeric"
-                      id="ed-respondent-ssn"
-                      placeholder="XXX-XX-XXXX"
-                      class="mt-1 block w-full"
-                    />
-                  </div>
                   <div>
                     <label for="ed-respondent-dl" class="block text-sm"
                       >Driver's License No.</label
@@ -6159,6 +6177,54 @@
                   id="ed-petitioner-name"
                   class="local-save mt-1 block w-full"
                 />
+              </div>
+              <div class="md:col-span-2">
+                <label for="ed-petitioner-street" class="block text-sm"
+                  >Petitioner Address
+                  <span
+                    class="text-xs text-gray-400 font-normal"
+                    >(auto-filled from facility)</span
+                  ></label
+                >
+                <div
+                  class="grid grid-cols-1 md:grid-cols-4 gap-2 mt-1"
+                >
+                  <div class="md:col-span-4">
+                    <input
+                      type="text"
+                      id="ed-petitioner-street"
+                      class="block w-full"
+                      placeholder="Street"
+                    />
+                  </div>
+                  <div class="md:col-span-2">
+                    <input
+                      type="text"
+                      id="ed-petitioner-city"
+                      class="block w-full"
+                      placeholder="City"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      id="ed-petitioner-state"
+                      class="block w-full"
+                      placeholder="State"
+                      maxlength="2"
+                      style="text-transform: uppercase"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      id="ed-petitioner-zip"
+                      class="block w-full"
+                      placeholder="Zip"
+                      maxlength="10"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
