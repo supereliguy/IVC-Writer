@@ -2324,7 +2324,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (config.type === "radio") {
         for (const radio of src) {
           if (radio.checked) {
-            const match = tgt[Array.from(src).indexOf(radio)];
+            const match = Array.from(tgt).find(r => r.value === radio.value);
             if (match) {
               match.checked = true;
               synced++;
