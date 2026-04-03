@@ -156,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
     container.appendChild(toast);
 
     // Animate in
+    toast.classList.add("translate-y-2", "opacity-0");
     requestAnimationFrame(() => {
       toast.classList.remove("translate-y-2", "opacity-0");
     });
@@ -2018,8 +2019,6 @@ document.addEventListener("DOMContentLoaded", () => {
         el.addEventListener("change", syncFacilityToPetitioner);
       }
     });
-    // Also sync on page load after localStorage restore
-    document.addEventListener("DOMContentLoaded", syncFacilityToPetitioner);
     // Run once now in case facility fields are already populated
     setTimeout(syncFacilityToPetitioner, 100);
   })();
@@ -2325,7 +2324,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (config.type === "radio") {
         for (const radio of src) {
           if (radio.checked) {
-            const match = tgt[Array.from(src).indexOf(radio)];
+            const match = Array.from(tgt).find(r => r.value === radio.value);
             if (match) {
               match.checked = true;
               synced++;
