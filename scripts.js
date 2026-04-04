@@ -437,6 +437,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const pdfDoc = await PDFDocument.load(aocPdfCache);
     const form = pdfDoc.getForm();
 
+    // Default respondent state to NC if empty
+    if (!data.respondentState) data.respondentState = "NC";
+
+    // Default waiver date to today if empty
+    if (!data.waiverDate || !data.waiverDate.full) {
+      const now = new Date();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const yyyy = now.getFullYear();
+      data.waiverDate = { full: `${mm}/${dd}/${yyyy}`, mm, dd, yyyy: String(yyyy) };
+    }
+
     form.getTextField("FileNo").setText(data.fileNo);
     form.getTextField("County").setText(data.county);
     form.getTextField("RespondentName").setText(data.respondentName);
@@ -1721,6 +1733,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (!data.examinerName && data.petitionerName) {
         data.examinerName = data.petitionerName;
+      }
+
+      // ED: default petitioner relationship to "ED Provider"
+      if (!data.petitionerRelationship) {
+        data.petitionerRelationship = "ED Provider";
+      }
+
+      // ED: default petitioner business phone from facility phone
+      if (!data.petitionerBusPhone && fPhone) {
+        data.petitionerBusPhone = fPhone;
       }
 
       // AOC last page date: auto-populate waiverDate from examDate
