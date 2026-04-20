@@ -1,6 +1,8 @@
 // Get PDF libraries
 const { PDFDocument } = PDFLib;
 
+const APP_VERSION = "0.1.0-beta";
+
 const FORM_URL_AOC = "./AOC-SP-300.pdf";
 const FORM_URL_DMH = "./DMH-5-72-19.pdf";
 
@@ -2490,9 +2492,47 @@ document.addEventListener("DOMContentLoaded", () => {
       closePdfPreview();
   });
 
+  // --- Beta Feedback mailto (no PHI, device/version only) ---
+  const feedbackLink = document.getElementById("beta-feedback-link");
+  if (feedbackLink) {
+    feedbackLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      const tz =
+        (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || "unknown";
+      const lines = [
+        "Please describe the bug or feedback below the line.",
+        "Do NOT include any patient information (PHI).",
+        "",
+        "",
+        "-----------------------------------------",
+        "Device & app info (auto-generated, no patient data):",
+        `App version: ${APP_VERSION}`,
+        `User agent: ${navigator.userAgent}`,
+        `Platform: ${navigator.platform || "unknown"}`,
+        `Language: ${navigator.language || "unknown"}`,
+        `Screen: ${window.screen.width}x${window.screen.height}`,
+        `Viewport: ${window.innerWidth}x${window.innerHeight}`,
+        `Pixel ratio: ${window.devicePixelRatio || 1}`,
+        `Theme: ${document.documentElement.classList.contains("dark") ? "dark" : "light"}`,
+        `Online: ${navigator.onLine}`,
+        `Timezone: ${tz}`,
+        `Timestamp: ${new Date().toISOString()}`,
+      ];
+      const subject = `IVC Writer feedback (v${APP_VERSION})`;
+      const href =
+        "mailto:elijahwyattmd@gmail.com?subject=" +
+        encodeURIComponent(subject) +
+        "&body=" +
+        encodeURIComponent(lines.join("\n"));
+      window.location.href = href;
+    });
+  }
+
   // --- About Panel Toggle ---
   const aboutBtn = document.getElementById("about-btn");
   const aboutPanel = document.getElementById("about-panel");
+  const aboutVersion = document.getElementById("about-version");
+  if (aboutVersion) aboutVersion.textContent = APP_VERSION;
   aboutBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     aboutPanel.classList.toggle("hidden");
