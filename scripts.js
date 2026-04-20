@@ -679,12 +679,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (data.disposition === "inpatient") {
       form.getCheckBox("Inpatient Commitment for").check();
-      if (data.commitmentDays)
-        form
-          .getTextField(
-            "days respondent must have a mental illness and dangerous to self or others",
-          )
-          .setText(data.commitmentDays);
+      if (data.commitmentDays) {
+        const daysField = form.getTextField(
+          "days respondent must have a mental illness and dangerous to self or others",
+        );
+        daysField.setText(data.commitmentDays);
+        daysField.setFontSize(10);
+      }
     }
     if (data.disposition === "outpatient") {
       form
