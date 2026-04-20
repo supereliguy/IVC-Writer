@@ -255,6 +255,15 @@ document.addEventListener("DOMContentLoaded", () => {
           .classList.toggle("hidden", radio.value !== "yes"),
       );
     });
+  document
+    .querySelectorAll('input[name="ed-interpreter"]')
+    .forEach((radio) => {
+      radio.addEventListener("change", () =>
+        document
+          .getElementById("ed-interpreter-details")
+          .classList.toggle("hidden", radio.value !== "yes"),
+      );
+    });
 
   // --- Narrative Snippet Builder ---
   function setupNarrativeSnippets() {
@@ -578,8 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .getTextField("OR")
       .setText(data.conductedFacilityName || data.examLocation);
 
-    if (data.isMi)
-      form.getCheckBox("An individual with a mental illness").check();
+    if (data.isMi) form.getCheckBox("An individual with a").check();
     if (data.isMiDangerSelf) form.getCheckBox("Self or").check();
     if (data.isMiDangerOthers) form.getCheckBox("Others").check();
     if (data.isMiId) form.getCheckBox("In addition to having a").check();
@@ -595,13 +603,26 @@ document.addEventListener("DOMContentLoaded", () => {
     form.getTextField("ImpressionDiagnosis").setText(data.impression);
 
     // Health screening: fill petitioner name as the physician/PA/NP
-    if (data.petitionerName) {
+    // ED mode: append exam date/time and default-check the "replaced by medical evaluation" attestation
+    const providerStamp = data.petitionerName
+      ? [data.petitionerName, data.examDate.full, data.examTime]
+          .filter(Boolean)
+          .join("  ")
+      : "";
+    if (providerStamp) {
       form
         .getTextField("Printed Name Credentials Date  Time")
-        .setText(data.petitionerName);
+        .setText(providerStamp);
       form
         .getTextField("Printed Name Credentials Date  Time_3")
-        .setText(data.petitionerName);
+        .setText(providerStamp);
+    }
+    if (data.edMode) {
+      form
+        .getCheckBox(
+          "Check box  sign to attest that the health screening is being replaced by a medical evaluation skip to Section III",
+        )
+        .check();
     }
     form.getTextField("HR").setText(data.hr);
     form.getTextField("RR").setText(data.rr);
@@ -1760,6 +1781,9 @@ document.addEventListener("DOMContentLoaded", () => {
         'input[name="ed-dmh-credential"]:checked',
       );
       data.dmhCredential = credEl ? credEl.value : "";
+
+      // ED flow: flag to auto-check health-screening attestation and populate date/time lines
+      data.edMode = true;
 
       const warnings = validateFormData(data, "ed");
       if (warnings.length > 0) {
