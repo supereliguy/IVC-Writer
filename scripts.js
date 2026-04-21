@@ -2495,8 +2495,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Beta Feedback mailto (no PHI, device/version only) ---
   const feedbackLink = document.getElementById("beta-feedback-link");
   if (feedbackLink) {
-    feedbackLink.addEventListener("click", (e) => {
-      e.preventDefault();
+    const buildFeedbackHref = () => {
       const tz =
         (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || "unknown";
       const lines = [
@@ -2519,12 +2518,21 @@ document.addEventListener("DOMContentLoaded", () => {
         `Timestamp: ${new Date().toISOString()}`,
       ];
       const subject = `IVC Writer feedback (v${APP_VERSION})`;
-      const href =
+      return (
         "mailto:elijahwyattmd@gmail.com?subject=" +
         encodeURIComponent(subject) +
         "&body=" +
-        encodeURIComponent(lines.join("\n"));
-      window.location.href = href;
+        encodeURIComponent(lines.join("\n"))
+      );
+    };
+    const refreshFeedbackHref = () => {
+      feedbackLink.href = buildFeedbackHref();
+    };
+    refreshFeedbackHref();
+    feedbackLink.addEventListener("mousedown", refreshFeedbackHref);
+    feedbackLink.addEventListener("focus", refreshFeedbackHref);
+    feedbackLink.addEventListener("touchstart", refreshFeedbackHref, {
+      passive: true,
     });
   }
 
