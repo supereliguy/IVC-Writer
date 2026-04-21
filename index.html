@@ -208,6 +208,50 @@
         color: var(--accent) !important;
       }
 
+      /* ── Beta Banner ───────────────────────────────────── */
+      .beta-banner-wrapper {
+        margin-bottom: 0.75rem;
+      }
+      .beta-banner {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        flex-wrap: wrap;
+        text-align: center;
+        line-height: 1.4;
+      }
+      .beta-badge {
+        background: rgba(255, 255, 255, 0.22);
+        color: #fff;
+        padding: 0.125rem 0.5rem;
+        border-radius: 999px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        font-size: 0.6875rem;
+        flex-shrink: 0;
+      }
+      .beta-link {
+        color: #fff;
+        text-decoration: underline;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .beta-link:hover,
+      .beta-link:focus {
+        text-decoration: none;
+        opacity: 0.9;
+      }
+      html.dark .beta-banner {
+        background: linear-gradient(135deg, #b45309, #92400e);
+      }
+
       /* ── Tab Navigation ────────────────────────────────── */
       .tab-nav {
         background: var(--tab-bg);
@@ -733,6 +777,24 @@
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 font-medium"
       >Skip to Main Content</a
     >
+    <div
+      class="max-w-4xl mx-auto beta-banner-wrapper"
+      role="region"
+      aria-label="Beta software notice"
+    >
+      <div class="beta-banner">
+        <span class="beta-badge" aria-hidden="true">BETA</span>
+        <span class="beta-text">
+          This software is in beta.
+          <a
+            id="beta-feedback-link"
+            href="mailto:elijahwyattmd@gmail.com"
+            class="beta-link"
+            >Send feedback or report a bug</a
+          >
+        </span>
+      </div>
+    </div>
     <div class="max-w-4xl mx-auto app-container">
       <header class="app-header text-white">
         <div class="flex items-center justify-between relative z-10">
@@ -801,7 +863,8 @@
               style="color: var(--accent); text-decoration: underline"
               >Open source</a
             >
-            &middot; Licensed under GPL-3.0
+            &middot; Licensed under GPL-3.0 &middot; Version
+            <span id="about-version">beta</span>
           </p>
         </div>
       </div>

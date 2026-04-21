@@ -1,4 +1,4 @@
-const CACHE_NAME = "ivc-writer-v1";
+const CACHE_NAME = "ivc-writer-v2";
 const ASSETS = [
   "./",
   "./index.html",
